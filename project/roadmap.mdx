@@ -57,3 +57,23 @@ Mainnet commerce requires an independent security review, remediation and verifi
 ## How progress is reported
 
 Update [current status](/project/status) when functionality is actually deployed and verified. Attach source, transaction, or test evidence where possible. Keep future work in this roadmap and keep sample activity labeled as sample activity.
+
+## Workstream acceptance matrix
+
+The roles below describe ownership needed for each workstream; they are not assignments to named people or commitments to release dates.
+
+| Workstream             | Role needed                               | Acceptance evidence                                                                         | Dependency                                       |
+| ---------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Wallet and recovery UX | Frontend and wallet integration           | Recorded supported-device sign-in, recovery, cancellation, and resume journeys              | Defined supported wallet/device matrix           |
+| Product delivery       | Application and security                  | Private asset ownership, refund revocation, grant expiry, and restore tests                 | Reliable persistent file storage                 |
+| Indexing operations    | Backend and infrastructure                | Provider-failure drill, canonical replay, measured catch-up, alerts and restore evidence    | Independent RPC capacity and durable checkpoints |
+| Aurora activation      | Integration owner and transfer authorizer | User-executed source transfer, verified canonical USDC receipt, expiry/failure handling     | Provider application configuration               |
+| SDK distribution       | Developer tooling                         | Versioned package, validated examples, documented compatibility policy                      | Stable intended public method set                |
+| Live extensions        | Product and implementation owners         | Backend permissions, failure paths, end-to-end proof, and updated method availability       | Validated scope for each workflow                |
+| Mainnet settlement     | Contract/security and operations          | Independent review, remediation, capacity analysis, verified deployment, readiness sign-off | Completion of release gates                      |
+
+## Known limitations to close explicitly
+
+The `reversed` earnings bucket exists in the shared contract but remains zero in the current live earnings projection; the settlement contract does not expose post-finalization reversal. Product `accessTiming` is modeled, but the current entitlement service accepts pending/finalized purchases and does not establish a separate after-hold access enforcement mode. The prototype also restricts one node and one purchase per wallet per campaign.
+
+Future releases should either implement additional behavior with complete tests or narrow the exposed contract and copy through a reviewed compatibility change. Documentation must not fill an implementation gap with a promise.

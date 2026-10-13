@@ -58,3 +58,13 @@ Direct purchases with `nodeId = 0` reserve no distributor reward.
 A merchant can register **one upcoming version at a time**, with **at least 24 hours' notice**. The version becomes eligible at its effective time. Existing purchases retain the policy and allocations they accepted; later policy changes do not rewrite them.
 
 The hold period, rate, and path on the receipt are the terms to inspect when reviewing an existing sale.
+
+## Additional policy constraints
+
+The full policy also includes `rewardToken`, `expiry`, and `eligibilityHash`. The current deployment uses the single supported six-decimal token. A scheduled policy cannot change the campaign's token.
+
+The hold must be between **60 seconds and 90 days**. Weights must be positive, have exactly the selected level count, and sum to 10,000. The per-sale cap cannot exceed the campaign liability cap.
+
+At campaign creation, expiry must be in the future and no more than 365 days away. A scheduled version must become effective before the current expiry, its own expiry must be after its effective time, and that expiry cannot extend beyond 365 days from the campaign's creation. The notice requirement is enforced against chain time.
+
+Use [worked integer examples](/concepts/economics-examples) to reproduce short-path rounding and [vault accounting](/concepts/vault-accounting) to distinguish available funding from remaining liability capacity.

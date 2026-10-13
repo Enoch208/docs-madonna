@@ -25,6 +25,9 @@ The local preview defaults to `http://localhost:3000`. Configuration and navigat
 - `guides/`: user journeys, accounts, environments, funding, and troubleshooting.
 - `developers/`: architecture, setup, indexing, API, authentication, SDK, and contracts.
 - `project/`: implemented scope, public proof, roadmap, and glossary.
+- `reference/`: all 189 client methods grouped by domain.
+- `schemas/`: downloadable structural method schemas and error codes.
+- `scripts/`: regeneration from a pinned application checkout.
 - `images/screenshots/`: unmodified captures of the deployed testnet application.
 - `images/brand/`, `logo/`: Spoke brand assets and header lockups.
 
@@ -39,3 +42,15 @@ Screenshots were captured on 13 October 2026 from the hosted testnet application
 ## Source
 
 Application and contracts: [Enoch208/spoke](https://github.com/Enoch208/spoke). Documentation: [Enoch208/docs-madonna](https://github.com/Enoch208/docs-madonna).
+
+## Regenerate the client reference
+
+The API catalog is generated from the installed Spoke workspace. From that workspace, run:
+
+```bash
+pnpm --filter @spoke/api exec tsx /absolute/path/to/docs-madonna/scripts/generate-api-reference.mts /absolute/path/to/spoke
+```
+
+The generator writes seven domain reference pages, the contract event page, and structural schema downloads. Review generated output, update the overview/status if scope changes, then run Mintlify validation and link checks. Custom Zod refinements and runtime authorization are not fully representable in JSON Schema; the reference documents that boundary explicitly.
+
+The documentation has separate reading paths for product concepts, practical user workflows, developers/operators, the complete client contract, and project evidence. Keep new explanations linked into those paths rather than adding isolated pages.

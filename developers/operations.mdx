@@ -1,0 +1,62 @@
+---
+title: "Operations and recovery"
+description: "Investigate stale reads, provider failures, file problems, and reorgs while preserving authoritative settlement."
+---
+
+Operate Spoke by separating a failure of the contract, event ingestion, projection, API, and browser. Restarting every service at once can hide the cause and make reconciliation harder.
+
+## Signals to inspect
+
+| Signal                       | What to look for                                   | First interpretation                                  |
+| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| API health                   | API, database, RPC, and indexer status             | Which dependency is unavailable or degraded           |
+| Indexed block and timestamp  | Advancing over successive samples                  | Whether event history is progressing                  |
+| `lagSeconds`                 | Sustained growth or gaps                           | Ingestion/projection freshness problem                |
+| Canonical block hash checks  | Mismatch and replay activity                       | Reorg or incompatible deployment state                |
+| RPC errors                   | Rate limits, log-range rejection, TLS errors       | Provider/configuration constraints                    |
+| Delivery integrity failures  | Missing bytes or SHA-256 mismatch                  | Persistent storage problem                            |
+| Uncertain gas transfers      | Durable hash/broadcast state                       | Reconcile existing transfer before another one        |
+| Insight/funding availability | Disabled provider, stale cache, unavailable status | Optional service limitation, not a settlement balance |
+
+The current `behind` threshold is more than 15 seconds of indexed-time lag. A short passing sample is evidence of that sample, not an uptime guarantee.
+
+## Stale index investigation
+
+1. Confirm the configured chain and protocol identity.
+2. Read the API's actual indexed timestamp and compare it with chain head time.
+3. Check whether the worker checkpoint is advancing.
+4. Check whether the API projector can verify canonical hashes and acquire its lock.
+5. Inspect RPC rate-limit, range-limit, and certificate errors.
+6. Restore the failing dependency, then observe catch-up and a verified receipt.
+
+Production separates the worker's realtime RPC from the API verification provider to avoid consuming the same request budget. The worker currently uses a five-block log interval/ceiling and a two-block lag. Increasing a polling interval is not a complete concurrency or provider-rate solution.
+
+## Reorganizations
+
+The worker rolls back reorganized entities. The API verifies canonical hashes and replays affected projections rather than silently filling an Envio gap with a second history source. Preserve offchain accounts and other application records.
+
+Do not manually set a cursor to the latest block just to make a health indicator green. That can omit events while falsely claiming freshness.
+
+## Deliberate index replay
+
+Changing a contract address or start block requires a reviewed replay plan. Back up the relevant state, verify that the worker targets its dedicated `envio` schema, and check compatibility with the API projector.
+
+The documented HyperIndex reset command is `pnpm exec envio start -r`, run in the indexer package with its intended environment. It deliberately rebuilds index state. Use it only for the dedicated worker schema and never as a general application-database reset. A source-RPC setting change alone can normally resume the existing checkpoint and does not justify a reset.
+
+## Backup and restore exercise
+
+Back up both the application database and private asset files, retain the corresponding release/configuration identity securely, and test restoration into an isolated environment. Confirm product ownership, file integrity, account mappings, and idempotency records before reconnecting services.
+
+Reconcile restored chain-derived state against current canonical history. Offchain state may have changed after a backup; account for that gap explicitly. A database restore cannot reverse chain transfers or recover product bytes that were never backed up.
+
+## Optional service outages
+
+**Nansen:** serve cached labeled results where appropriate. Do not trigger uncontrolled refreshes on page views or repeated restarts. The durable budget is a spending ceiling.
+
+**Aurora:** unavailable provider status preserves the last observed state and disables sending instructions in the UI. Expiry disables sending while reconciliation continues. Provider success requires independent destination-chain verification before funding confirmation.
+
+**Gas assistance:** signed transfers are recorded before broadcast. An ambiguous retry must reconcile or resend the same transaction, not spend from the station under a fresh hash without accounting.
+
+## Incident evidence
+
+Capture public request IDs, transaction hashes, chain/contract identity, relevant block numbers and hashes, timestamps, and exact release revisions. Keep cookies, keys, private provider URLs, download tokens, and private product contents out of public reports. Close an incident with observed recovery and reconciliation, not only a successful service restart.

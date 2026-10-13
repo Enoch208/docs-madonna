@@ -1,0 +1,52 @@
+---
+title: "Read and verify a receipt"
+description: "Connect a purchase to its accepted terms, paid path, lifecycle events, and independent chain evidence."
+---
+
+A receipt explains a particular sale. It should answer: what was paid, which campaign accepted it, which policy applied, who was allocated rewards, and what happened after purchase?
+
+Use [the settled demonstration receipt](https://usespoke.xyz/receipts/10143/4) while reading this guide. It is a real testnet record from a scripted fixture, not customer revenue.
+
+<Frame caption="The public receipt separates buyer payment, merchant-funded rewards, allocation claims, and proof.">
+  <img
+    src="/images/screenshots/receipt-live.jpg"
+    alt="Testnet sale receipt with separate payment and reward amounts, paid path, settlement timeline, and proof"
+  />
+</Frame>
+
+## Read the receipt from top to bottom
+
+| Item                        | What it tells you                                            | What it does not prove                                         |
+| --------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
+| Chain and sale ID           | Which deployment and purchase to inspect                     | That another chain's matching ID is the same sale              |
+| Buyer paid                  | Product payment accepted by the contract                     | The merchant's available reward budget                         |
+| Merchant-funded reward      | Reward reserved for this sale's eligible path                | That recipients have already withdrawn it                      |
+| Hold end                    | Contract timestamp at which finalization becomes eligible    | Automatic finalization or guaranteed inclusion at that instant |
+| Paid path                   | Selected recipients, depth, effective weights, and amounts   | Every person who influenced the buyer offchain                 |
+| Allocation state            | Whether a share is reserved, claimable, claimed, or refunded | A guaranteed future earning opportunity                        |
+| Policy hash                 | Commitment to the accepted terms                             | A replacement for understanding those terms                    |
+| Order key                   | The identity of the logical checkout                         | Permission to access the buyer's private delivery              |
+| Proof and transaction links | Purchase and settlement evidence                             | A security audit or a commercial revenue claim                 |
+
+## Three independent questions
+
+**Was the purchase accepted?** Find the purchase transaction and sale record on the correct contract.
+
+**Was the sale finalized or refunded?** Read the current sale state and its terminal event. A wallet signature or a local confirmation screen is insufficient.
+
+**Has this recipient claimed?** Inspect allocation/claim data. A finalized sale can have recipients who have claimed and recipients who have not.
+
+## Verify through the API
+
+```bash
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4/events
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4/path
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4/verify
+```
+
+The verification method returns the sale, allocations, policy hash, checked block number, and whether the index matches. Keep chain identity and block metadata alongside the result. If the index is behind, wait for reconciliation rather than treating a partial view as final.
+
+## Privacy and sharing
+
+The graph may show **Someone** when presentation preferences hide an identity. Public chain evidence remains available. Sharing a receipt does not expose a private file by design; delivery requires the authenticated buyer entitlement check.

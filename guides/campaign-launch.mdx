@@ -1,0 +1,55 @@
+---
+title: "Launch a campaign"
+description: "Plan the product, policy, budget, and settlement checks for a complete testnet campaign launch."
+---
+
+A successful launch connects four things: a product people can understand, a funded reward policy, a working purchase and delivery flow, and clear responsibility for settlement. Use this guide alongside [the merchant walkthrough](/guides/merchants).
+
+## Before opening the composer
+
+| Decision             | What to prepare                                                            | Why it matters                                                  |
+| -------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Product              | Title, summary, description, price, image, delivery mode, and refund terms | Buyers must know what they receive before signing               |
+| Merchant identity    | Public name, slug, support contact, and region                             | Connects the offer to an accountable merchant                   |
+| Reward rate          | A basis-point rate and per-sale cap                                        | Bounds the cost of one qualifying purchase                      |
+| Paid depth           | One to five levels and positive weights totaling 10,000                    | Explains which part of the graph can be paid                    |
+| Short-path treatment | Renormalize existing recipients or return unused shares                    | Prevents surprises when fewer people are eligible               |
+| Hold                 | A supported duration from 60 seconds to 90 days                            | Sets the boundary between pending-sale refunds and finalization |
+| Funding              | A separate reward deposit and campaign liability cap                       | Rewards must have coverage before purchases reserve them        |
+| End time             | A future expiry within the contract's schedule rules                       | Defines when new activity stops                                 |
+
+## An illustrative launch plan
+
+Suppose a test product costs **20 SDUSD** and you choose a **10%** reward, a **2 SDUSD** per-sale cap, two paid levels, and a **70/30** split. With sufficient funding and a full two-person path, one sale reserves **2 SDUSD**: **1.40** for the nearest distributor and **0.60** for their parent.
+
+A **40 SDUSD** available budget supports at most **20 such reservations** before considering other constraints. It does not guarantee 20 sales. Refunded purchases release their reservations; finalized and claimed rewards still count toward the campaign's lifetime liability usage.
+
+Keep the buyer payment separate: each buyer pays 20 SDUSD for the product. The additional 2 SDUSD reward comes from your funded reward budget.
+
+## Create, fund, then activate
+
+A newly created onchain campaign starts inactive. Funding adds to its available reward balance. Activation requires some available reward funding and merchant authorization. The user interface can guide you through these steps, but each required onchain transaction must succeed.
+
+After activation, inspect the public campaign as a buyer would. Confirm the price, product version, reward rate, paid depth, short-path rule, hold, and end time. Create a test link with a different wallet: the merchant cannot be its own distributor.
+
+## Verify both settlement outcomes
+
+Use separate eligible buyer wallets to exercise the two outcomes. The current prototype allows one purchase per buyer per campaign, even if that purchase was refunded.
+
+| Test                                         | Expected result                                                        |
+| -------------------------------------------- | ---------------------------------------------------------------------- |
+| Purchase through a distributor link          | A receipt with the accepted policy and reserved allocations            |
+| Authenticated delivery access                | The purchasing account receives the configured delivery response       |
+| Merchant refund before unlock                | Buyer payment returned, reward released, delivery entitlement revoked  |
+| Finalization at/after unlock on another sale | Reward and merchant proceeds become claimable                          |
+| Distributor and merchant claims              | Their respective balances are withdrawn through separate claim actions |
+
+These are testnet verification steps. Do not use a real mainnet asset or interpret the resulting SDUSD totals as revenue.
+
+## Monitor the campaign after launch
+
+Watch available rewards, pending reservations, claimable liabilities, campaign expiry, and indexing freshness. A large gross deposit is not the same as a large remaining budget. If the graph is active but purchases fail, inspect caps, available funds, buyer eligibility, and capacity limits before changing the interface.
+
+To revise future policy terms, schedule a version with at least 24 hours' notice. To stop new activity immediately, pause the campaign. Existing refund, finalization, and claim obligations continue.
+
+See [vault accounting](/concepts/vault-accounting) for exact balance movements and [refunds and claims](/guides/refunds-and-claims) for who can perform each action.

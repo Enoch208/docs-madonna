@@ -1,0 +1,68 @@
+---
+title: "Frequently asked questions"
+description: "Direct answers about rewards, wallets, product delivery, campaign changes, and what is live."
+---
+
+## Do I earn simply by creating a link?
+
+No. Link creation establishes attribution. A qualifying purchase must reserve a reward and finalize before the allocation becomes claimable. Clicks, sign-ups, and recruiting other sharers are not payout events.
+
+## Does every person above me receive a reward?
+
+No. The campaign pays a bounded number of eligible levels, currently one to five. People on other branches are not part of that sale's paid path. The merchant and buyer cannot be eligible recipients in the paid ancestry.
+
+## Can I move my link under someone else later?
+
+The parent is immutable after creation. The current contract allows one node per wallet per campaign. Inspect the parent and preview before you sign.
+
+## Can I buy twice from the same campaign?
+
+The current prototype permits one purchase per buyer per campaign. A refund does not clear that buyer's purchase record. This is a deployment limit, not a claim that all future versions will use the same purchase model.
+
+## Is the displayed reward percentage my personal share?
+
+Usually it describes the campaign's total reward rate. Your individual allocation depends on your eligible level, weights, caps, short-path rule, and sale outcome. Use the link or checkout preview to inspect amounts.
+
+## Does a direct purchase pay a distributor?
+
+No. Direct purchases use node ID zero and reserve no distributor commission.
+
+## Can a merchant change my already accepted reward?
+
+A sale snapshots its policy and allocations. Future policy changes require at least 24 hours' notice and do not rewrite accepted sales. A refund during the hold can release that sale's reserved reward.
+
+## Can I refund my own purchase from the contract?
+
+The native refund function is merchant-authorized. A buyer can request help or a refund through supported application workflows, but the request itself does not transfer tokens. The onchain refund must complete before unlock.
+
+## Does the end of the hold automatically send my reward?
+
+No. The sale must finalize, then each beneficiary claims their balance. **Ready to finalize**, **Claimable**, and **Claimed** are different states.
+
+## Can the merchant withdraw money owed to distributors?
+
+Unused-budget withdrawal is restricted to available rewards on paused, ended, or expired campaigns. Pending reservations and finalized claimable liabilities remain protected by the contract.
+
+## Does refunding revoke a file I already downloaded?
+
+It revokes future server-side delivery access for that sale. It cannot erase a file already saved on someone's device. External/manual fulfillment also depends on the merchant's process.
+
+## What does “Someone” mean in the graph?
+
+The account's public presentation is limited. It does not mean the allocation is missing, nor does it remove public blockchain history.
+
+## Is SDUSD real USDC?
+
+No. SDUSD is a freely mintable, non-redeemable Monad Testnet token with six decimals. It has no cash value. The optional Aurora funding destination is mainnet USDC and remains separate from testnet settlement.
+
+## Is Aurora funding live?
+
+The integration code and routes exist, but the documented deployment reports `configured: false`. Activation and a verified user-executed mainnet transfer remain outstanding. See [wallet funding](/guides/wallet-funding).
+
+## Can I integrate using an API key today?
+
+Public read methods do not require an API key. Account workflows use wallet sessions and browser origin/CSRF protections. A general developer API-key management workflow is a designed extension, not an available replacement for those controls.
+
+## Has the protocol been independently audited?
+
+The project has automated tests, verified contract source, and recorded testnet evidence. Those do not constitute an independent audit. Mainnet settlement remains gated on additional review and readiness work.

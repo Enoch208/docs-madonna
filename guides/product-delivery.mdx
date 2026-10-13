@@ -1,0 +1,52 @@
+---
+title: "Products and delivery"
+description: "Separate public product information from private delivery, and understand versioning, uploads, and access checks."
+---
+
+A product contains the information shown before a purchase and the delivery information used after it. Those are different audiences. Public images help explain an offer; a private download belongs behind the buyer access check.
+
+## Product fields
+
+The current product schema includes title, summary, outcome, description, category, price in token base units, token address, images, fulfillment mode, deliverable, and refund policy. Optional fields include cover alt text, access timing, and product status.
+
+The supported category values are `digital`, `education`, `software`, `design`, and `other`. A product can describe `download`, `external`, or `manual` delivery. The exact input constraints are in the [product method reference](/reference/commerce).
+
+A schema field describes an accepted data shape. Always verify the implemented delivery behavior before promising a timing or integration feature. In particular, the current entitlement check accepts a confirmed pending or finalized purchase and rejects refunded sales; an `accessTiming` field alone does not establish a different enforcement policy.
+
+## Versions preserve the purchase context
+
+Campaigns commit to a SKU hash and price. The delivery service locates the corresponding immutable product version and checks that its merchant owner matches the campaign's onchain merchant. Updating a product record does not rewrite the contract's accepted sale or move an old purchase to arbitrary new delivery content.
+
+When preparing a campaign, select the intended product version and verify its preview. If the client reports a product-version mismatch, refresh the data and review the changed terms before signing.
+
+## Upload requirements
+
+| Asset            | Current limits and processing                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| Merchant logo    | PNG, JPEG, or WebP; at most 2,000,000 bytes; square; at least 256 × 256 pixels                      |
+| Product asset    | Non-empty file, at most 25,000,000 bytes                                                            |
+| Supported image  | Decoded with a 16,777,216-pixel bound, orientation corrected, metadata stripped, re-encoded as WebP |
+| Private download | Stored as an owner-scoped asset with a SHA-256 integrity value                                      |
+
+The server accepts one file per upload request. A file extension or caller-provided MIME label is not sufficient for an image: the image must decode safely. A failed validation leaves the client with an error to correct rather than a publishable image.
+
+## Buyer access flow
+
+1. The buyer signs in and requests access for a sale.
+2. The server reads the sale from the contract, including buyer and status.
+3. It verifies the purchasing wallet or an appropriately linked wallet under the same account.
+4. It resolves the product version and checks merchant ownership.
+5. The delivery route returns the appropriate access response.
+6. A private download checks entitlement again, including refunds, and verifies stored file integrity.
+
+A shared public receipt is not a bearer credential for a private product. A previously issued temporary link does not override a later onchain refund.
+
+## Practical limitations
+
+A merchant must still provide a valid, useful product. Access control cannot prove its quality or recover an already downloaded file from a buyer's computer. External and manual delivery also depend on the merchant's own fulfillment process. Use clear support and refund instructions rather than implying that the protocol arbitrates every product dispute.
+
+## Temporary download grants
+
+An authorized access request creates a grant with a **15-minute** expiry. The returned URL contains a secret token and should be treated as private. Do not place it in public analytics, screenshots, or support reports.
+
+The download handler validates that token and expiry, then rechecks the sale and product version. External delivery redirects to a validated HTTPS URL; manual delivery returns the merchant's text instructions; download delivery returns the integrity-checked asset. Refund enforcement remains active while the grant is otherwise valid.

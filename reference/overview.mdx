@@ -1,0 +1,64 @@
+---
+title: "Complete client reference"
+description: "Find all 189 typed client methods, their HTTP mapping, access requirements, availability, and structural schemas."
+---
+
+The reference covers every method in the documented shared client contract. Each domain page lists the method name, HTTP route, base access requirement, availability, input fields, and expandable structural input/output schemas.
+
+The snapshot is generated from application revision **`1c90c5e`**. It contains **135 core methods**, **4 optional Aurora methods**, and **50 designed methods**. Check the [live endpoint registry](https://api.usespoke.xyz/v1/system/endpoints) and optional provider configuration before relying on current availability.
+
+<Columns cols={2}>
+  <Card title="Identity and accounts" icon="user" href="/reference/identity">
+    Authentication, account settings, wallets, passkeys, sessions, and
+    notifications.
+  </Card>
+  <Card title="Commerce" icon="store" href="/reference/commerce">
+    Merchants, product assets, campaign drafts, policies, and studio tools.
+  </Card>
+  <Card
+    title="Distribution"
+    icon="diagram-project"
+    href="/reference/distribution"
+  >
+    Links, ancestry, network views, public profiles, and reputation.
+  </Card>
+  <Card title="Settlement" icon="receipt" href="/reference/settlement">
+    Checkout, delivery, receipts, earnings, vaults, reports, and refund
+    requests.
+  </Card>
+  <Card title="Funding and insights" icon="wallet" href="/reference/funding">
+    Gas assistance, separate optional mainnet funding, and cached wallet
+    context.
+  </Card>
+  <Card title="Platform" icon="server" href="/reference/platform">
+    Networks, tokens, health, support, developer, and operator surfaces.
+  </Card>
+</Columns>
+
+[Designed extension methods](/reference/extensions) complete the catalog for partnerships, invitations, communities, integrations, billing, subscriptions, teams, and other extension domains. Their inclusion documents the client design; it does not activate their live implementation.
+
+## How to read a method
+
+**Client input** is the object passed to the typed method. Path fields move into the URL; some methods unwrap a nested body, and uploads use multipart. Read [HTTP transport](/developers/http-transport) before forming a raw request.
+
+**Output** is the successful response's `data` field. It is wrapped by the standard envelope described in [API overview](/developers/api).
+
+**Access** is the shared route's base requirement. Session access does not imply permission to read another account's records, act as a merchant, perform operator actions, or skip a fresh confirmation. Service authorization still applies.
+
+**Availability** distinguishes core routes, conditional optional funding, and designed routes that return `FEATURE_NOT_AVAILABLE`. A core service may still need configuration or have no data for a given account.
+
+## Schema fidelity
+
+The JSON schemas are generated structural projections of the original Zod schemas. They describe fields, shapes, enums, and representable bounds. They do not reproduce every custom refinement, transform, byte-range check, browser file validator, business rule, or runtime authorization check.
+
+For example, weights must sum to 10,000, a canonical integer must fit its onchain range, an HTTPS-only URL refinement must pass, and some confirmation purposes require an action name. Those validations remain in the shared Zod/server implementation even when a JSON Schema projection cannot express them completely.
+
+The client contract is shared with Demo mode, so some structural ID unions include `demo-…`. Live services still require live IDs and enforce their own boundaries. Do not use these projections to bypass the original validator.
+
+[Download the complete method snapshot](https://raw.githubusercontent.com/Enoch208/docs-madonna/main/schemas/client-methods.json) · [Download the error code union](https://raw.githubusercontent.com/Enoch208/docs-madonna/main/schemas/error-codes.json) · [Read the original schemas](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api)
+
+## Updating the reference
+
+The docs repository includes `scripts/generate-api-reference.mts`. Run it with the Spoke workspace's installed `tsx` loader and the desired source checkout. It records the exact Git revision and regenerates method pages, schema downloads, and the contract event reference. Review availability and explanatory prose when the source contract changes.
+
+Generated schemas are reference material, not a public promise that future incompatible changes will be silently accepted. Consumers should pin an intended contract/version and validate responses.

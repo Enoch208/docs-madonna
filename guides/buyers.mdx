@@ -39,3 +39,9 @@ Delivery access rechecks the sale and buyer. A refunded sale loses its delivery 
 ## What your purchase demonstrates
 
 The current product is a testnet implementation. SDUSD is freely mintable and non-redeemable. Scripted demonstration purchases and the sample products shown in Demo mode do not represent real customer orders.
+
+## Important prototype behavior
+
+A wallet can make only one purchase per campaign in the current contract. A refunded purchase still occupies that record. The native refund action is merchant-authorized; a buyer request is not an automatic transfer.
+
+Use [reading receipts](/guides/reading-receipts) to check the accepted terms and [refunds and claims](/guides/refunds-and-claims) to understand the exact unlock boundary.

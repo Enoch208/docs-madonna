@@ -1,0 +1,65 @@
+---
+title: "Testing and verification"
+description: "Choose the right test layer, reproduce settlement outcomes, and understand the limits of the evidence."
+---
+
+Spoke combines shared-schema tests, contract tests, API integration tests, frontend client/state tests, browser checks, and recorded testnet journeys. Each layer catches a different kind of failure.
+
+## Test matrix
+
+| Layer                 | What it should establish                                                   | What it does not establish alone                |
+| --------------------- | -------------------------------------------------------------------------- | ----------------------------------------------- |
+| Protocol/schema tests | Money math, field validation, types, route contracts, statuses             | Deployment configuration or real chain behavior |
+| Foundry tests         | Contract transitions, permissions, edge cases, fuzz and invariant behavior | Correct UI wiring or operational uptime         |
+| API integration tests | Sessions, ownership, idempotency, projections, replay, file access         | Every external wallet/device combination        |
+| Frontend tests        | Client mapping, transaction states, error and resume behavior              | Successful hardware passkey signing             |
+| Browser checks        | Actual layout, navigation, accessibility, and visible journey states       | Independent security assurance                  |
+| Live testnet journey  | Recorded client/API/contract flow against the deployed system              | Real customer traction or mainnet readiness     |
+
+## Run the standard layers
+
+From the application repository:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm format:check
+pnpm test --project protocol
+pnpm test --project sdk
+pnpm test --project web
+pnpm contracts:test
+pnpm --filter @spoke/web build
+```
+
+Contract formatting can be checked with `forge fmt --check` inside `packages/contracts`. The generated ABI must match the compiled source after contract changes.
+
+## API integration environment
+
+Use a disposable PostgreSQL database. The API README documents `TEST_DATABASE_URL`; gas tests additionally require a separate Anvil instance configured as chain 10143 through `TEST_GAS_RPC_URL`.
+
+```bash
+TEST_DATABASE_URL=postgres://spoke:spoke@127.0.0.1:54332/spoke_test \
+  pnpm test --project api
+```
+
+Create the disposable database before running the command. Do not target production or a database with data you need to preserve. Normal local application development uses Anvil chain 31337; gas-service tests intentionally use a different chain setting and should not share that process accidentally.
+
+## Acceptance scenarios for a settlement change
+
+- Full and short referral paths produce exact integer allocations.
+- Direct purchase reserves zero reward.
+- Buyer, merchant, duplicate, wrong-campaign, and invalid-path conditions are rejected correctly.
+- Refund succeeds before unlock and fails at the boundary.
+- Finalization fails before unlock and succeeds at/after the boundary.
+- Refunded and finalized outcomes cannot overlap.
+- Claims cannot spend a balance twice.
+- Unused-budget withdrawal preserves reserved and claimable liabilities.
+- Policy scheduling enforces notice and keeps old sales unchanged.
+- A reorg/replay restores canonical views without deleting offchain accounts.
+- Refund revokes private delivery even if a previously issued grant has not expired.
+
+## Evidence to keep with a release
+
+Keep the exact commit, test commands/results, environment identity, transaction hashes, and observed limitations. The public [proof page](/project/proof) links checked artifacts for the scripted deployment. Do not replace those artifacts with screenshots of fixture amounts as a claim of commercial adoption.
+
+No single green test suite establishes mainnet readiness. Independent review, deployment controls, recovery exercises, capacity analysis, and explicit release approval remain separate gates in the [roadmap](/project/roadmap).

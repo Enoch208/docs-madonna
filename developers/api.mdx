@@ -124,3 +124,7 @@ type ApiFailure = {
 | `FEATURE_NOT_AVAILABLE`                         | Treat the feature as unavailable; do not simulate a live success      |
 
 The [error definitions](https://github.com/Enoch208/spoke/blob/main/packages/protocol/src/errors.ts) contain the full union. Preserve `requestId` in bug reports. A retryable transport error does not authorize a duplicate financial action.
+
+## Complete field-level reference
+
+The earlier tables are a quick entry point. The [complete client reference](/reference/overview) covers every one of the 189 methods with typed field tables, input/output schema projections, availability labels, and pinned source links. The [HTTP transport guide](/developers/http-transport) explains request serialization; the [checkout integration guide](/developers/checkout-integration) explains the multi-step purchase flow.

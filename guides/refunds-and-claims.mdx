@@ -1,0 +1,47 @@
+---
+title: "Refunds, finalization, and claims"
+description: "Know the exact actor, time boundary, and balance change for each settlement action."
+---
+
+A sale has one settlement outcome: it remains pending, refunds before its unlock time, or finalizes at/after that time. Claiming happens after finalization and is tracked separately for each beneficiary.
+
+## Who can do what?
+
+| Action                                 | Actor enforced by the contract              | Timing                                   | Result                                                                |
+| -------------------------------------- | ------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| `refundNativeSale(saleId)`             | Campaign merchant                           | Pending sale, strictly before `unlockAt` | Buyer receives the price; reserved reward returns to available budget |
+| `finalizeSale(saleId)`                 | Any caller                                  | Pending sale, at or after `unlockAt`     | Merchant proceeds and distributor allocations become claimable        |
+| `claimRewards(token)`                  | Reward beneficiary claims their own balance | When nonzero claimable balance exists    | Aggregates that recipient's eligible balances for the supported token |
+| `claimMerchantProceeds(campaignId)`    | Campaign merchant                           | When nonzero proceeds are claimable      | Transfers that campaign's merchant proceeds                           |
+| `refundUnusedRewardBudget(campaignId)` | Campaign merchant                           | Paused, ended, or expired campaign       | Transfers only available unused rewards                               |
+
+The public contract permits finalization by any caller. An application screen or API session can impose its own access requirements for a particular workflow. Do not confuse those interface requirements with an onchain merchant-only restriction.
+
+## The refund boundary is exact
+
+If `unlockAt` is 12:00:00 UTC, the pending-sale refund must execute in a block whose timestamp is **before** 12:00:00. At 12:00:00 or later, finalization is eligible and that refund function rejects the request. Local wall-clock time or the time a user clicked a button does not determine the contract result.
+
+A buyer's refund request is a communication and application record. It does not itself transfer tokens. Only the merchant's successful onchain refund changes the native sale to refunded. Allow time for wallet confirmation and inclusion before the boundary.
+
+## Refund checklist
+
+1. Identify the exact sale ID and chain.
+2. Confirm that the sale is pending and read its unlock time.
+3. Resolve the buyer's request according to the product's stated policy.
+4. If refunding, have the merchant wallet submit the refund before unlock.
+5. Verify the transaction and receipt; confirm released rewards and buyer refund.
+6. Check that private delivery access is denied for that sale.
+
+A reverted or rejected transaction is not a completed refund. The API's dispute outcome text is not a substitute for chain evidence.
+
+## Finalize, then claim
+
+After the hold, finalization converts a reservation into claimable liabilities. It does not automatically send each allocation to a wallet. The merchant and distributors pull their own balances with the relevant claim function.
+
+Distributor claims aggregate claimable rewards across earning campaigns for the supported token. Merchant proceeds claims are campaign-specific. Keep those separate in accounting and in the user interface.
+
+## Campaigns that stop running
+
+Pausing or ending a campaign stops new links and purchases; it does not release existing reserved obligations. Finalization, valid refunds, and claims remain available. Withdrawing unused rewards never consumes `pendingReserved` or `vestedUnclaimed`.
+
+If an action is unavailable, compare the contract state against the [six earnings buckets](/concepts/settlement) and [troubleshooting guide](/guides/troubleshooting).

@@ -1,0 +1,94 @@
+---
+title: "Build a reliable checkout"
+description: "Implement a recoverable purchase flow with exact previews, a stable order key, wallet authorization, and verified settlement."
+---
+
+A correct checkout coordinates the browser, account session, token approval, contract purchase, RPC receipt, and indexer. Persist enough identity to resume the original action at every boundary.
+
+## The identities to retain
+
+| Value                         | Scope and purpose                                                 |
+| ----------------------------- | ----------------------------------------------------------------- |
+| Chain ID and protocol address | Identifies the deployment                                         |
+| Buyer wallet                  | Identifies the signer and contract buyer                          |
+| Campaign and node IDs         | Identifies the offer and attribution path; node zero means direct |
+| `orderKey`                    | Random 32-byte identity for one logical purchase                  |
+| Intent ID                     | Finds the authenticated API record                                |
+| Transaction hash              | Tracks the actual broadcast transaction                           |
+| Sale ID                       | Connects the accepted purchase to receipts and delivery           |
+
+Persist recoverable checkout state under the chain, account, and campaign context. Do not accidentally reuse an intent after a wallet switch or generate a fresh order key merely because the page reloaded.
+
+## 1. Preview the exact purchase
+
+Call `checkout.preview` with the selected campaign and attribution node. Review the product and policy data, price, reward amount, chain, and buyer context. Use the returned values rather than calculating an independent floating-point quote.
+
+A preview is observational. Budget, schedule, policy, and eligibility can change before inclusion. Refresh after a mismatch and have the buyer review new terms.
+
+## 2. Create a stable order key and intent
+
+In the browser, generate the order key once:
+
+```ts
+import { bytesToHex } from "viem";
+
+const orderKey = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
+// Persist this with the reviewed checkout before sending a request.
+```
+
+The exact client input is:
+
+```ts
+type CheckoutInput = {
+  campaignId: string;
+  nodeId: string; // "0" for a direct purchase
+  orderKey: `0x${string}`;
+  expectedPrice: string;
+  expectedReward: string;
+  policyHash: `0x${string}`;
+  chainId: number;
+};
+```
+
+Send it to `POST /v1/checkout/intents` from the allowed application origin with the authenticated cookie, CSRF token, and `idempotency-key: <orderKey>`. This is an integration shape, not a substitute for the shared Zod input schema.
+
+The server checks chain identity and current preview terms. The same idempotency key with the same request restores its record; a changed request under that key conflicts. The intent returns destination, calldata, value, expiry, and tracking fields. It does not move funds.
+
+## 3. Review approval and purchase
+
+Verify that the returned `to` is the intended deployed protocol, `buyer` is the signing account, `chainId` matches, and `value` is zero for the token purchase. Ensure the buyer has the required token balance and allowance. Token approval and purchase are distinct wallet actions.
+
+The contract call is exactly:
+
+```solidity
+purchase(uint256 campaignId, uint256 nodeId, bytes32 orderKey)
+```
+
+Use the generated ABI or reviewed intent calldata and the user's wallet flow. Do not send the purchase from a backend private key or treat a successful sign-in as permission to buy.
+
+## 4. Attach and follow the transaction
+
+After broadcast, call `checkout.attachTransaction` with intent ID and hash. The server checks sender, destination, exact calldata, and zero native value. An unrelated transaction cannot be attached to manufacture a successful checkout.
+
+An RPC may not see the new hash immediately. `TX_PENDING` is a reason to follow the same hash with bounded retry, not create another purchase. Continue reading the intent and receipt until the action is confirmed and indexed.
+
+## Recovery decision table
+
+| Interruption                     | Correct next step                                                                                   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Before wallet signature          | Restore the reviewed intent, check expiry and current terms                                         |
+| User rejects signature           | Show rejection and allow a deliberate retry                                                         |
+| Hash obtained, attach call fails | Retain the hash; retry attaching the same transaction                                               |
+| Broadcast outcome uncertain      | Inspect the original order key and transaction before resubmitting                                  |
+| Intent expires                   | First reconcile whether its purchase already exists; refresh terms only if no purchase was accepted |
+| Wallet or chain changes          | Stop the current signing flow; restore only a matching account/deployment context                   |
+| Transaction reverts              | Explain the actual contract failure and refresh relevant data                                       |
+| Index is behind                  | Track the confirmed transaction while waiting for the receipt projection                            |
+
+The contract's `saleIdForOrder` and `saleIdForBuyer` support reconciliation. The prototype enforces one purchase per buyer per campaign. Changing the order key is not a way to bypass that rule.
+
+## Keep three state machines separate
+
+The UI's transaction lifecycle includes `done`, `rejected`, `unknown`, and `replaced`. The API intent status has its own values, including `created`, `submitted`, `included`, `confirmed`, `expired`, and `failed`. The sale itself is pending, refunded, or finalized. An intent marked confirmed is not proof that a reward has become claimable.
+
+After purchase, direct the buyer to their receipt and authenticated delivery flow. After the hold, settlement follows [refunds, finalization, and claims](/guides/refunds-and-claims).

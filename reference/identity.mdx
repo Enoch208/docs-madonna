@@ -1,0 +1,3497 @@
+---
+title: "Identity and accounts"
+description: "Wallet authentication, account profiles, recovery, sessions, wallets, passkeys, and notification preferences."
+---
+
+Wallet authentication, account profiles, recovery, sessions, wallets, passkeys, and notification preferences.
+
+This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **29 client methods** in this group.
+
+<Note>
+  Input schemas describe the typed client call before path/query/body mapping.
+  Output schemas describe the envelope's `data`, not the full HTTP response.
+  Custom refinements, transforms, and runtime permissions are enforced by the
+  [shared Zod
+  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  Read [transport rules](/developers/http-transport) before copying a client
+  object into an HTTP body. Designed methods reject live calls; optional funding
+  still requires provider configuration.
+</Note>
+
+[Download all method schemas](https://raw.githubusercontent.com/Enoch208/docs-madonna/main/schemas/client-methods.json) · [Live endpoint registry](https://api.usespoke.xyz/v1/system/endpoints)
+
+## Methods at a glance
+
+| Client method                                                         | HTTP route                              | Access  | Availability |
+| --------------------------------------------------------------------- | --------------------------------------- | ------- | ------------ |
+| [`auth.challenge`](#auth-challenge)                                   | `POST /v1/auth/challenge`               | public  | Core live    |
+| [`auth.verify`](#auth-verify)                                         | `POST /v1/auth/verify`                  | public  | Core live    |
+| [`auth.signOut`](#auth-signout)                                       | `POST /v1/auth/sign-out`                | session | Core live    |
+| [`account.me`](#account-me)                                           | `GET /v1/me`                            | session | Core live    |
+| [`account.updateProfile`](#account-updateprofile)                     | `PATCH /v1/me`                          | session | Core live    |
+| [`account.handleAvailable`](#account-handleavailable)                 | `GET /v1/handles/:handle`               | public  | Core live    |
+| [`account.activity`](#account-activity)                               | `GET /v1/me/activity`                   | session | Core live    |
+| [`account.balances`](#account-balances)                               | `GET /v1/me/balances`                   | session | Core live    |
+| [`account.recordRecoveryCheck`](#account-recordrecoverycheck)         | `POST /v1/me/recovery-check`            | session | Core live    |
+| [`account.passkeys`](#account-passkeys)                               | `GET /v1/me/passkeys`                   | session | Core live    |
+| [`account.addPasskey`](#account-addpasskey)                           | `POST /v1/me/passkeys`                  | session | Core live    |
+| [`account.updatePasskey`](#account-updatepasskey)                     | `PATCH /v1/me/passkeys/:credentialId`   | session | Core live    |
+| [`account.removePasskey`](#account-removepasskey)                     | `DELETE /v1/me/passkeys/:credentialId`  | session | Core live    |
+| [`account.passkeyVault`](#account-passkeyvault)                       | `GET /v1/passkey-vaults/:credentialId`  | public  | Core live    |
+| [`account.wallets`](#account-wallets)                                 | `GET /v1/me/wallets`                    | session | Core live    |
+| [`account.linkWallet`](#account-linkwallet)                           | `POST /v1/me/wallets`                   | session | Core live    |
+| [`account.unlinkWallet`](#account-unlinkwallet)                       | `DELETE /v1/me/wallets/:address`        | session | Core live    |
+| [`account.labelWallet`](#account-labelwallet)                         | `PATCH /v1/me/wallets/:address`         | session | Core live    |
+| [`account.setPayoutAddress`](#account-setpayoutaddress)               | `PUT /v1/me/payout-address`             | session | Core live    |
+| [`account.sessions`](#account-sessions)                               | `GET /v1/me/sessions`                   | session | Core live    |
+| [`account.revokeSession`](#account-revokesession)                     | `DELETE /v1/me/sessions`                | session | Core live    |
+| [`account.preferences`](#account-preferences)                         | `GET /v1/me/preferences`                | session | Core live    |
+| [`account.updatePreferences`](#account-updatepreferences)             | `PATCH /v1/me/preferences`              | session | Core live    |
+| [`account.exportData`](#account-exportdata)                           | `POST /v1/me/export`                    | session | Core live    |
+| [`account.deleteAccount`](#account-deleteaccount)                     | `DELETE /v1/me`                         | session | Core live    |
+| [`notifications.list`](#notifications-list)                           | `GET /v1/me/notifications`              | session | Core live    |
+| [`notifications.markRead`](#notifications-markread)                   | `POST /v1/me/notifications/read`        | session | Core live    |
+| [`notifications.preferences`](#notifications-preferences)             | `GET /v1/me/notification-preferences`   | session | Core live    |
+| [`notifications.updatePreferences`](#notifications-updatepreferences) | `PATCH /v1/me/notification-preferences` | session | Core live    |
+
+## auth.challenge
+
+**POST `/v1/auth/challenge`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L120).
+
+**Client input fields**
+
+| Field         | Type                            | Required | Constraints                                           |
+| ------------- | ------------------------------- | -------- | ----------------------------------------------------- |
+| `address`     | string                          | Yes      | Pattern validated; see input schema                   |
+| `chainId`     | integer                         | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+| `accountKind` | "wallet" · "passkey" · "phrase" | No       | Default: `"wallet"`                                   |
+| `purpose`     | "signIn" · "link" · "confirm"   | No       | Default: `"signIn"`                                   |
+| `action`      | string                          | No       | Min length: 1; Max length: 80                         |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "accountKind": {
+      "default": "wallet",
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "purpose": {
+      "default": "signIn",
+      "type": "string",
+      "enum": ["signIn", "link", "confirm"]
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    }
+  },
+  "required": ["address", "chainId"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "nonce": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": ["message", "nonce", "expiresAt"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## auth.verify
+
+**POST `/v1/auth/verify`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L121).
+
+**Client input fields**
+
+| Field       | Type                            | Required | Constraints                                            |
+| ----------- | ------------------------------- | -------- | ------------------------------------------------------ |
+| `message`   | string                          | Yes      | Min length: 1; Max length: 4096                        |
+| `signature` | string                          | Yes      | Max length: 16384; Pattern validated; see input schema |
+| `method`    | "wallet" · "passkey" · "phrase" | No       | Default: `"wallet"`                                    |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "signature": {
+      "type": "string",
+      "maxLength": 16384,
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "method": {
+      "default": "wallet",
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    }
+  },
+  "required": ["message", "signature"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "chainId": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "isNewAccount": {
+          "type": "boolean"
+        },
+        "csrfToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "address",
+        "chainId",
+        "expiresAt",
+        "isNewAccount",
+        "csrfToken"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "confirmationToken": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["confirmationToken", "expiresAt"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "isNewAccount": {
+          "type": "boolean",
+          "const": true
+        },
+        "session": {
+          "type": "null"
+        }
+      },
+      "required": ["address", "isNewAccount", "session"],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## auth.signOut
+
+**POST `/v1/auth/sign-out`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L129).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.me
+
+**GET `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L130).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "accountKind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "handle": {
+      "type": ["string", "null"]
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "avatarSeed": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "website": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "onboarding": {
+      "type": "object",
+      "properties": {
+        "intent": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["buy", "earn", "sell"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["intent", "completedAt"],
+      "additionalProperties": false
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "checkedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["checkedAt"],
+      "additionalProperties": false
+    },
+    "handleChangedAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "handleChangeAvailableAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "payoutAddress": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "workspaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "description": {
+            "type": "string"
+          },
+          "logo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "verificationTier": {
+            "type": "string",
+            "enum": ["unverified", "domain", "business"]
+          },
+          "joinedAt": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "offersCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "closedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema1"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "category": {
+            "type": ["string", "null"]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supportEmail": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "moderation": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": ["visible", "hidden"]
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "at": {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    "action": {
+                      "type": "string"
+                    },
+                    "reasonCategory": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["at", "action", "reasonCategory"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["state", "actions"],
+            "additionalProperties": false
+          },
+          "region": {
+            "type": "string"
+          },
+          "defaults": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "rewardToken": {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "commissionBps": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "perSaleCap": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "campaignLiabilityCap": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "maxRewardedAncestors": {
+                    "$ref": "#/$defs/__schema4"
+                  },
+                  "weightsBps": {
+                    "$ref": "#/$defs/__schema5"
+                  },
+                  "shortPathMode": {
+                    "$ref": "#/$defs/__schema7"
+                  },
+                  "holdSeconds": {
+                    "$ref": "#/$defs/__schema8"
+                  },
+                  "expiry": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "eligibilityHash": {
+                    "$ref": "#/$defs/__schema9"
+                  }
+                },
+                "required": [
+                  "rewardToken",
+                  "commissionBps",
+                  "perSaleCap",
+                  "campaignLiabilityCap",
+                  "maxRewardedAncestors",
+                  "weightsBps",
+                  "shortPathMode",
+                  "holdSeconds",
+                  "expiry",
+                  "eligibilityHash"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "budgetAlertSales": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "agreement": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "publishedAt": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "acceptedAt": {
+                "$ref": "#/$defs/__schema1"
+              }
+            },
+            "required": ["version", "publishedAt", "url", "acceptedAt"],
+            "additionalProperties": false
+          },
+          "businessWallet": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "showSupportEmail": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "address",
+          "description",
+          "logo",
+          "website",
+          "verificationTier",
+          "joinedAt",
+          "offersCount",
+          "closedAt",
+          "supportEmail",
+          "region",
+          "defaults",
+          "budgetAlertSales",
+          "agreement",
+          "businessWallet"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "isMerchant": {
+      "type": "boolean"
+    },
+    "isOperator": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "visibility": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "fields": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "acceptsInvitations": {
+          "$ref": "#/$defs/__schema12"
+        }
+      },
+      "required": ["level", "fields", "acceptsInvitations"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "address",
+    "accountKind",
+    "handle",
+    "displayName",
+    "avatarSeed",
+    "bio",
+    "website",
+    "onboarding",
+    "recovery",
+    "handleChangedAt",
+    "handleChangeAvailableAt",
+    "payoutAddress",
+    "workspaces",
+    "isMerchant",
+    "isOperator",
+    "createdAt"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema3": {
+      "type": "string"
+    },
+    "__schema4": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "__schema5": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema6"
+      }
+    },
+    "__schema6": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema7": {
+      "default": "RENORMALIZE_EXISTING",
+      "type": "string",
+      "enum": ["RENORMALIZE_EXISTING", "RETURN_UNUSED"]
+    },
+    "__schema8": {
+      "type": "integer",
+      "minimum": 60,
+      "maximum": 7776000
+    },
+    "__schema9": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema10": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "__schema11": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "settledConversions",
+          "netAttributedValue",
+          "merchantCount",
+          "campaignCount",
+          "refundAdjustment"
+        ]
+      }
+    },
+    "__schema12": {
+      "default": false,
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.updateProfile
+
+**PATCH `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L131).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field                 | Type                    | Required | Constraints                                                        |
+| --------------------- | ----------------------- | -------- | ------------------------------------------------------------------ |
+| `displayName`         | string                  | No       | Max length: 80                                                     |
+| `handle`              | string                  | No       | Min length: 3; Max length: 30; Pattern validated; see input schema |
+| `avatarSeed`          | string                  | No       | Max length: 100                                                    |
+| `bio`                 | string                  | No       | Max length: 500                                                    |
+| `website`             | string or null          | No       | See nested schema and runtime validation                           |
+| `intent`              | "buy" · "earn" · "sell" | No       | See nested schema and runtime validation                           |
+| `onboardingCompleted` | boolean                 | No       | See nested schema and runtime validation                           |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "displayName": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "handle": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 30,
+      "pattern": "^[a-z][a-z0-9_]+$"
+    },
+    "avatarSeed": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "bio": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "website": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["buy", "earn", "sell"]
+    },
+    "onboardingCompleted": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "accountKind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "handle": {
+      "type": ["string", "null"]
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "avatarSeed": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "website": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "onboarding": {
+      "type": "object",
+      "properties": {
+        "intent": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["buy", "earn", "sell"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["intent", "completedAt"],
+      "additionalProperties": false
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "checkedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["checkedAt"],
+      "additionalProperties": false
+    },
+    "handleChangedAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "handleChangeAvailableAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "payoutAddress": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "workspaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "description": {
+            "type": "string"
+          },
+          "logo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "verificationTier": {
+            "type": "string",
+            "enum": ["unverified", "domain", "business"]
+          },
+          "joinedAt": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "offersCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "closedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema1"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "category": {
+            "type": ["string", "null"]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supportEmail": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "moderation": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": ["visible", "hidden"]
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "at": {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    "action": {
+                      "type": "string"
+                    },
+                    "reasonCategory": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["at", "action", "reasonCategory"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["state", "actions"],
+            "additionalProperties": false
+          },
+          "region": {
+            "type": "string"
+          },
+          "defaults": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "rewardToken": {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "commissionBps": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "perSaleCap": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "campaignLiabilityCap": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "maxRewardedAncestors": {
+                    "$ref": "#/$defs/__schema4"
+                  },
+                  "weightsBps": {
+                    "$ref": "#/$defs/__schema5"
+                  },
+                  "shortPathMode": {
+                    "$ref": "#/$defs/__schema7"
+                  },
+                  "holdSeconds": {
+                    "$ref": "#/$defs/__schema8"
+                  },
+                  "expiry": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "eligibilityHash": {
+                    "$ref": "#/$defs/__schema9"
+                  }
+                },
+                "required": [
+                  "rewardToken",
+                  "commissionBps",
+                  "perSaleCap",
+                  "campaignLiabilityCap",
+                  "maxRewardedAncestors",
+                  "weightsBps",
+                  "shortPathMode",
+                  "holdSeconds",
+                  "expiry",
+                  "eligibilityHash"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "budgetAlertSales": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "agreement": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "publishedAt": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "acceptedAt": {
+                "$ref": "#/$defs/__schema1"
+              }
+            },
+            "required": ["version", "publishedAt", "url", "acceptedAt"],
+            "additionalProperties": false
+          },
+          "businessWallet": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "showSupportEmail": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "address",
+          "description",
+          "logo",
+          "website",
+          "verificationTier",
+          "joinedAt",
+          "offersCount",
+          "closedAt",
+          "supportEmail",
+          "region",
+          "defaults",
+          "budgetAlertSales",
+          "agreement",
+          "businessWallet"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "isMerchant": {
+      "type": "boolean"
+    },
+    "isOperator": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "visibility": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "fields": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "acceptsInvitations": {
+          "$ref": "#/$defs/__schema12"
+        }
+      },
+      "required": ["level", "fields", "acceptsInvitations"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "address",
+    "accountKind",
+    "handle",
+    "displayName",
+    "avatarSeed",
+    "bio",
+    "website",
+    "onboarding",
+    "recovery",
+    "handleChangedAt",
+    "handleChangeAvailableAt",
+    "payoutAddress",
+    "workspaces",
+    "isMerchant",
+    "isOperator",
+    "createdAt"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema3": {
+      "type": "string"
+    },
+    "__schema4": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "__schema5": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema6"
+      }
+    },
+    "__schema6": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema7": {
+      "default": "RENORMALIZE_EXISTING",
+      "type": "string",
+      "enum": ["RENORMALIZE_EXISTING", "RETURN_UNUSED"]
+    },
+    "__schema8": {
+      "type": "integer",
+      "minimum": 60,
+      "maximum": 7776000
+    },
+    "__schema9": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema10": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "__schema11": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "settledConversions",
+          "netAttributedValue",
+          "merchantCount",
+          "campaignCount",
+          "refundAdjustment"
+        ]
+      }
+    },
+    "__schema12": {
+      "default": false,
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.handleAvailable
+
+**GET `/v1/handles/:handle`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L132).
+
+**Client input fields**
+
+| Field    | Type   | Required | Constraints                              |
+| -------- | ------ | -------- | ---------------------------------------- |
+| `handle` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "handle": {
+      "type": "string"
+    }
+  },
+  "required": ["handle"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "available": {
+      "type": "boolean"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["taken", "reserved", "invalid"]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "suggestions": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema0"
+      }
+    }
+  },
+  "required": ["available", "reason", "suggestions"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.activity
+
+**GET `/v1/me/activity`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L133).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                              |
+| --------- | ------- | -------- | ---------------------------------------- |
+| `cursor`  | string  | No       | See nested schema and runtime validation |
+| `limit`   | integer | No       | Minimum: 1; Maximum: 100                 |
+| `address` | string  | No       | Pattern validated; see input schema      |
+| `filter`  | string  | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "filter": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$"
+                  },
+                  "symbol": {
+                    "type": "string"
+                  },
+                  "decimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 36
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "testnet": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["address", "symbol", "decimals"],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "txHash": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$"
+          },
+          "blockNumber": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_submitted",
+              "wallet_confirmation",
+              "submitted",
+              "included",
+              "confirmed",
+              "indexed",
+              "done",
+              "rejected",
+              "unknown",
+              "replaced",
+              "failed"
+            ]
+          },
+          "objectId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          }
+        },
+        "required": [
+          "kind",
+          "amount",
+          "token",
+          "txHash",
+          "blockNumber",
+          "status",
+          "objectId",
+          "at"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.balances
+
+**GET `/v1/me/balances`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L137).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field     | Type   | Required | Constraints                         |
+| --------- | ------ | -------- | ----------------------------------- |
+| `address` | string | No       | Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "monWei": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "sdusd": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sdusdAllowanceToProtocol": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "required": ["monWei", "sdusd", "sdusdAllowanceToProtocol", "blockNumber"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.recordRecoveryCheck
+
+**POST `/v1/me/recovery-check`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L138).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "checkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": ["checkedAt"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.passkeys
+
+**GET `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L139).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "credentialId": {
+        "type": "string"
+      },
+      "label": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string",
+        "enum": ["original", "added"]
+      },
+      "deviceHint": {
+        "type": "string"
+      },
+      "createdAt": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "lastUsedAt": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/__schema0"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "hasVault": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "credentialId",
+      "label",
+      "kind",
+      "deviceHint",
+      "createdAt",
+      "lastUsedAt",
+      "hasVault"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.addPasskey
+
+**POST `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L140).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type                                                           | Required | Constraints                              |
+| ------------------- | -------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `credentialId`      | string                                                         | Yes      | Min length: 16; Max length: 1024         |
+| `kind`              | "original" · "added"                                           | Yes      | See nested schema and runtime validation |
+| `transports`        | "usb" · "nfc" · "ble" · "internal" · "hybrid" · "smart-card"[] | Yes      | See nested schema and runtime validation |
+| `label`             | string                                                         | Yes      | Min length: 1; Max length: 80            |
+| `vault`             | object                                                         | No       | See nested schema and runtime validation |
+| `confirmationToken` | string                                                         | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 1024
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["original", "added"]
+    },
+    "transports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["usb", "nfc", "ble", "internal", "hybrid", "smart-card"]
+      }
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "vault": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "confirmationToken": {
+      "type": "string"
+    }
+  },
+  "required": ["credentialId", "kind", "transports", "label"],
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema1"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/__schema1"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["original", "added"]
+    },
+    "deviceHint": {
+      "type": "string"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "lastUsedAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hasVault": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "credentialId",
+    "label",
+    "kind",
+    "deviceHint",
+    "createdAt",
+    "lastUsedAt",
+    "hasVault"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.updatePasskey
+
+**PATCH `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L150).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field          | Type   | Required | Constraints                      |
+| -------------- | ------ | -------- | -------------------------------- |
+| `credentialId` | string | Yes      | Min length: 16; Max length: 1024 |
+| `label`        | string | Yes      | Min length: 1; Max length: 80    |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 1024
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    }
+  },
+  "required": ["credentialId", "label"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["original", "added"]
+    },
+    "deviceHint": {
+      "type": "string"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "lastUsedAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hasVault": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "credentialId",
+    "label",
+    "kind",
+    "deviceHint",
+    "createdAt",
+    "lastUsedAt",
+    "hasVault"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.removePasskey
+
+**DELETE `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L154).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type   | Required | Constraints                      |
+| ------------------- | ------ | -------- | -------------------------------- |
+| `credentialId`      | string | Yes      | Min length: 16; Max length: 1024 |
+| `confirmationToken` | string | Yes      | Min length: 32; Max length: 128  |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 1024
+    },
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    }
+  },
+  "required": ["credentialId", "confirmationToken"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.passkeyVault
+
+**GET `/v1/passkey-vaults/:credentialId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L155).
+
+**Client input fields**
+
+| Field          | Type   | Required | Constraints                      |
+| -------------- | ------ | -------- | -------------------------------- |
+| `credentialId` | string | Yes      | Min length: 16; Max length: 1024 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credentialId": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 1024
+    }
+  },
+  "required": ["credentialId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "propertyNames": {
+    "$ref": "#/$defs/__schema0"
+  },
+  "additionalProperties": {
+    "$ref": "#/$defs/__schema1"
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema1"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/__schema1"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.wallets
+
+**GET `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L156).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]{40}$"
+      },
+      "kind": {
+        "type": "string",
+        "enum": ["wallet", "passkey", "phrase"]
+      },
+      "derivationIndex": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "walletName": {
+        "type": ["string", "null"]
+      },
+      "label": {
+        "type": "string"
+      },
+      "isPayout": {
+        "type": "boolean"
+      },
+      "isCurrentSigner": {
+        "type": "boolean"
+      },
+      "linkedAt": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+      }
+    },
+    "required": [
+      "address",
+      "kind",
+      "derivationIndex",
+      "walletName",
+      "label",
+      "isPayout",
+      "isCurrentSigner",
+      "linkedAt"
+    ],
+    "additionalProperties": false
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.linkWallet
+
+**POST `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L157).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type                            | Required | Constraints                              |
+| ------------------- | ------------------------------- | -------- | ---------------------------------------- |
+| `address`           | string                          | Yes      | Pattern validated; see input schema      |
+| `confirmationToken` | string                          | Yes      | Min length: 32; Max length: 128          |
+| `kind`              | "wallet" · "passkey" · "phrase" | Yes      | See nested schema and runtime validation |
+| `derivationIndex`   | integer                         | No       | Minimum: 0; Maximum: 4                   |
+| `walletName`        | string                          | No       | Max length: 80                           |
+| `label`             | string                          | No       | Max length: 80                           |
+| `linkSignature`     | string                          | Yes      | Pattern validated; see input schema      |
+| `nonce`             | string                          | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "derivationIndex": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "walletName": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "linkSignature": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "nonce": {
+      "type": "string"
+    }
+  },
+  "required": ["address", "confirmationToken", "kind", "linkSignature", "nonce"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "derivationIndex": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "walletName": {
+      "type": ["string", "null"]
+    },
+    "label": {
+      "type": "string"
+    },
+    "isPayout": {
+      "type": "boolean"
+    },
+    "isCurrentSigner": {
+      "type": "boolean"
+    },
+    "linkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": [
+    "address",
+    "kind",
+    "derivationIndex",
+    "walletName",
+    "label",
+    "isPayout",
+    "isCurrentSigner",
+    "linkedAt"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.unlinkWallet
+
+**DELETE `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L168).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type   | Required | Constraints                         |
+| ------------------- | ------ | -------- | ----------------------------------- |
+| `address`           | string | Yes      | Pattern validated; see input schema |
+| `confirmationToken` | string | Yes      | Min length: 32; Max length: 128     |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    }
+  },
+  "required": ["address", "confirmationToken"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.labelWallet
+
+**PATCH `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L169).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field     | Type   | Required | Constraints                         |
+| --------- | ------ | -------- | ----------------------------------- |
+| `address` | string | Yes      | Pattern validated; see input schema |
+| `label`   | string | Yes      | Max length: 80                      |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 80
+    }
+  },
+  "required": ["address", "label"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "derivationIndex": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "walletName": {
+      "type": ["string", "null"]
+    },
+    "label": {
+      "type": "string"
+    },
+    "isPayout": {
+      "type": "boolean"
+    },
+    "isCurrentSigner": {
+      "type": "boolean"
+    },
+    "linkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": [
+    "address",
+    "kind",
+    "derivationIndex",
+    "walletName",
+    "label",
+    "isPayout",
+    "isCurrentSigner",
+    "linkedAt"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.setPayoutAddress
+
+**PUT `/v1/me/payout-address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L170).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type   | Required | Constraints                         |
+| ------------------- | ------ | -------- | ----------------------------------- |
+| `address`           | string | Yes      | Pattern validated; see input schema |
+| `confirmationToken` | string | Yes      | Min length: 32; Max length: 128     |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    }
+  },
+  "required": ["address", "confirmationToken"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["wallet", "passkey", "phrase"]
+    },
+    "derivationIndex": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "walletName": {
+      "type": ["string", "null"]
+    },
+    "label": {
+      "type": "string"
+    },
+    "isPayout": {
+      "type": "boolean"
+    },
+    "isCurrentSigner": {
+      "type": "boolean"
+    },
+    "linkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": [
+    "address",
+    "kind",
+    "derivationIndex",
+    "walletName",
+    "label",
+    "isPayout",
+    "isCurrentSigner",
+    "linkedAt"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.sessions
+
+**GET `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L171).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100,
+        "pattern": "^[a-zA-Z0-9_-]+$"
+      },
+      "deviceLabel": {
+        "type": "string"
+      },
+      "method": {
+        "type": "string",
+        "enum": ["wallet", "passkey", "phrase"]
+      },
+      "signedInAt": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "lastActiveAt": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "expiresAt": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "isCurrent": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "id",
+      "deviceLabel",
+      "method",
+      "signedInAt",
+      "lastActiveAt",
+      "expiresAt",
+      "isCurrent"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.revokeSession
+
+**DELETE `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L172).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+Output shape: **object**. See the complete schema below.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      "required": ["sessionId"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "type": "string",
+          "enum": ["others", "all"]
+        }
+      },
+      "required": ["scope"]
+    }
+  ]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.preferences
+
+**GET `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L179).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "displayCurrency": {
+      "type": "string",
+      "enum": ["SDUSD", "USD", "NGN", "EUR", "GBP"]
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["system", "light", "dark"]
+    },
+    "language": {
+      "type": "string",
+      "const": "en"
+    },
+    "startWorkspace": {
+      "type": "string",
+      "enum": ["buy", "earn", "sell"]
+    },
+    "earnChecklistHidden": {
+      "type": "boolean"
+    },
+    "sellChecklistHidden": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "displayCurrency",
+    "theme",
+    "language",
+    "startWorkspace",
+    "earnChecklistHidden"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.updatePreferences
+
+**PATCH `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L180).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field                 | Type                                    | Required | Constraints                              |
+| --------------------- | --------------------------------------- | -------- | ---------------------------------------- |
+| `displayCurrency`     | "SDUSD" · "USD" · "NGN" · "EUR" · "GBP" | No       | See nested schema and runtime validation |
+| `theme`               | "system" · "light" · "dark"             | No       | See nested schema and runtime validation |
+| `language`            | "en"                                    | No       | See nested schema and runtime validation |
+| `startWorkspace`      | "buy" · "earn" · "sell"                 | No       | See nested schema and runtime validation |
+| `earnChecklistHidden` | boolean                                 | No       | See nested schema and runtime validation |
+| `sellChecklistHidden` | boolean                                 | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "displayCurrency": {
+      "type": "string",
+      "enum": ["SDUSD", "USD", "NGN", "EUR", "GBP"]
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["system", "light", "dark"]
+    },
+    "language": {
+      "type": "string",
+      "const": "en"
+    },
+    "startWorkspace": {
+      "type": "string",
+      "enum": ["buy", "earn", "sell"]
+    },
+    "earnChecklistHidden": {
+      "type": "boolean"
+    },
+    "sellChecklistHidden": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "displayCurrency": {
+      "type": "string",
+      "enum": ["SDUSD", "USD", "NGN", "EUR", "GBP"]
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["system", "light", "dark"]
+    },
+    "language": {
+      "type": "string",
+      "const": "en"
+    },
+    "startWorkspace": {
+      "type": "string",
+      "enum": ["buy", "earn", "sell"]
+    },
+    "earnChecklistHidden": {
+      "type": "boolean"
+    },
+    "sellChecklistHidden": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "displayCurrency",
+    "theme",
+    "language",
+    "startWorkspace",
+    "earnChecklistHidden"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.exportData
+
+**POST `/v1/me/export`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L181).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type   | Required | Constraints                     |
+| ------------------- | ------ | -------- | ------------------------------- |
+| `confirmationToken` | string | Yes      | Min length: 32; Max length: 128 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    }
+  },
+  "required": ["confirmationToken"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "jobId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["queued", "running", "ready", "failed"]
+    },
+    "url": {
+      "type": ["string", "null"]
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  },
+  "required": ["jobId", "status", "url"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## account.deleteAccount
+
+**DELETE `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L182).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field               | Type                | Required | Constraints                              |
+| ------------------- | ------------------- | -------- | ---------------------------------------- |
+| `confirmationToken` | string              | Yes      | Min length: 32; Max length: 128          |
+| `typedConfirmation` | "delete my account" | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "confirmationToken": {
+      "type": "string",
+      "minLength": 32,
+      "maxLength": 128
+    },
+    "typedConfirmation": {
+      "type": "string",
+      "const": "delete my account"
+    }
+  },
+  "required": ["confirmationToken", "typedConfirmation"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## notifications.list
+
+**GET `/v1/me/notifications`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L192).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type    | Required | Constraints                              |
+| ------------ | ------- | -------- | ---------------------------------------- |
+| `cursor`     | string  | No       | See nested schema and runtime validation |
+| `limit`      | integer | No       | Minimum: 1; Maximum: 100                 |
+| `unreadOnly` | boolean | No       | See nested schema and runtime validation |
+| `category`   | string  | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "unreadOnly": {
+      "type": "boolean"
+    },
+    "category": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][\\w]*\\.[a-z][\\w]*$"
+          },
+          "category": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "string",
+            "enum": ["earn", "sell", "account"]
+          },
+          "readAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "category",
+          "title",
+          "body",
+          "href",
+          "workspace",
+          "readAt",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## notifications.markRead
+
+**POST `/v1/me/notifications/read`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L196).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+Output shape: **object**. See the complete schema below.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          }
+        }
+      },
+      "required": ["ids"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": ["all"]
+    }
+  ],
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## notifications.preferences
+
+**GET `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L203).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sales": {
+      "default": true,
+      "type": "boolean"
+    },
+    "earnings": {
+      "default": true,
+      "type": "boolean"
+    },
+    "campaigns": {
+      "default": true,
+      "type": "boolean"
+    },
+    "invitations": {
+      "default": true,
+      "type": "boolean"
+    },
+    "account": {
+      "default": true,
+      "type": "boolean"
+    },
+    "toastsEnabled": {
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "sales",
+    "earnings",
+    "campaigns",
+    "invitations",
+    "account",
+    "toastsEnabled"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## notifications.updatePreferences
+
+**PATCH `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L204).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field           | Type    | Required | Constraints     |
+| --------------- | ------- | -------- | --------------- |
+| `sales`         | boolean | No       | Default: `true` |
+| `earnings`      | boolean | No       | Default: `true` |
+| `campaigns`     | boolean | No       | Default: `true` |
+| `invitations`   | boolean | No       | Default: `true` |
+| `account`       | boolean | No       | Default: `true` |
+| `toastsEnabled` | boolean | No       | Default: `true` |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sales": {
+      "default": true,
+      "type": "boolean"
+    },
+    "earnings": {
+      "default": true,
+      "type": "boolean"
+    },
+    "campaigns": {
+      "default": true,
+      "type": "boolean"
+    },
+    "invitations": {
+      "default": true,
+      "type": "boolean"
+    },
+    "account": {
+      "default": true,
+      "type": "boolean"
+    },
+    "toastsEnabled": {
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sales": {
+      "default": true,
+      "type": "boolean"
+    },
+    "earnings": {
+      "default": true,
+      "type": "boolean"
+    },
+    "campaigns": {
+      "default": true,
+      "type": "boolean"
+    },
+    "invitations": {
+      "default": true,
+      "type": "boolean"
+    },
+    "account": {
+      "default": true,
+      "type": "boolean"
+    },
+    "toastsEnabled": {
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "sales",
+    "earnings",
+    "campaigns",
+    "invitations",
+    "account",
+    "toastsEnabled"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>

@@ -1,0 +1,233 @@
+---
+title: "Contract event reference"
+description: "Decode every protocol event and connect it to attribution, policy, settlement, and claims."
+---
+
+This reference is generated from the protocol ABI at [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It documents protocol events; ERC-20 token transfer events are a separate stream.
+
+## Event processing rules
+
+Use the generated ABI to decode logs. Preserve chain ID, contract address, transaction hash, log index, block number, block hash, and block timestamp. Process canonical ordering and handle removed/reorganized history; a log seen once is not a permanent settlement fact.
+
+Several events can describe one action. A purchase emits its acceptance and allocation reservations; finalization emits vesting events as well as the sale result. Do not add those events as separate sales or count both reservations and vesting as new earnings.
+
+See [indexing](/developers/indexing), [data model](/developers/data-model), and [vault accounting](/concepts/vault-accounting).
+
+## CampaignCreated
+
+Establishes the campaign, merchant, product commitment, price, token, and initial policy hash. Creation is not activation.
+
+| Field          | ABI type  | Indexed topic |
+| -------------- | --------- | ------------- |
+| `campaignId`   | `uint256` | Yes           |
+| `merchant`     | `address` | Yes           |
+| `metadataHash` | `bytes32` | No            |
+| `skuHash`      | `bytes32` | No            |
+| `price`        | `uint256` | No            |
+| `token`        | `address` | No            |
+| `policyHash`   | `bytes32` | No            |
+
+## CampaignFunded
+
+Adds received tokens to the separate reward budget. The funder is not necessarily the campaign merchant.
+
+| Field            | ABI type  | Indexed topic |
+| ---------------- | --------- | ------------- |
+| `campaignId`     | `uint256` | Yes           |
+| `funder`         | `address` | Yes           |
+| `receivedAmount` | `uint256` | No            |
+
+## CampaignStatusChanged
+
+Records active, paused, and ended flags. Time-based expiry still needs evaluation against the applicable policy.
+
+| Field        | ABI type  | Indexed topic |
+| ------------ | --------- | ------------- |
+| `campaignId` | `uint256` | Yes           |
+| `active`     | `bool`    | No            |
+| `paused`     | `bool`    | No            |
+| `ended`      | `bool`    | No            |
+
+## MerchantProceedsClaimed
+
+Records the merchant withdrawing claimable product proceeds for a campaign.
+
+| Field        | ABI type  | Indexed topic |
+| ------------ | --------- | ------------- |
+| `campaignId` | `uint256` | Yes           |
+| `merchant`   | `address` | Yes           |
+| `amount`     | `uint256` | No            |
+
+## NativePurchaseAccepted
+
+Records a purchase, accepted policy, price, reserved reward, and unlock time. Finalization is a later event.
+
+| Field            | ABI type  | Indexed topic |
+| ---------------- | --------- | ------------- |
+| `saleId`         | `uint256` | Yes           |
+| `campaignId`     | `uint256` | Yes           |
+| `buyer`          | `address` | Yes           |
+| `nodeId`         | `uint256` | No            |
+| `orderKey`       | `bytes32` | No            |
+| `policyHash`     | `bytes32` | No            |
+| `policyVersion`  | `uint32`  | No            |
+| `price`          | `uint256` | No            |
+| `rewardReserved` | `uint256` | No            |
+| `unlockAt`       | `uint64`  | No            |
+
+## NodeCreated
+
+Records an immutable parent edge and node owner inside a campaign. This is attribution, not a commission payment.
+
+| Field          | ABI type  | Indexed topic |
+| -------------- | --------- | ------------- |
+| `campaignId`   | `uint256` | Yes           |
+| `nodeId`       | `uint256` | Yes           |
+| `parentNodeId` | `uint256` | No            |
+| `owner`        | `address` | Yes           |
+| `metadataHash` | `bytes32` | No            |
+
+## PolicyVersionRegistered
+
+Records the terms and effective time of a policy version. A scheduled version is not effective merely because the event exists.
+
+| Field         | ABI type  | Indexed topic |
+| ------------- | --------- | ------------- |
+| `campaignId`  | `uint256` | Yes           |
+| `version`     | `uint32`  | Yes           |
+| `policyHash`  | `bytes32` | Yes           |
+| `effectiveAt` | `uint64`  | No            |
+| `policy`      | `tuple`   | No            |
+
+<Accordion title="Tuple field definition">
+
+```json
+[
+  {
+    "name": "policy",
+    "type": "tuple",
+    "indexed": false,
+    "internalType": "struct ISpokeProtocol.CommissionPolicy",
+    "components": [
+      {
+        "name": "rewardToken",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "commissionBps",
+        "type": "uint16",
+        "internalType": "uint16"
+      },
+      {
+        "name": "maxRewardedAncestors",
+        "type": "uint16",
+        "internalType": "uint16"
+      },
+      {
+        "name": "weightsBps",
+        "type": "uint16[]",
+        "internalType": "uint16[]"
+      },
+      {
+        "name": "perSaleCap",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "campaignLiabilityCap",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "holdSeconds",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "expiry",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "shortPathMode",
+        "type": "uint8",
+        "internalType": "enum ISpokeProtocol.ShortPathMode"
+      },
+      {
+        "name": "eligibilityHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ]
+  }
+]
+```
+
+</Accordion>
+
+## RewardClaimed
+
+Records a recipient withdrawing reward balance from a campaign. One token-wide claim can emit multiple campaign events.
+
+| Field        | ABI type  | Indexed topic |
+| ------------ | --------- | ------------- |
+| `campaignId` | `uint256` | Yes           |
+| `recipient`  | `address` | Yes           |
+| `token`      | `address` | Yes           |
+| `amount`     | `uint256` | No            |
+
+## RewardReserved
+
+Records one pending allocation. A reservation is not yet claimable.
+
+| Field                | ABI type  | Indexed topic |
+| -------------------- | --------- | ------------- |
+| `saleId`             | `uint256` | Yes           |
+| `campaignId`         | `uint256` | Yes           |
+| `recipient`          | `address` | Yes           |
+| `amount`             | `uint256` | No            |
+| `depth`              | `uint8`   | No            |
+| `effectiveWeightBps` | `uint16`  | No            |
+
+## RewardVested
+
+Records an individual allocation becoming claimable as part of finalization.
+
+| Field       | ABI type  | Indexed topic |
+| ----------- | --------- | ------------- |
+| `saleId`    | `uint256` | Yes           |
+| `recipient` | `address` | Yes           |
+| `amount`    | `uint256` | No            |
+
+## SaleFinalized
+
+Moves merchant proceeds and rewards to claimable liabilities after the hold. This does not itself transfer all beneficiaries their funds.
+
+| Field              | ABI type  | Indexed topic |
+| ------------------ | --------- | ------------- |
+| `saleId`           | `uint256` | Yes           |
+| `campaignId`       | `uint256` | Yes           |
+| `merchantAmount`   | `uint256` | No            |
+| `commissionAmount` | `uint256` | No            |
+
+## SaleRefunded
+
+Returns the buyer payment and releases the reserved reward before unlock. This is terminal for the sale.
+
+| Field            | ABI type  | Indexed topic |
+| ---------------- | --------- | ------------- |
+| `saleId`         | `uint256` | Yes           |
+| `campaignId`     | `uint256` | Yes           |
+| `price`          | `uint256` | No            |
+| `releasedReward` | `uint256` | No            |
+
+## SurplusReturned
+
+Records unused available rewards returned to the merchant under the lifecycle restrictions.
+
+| Field        | ABI type  | Indexed topic |
+| ------------ | --------- | ------------- |
+| `campaignId` | `uint256` | Yes           |
+| `merchant`   | `address` | Yes           |
+| `amount`     | `uint256` | No            |

@@ -1,0 +1,6681 @@
+---
+title: "Links, graphs, and reputation"
+description: "Distribution links, graph navigation, ancestry, public records, visibility, and distributor discovery."
+---
+
+Distribution links, graph navigation, ancestry, public records, visibility, and distributor discovery.
+
+This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **22 client methods** in this group.
+
+<Note>
+  Input schemas describe the typed client call before path/query/body mapping.
+  Output schemas describe the envelope's `data`, not the full HTTP response.
+  Custom refinements, transforms, and runtime permissions are enforced by the
+  [shared Zod
+  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  Read [transport rules](/developers/http-transport) before copying a client
+  object into an HTTP body. Designed methods reject live calls; optional funding
+  still requires provider configuration.
+</Note>
+
+[Download all method schemas](https://raw.githubusercontent.com/Enoch208/docs-madonna/main/schemas/client-methods.json) · [Live endpoint registry](https://api.usespoke.xyz/v1/system/endpoints)
+
+## Methods at a glance
+
+| Client method                                                   | HTTP route                                      | Access  | Availability           |
+| --------------------------------------------------------------- | ----------------------------------------------- | ------- | ---------------------- |
+| [`links.mine`](#links-mine)                                     | `GET /v1/me/links`                              | session | Core live              |
+| [`links.get`](#links-get)                                       | `GET /v1/links/:nodeId`                         | public  | Core live              |
+| [`links.resolveCode`](#links-resolvecode)                       | `GET /v1/referrals/:code`                       | public  | Core live              |
+| [`links.recordOpen`](#links-recordopen)                         | `POST /v1/referrals/:code/open`                 | public  | Core live              |
+| [`links.previewJoin`](#links-previewjoin)                       | `GET /v1/campaigns/:campaignId/join-preview`    | session | Core live              |
+| [`links.stats`](#links-stats)                                   | `GET /v1/links/:nodeId/stats`                   | session | Core live              |
+| [`graph.forCampaign`](#graph-forcampaign)                       | `GET /v1/campaigns/:campaignId/graph`           | public  | Core live              |
+| [`graph.mine`](#graph-mine)                                     | `GET /v1/me/graph`                              | session | Core live              |
+| [`graph.ancestry`](#graph-ancestry)                             | `GET /v1/nodes/:chainId/:nodeId/ancestry`       | public  | Core live              |
+| [`graph.salePath`](#graph-salepath)                             | `GET /v1/receipts/:chainId/:saleId/path`        | public  | Core live              |
+| [`graph.search`](#graph-search)                                 | `GET /v1/campaigns/:campaignId/graph/search`    | public  | Core live              |
+| [`graph.export`](#graph-export)                                 | `POST /v1/graph/exports`                        | session | Designed — unavailable |
+| [`reputation.get`](#reputation-get)                             | `GET /v1/distributors/:addressOrHandle/profile` | public  | Core live              |
+| [`reputation.mine`](#reputation-mine)                           | `GET /v1/me/reputation`                         | session | Core live              |
+| [`reputation.updateVisibility`](#reputation-updatevisibility)   | `PATCH /v1/me/reputation/visibility`            | session | Core live              |
+| [`reputation.exportCredential`](#reputation-exportcredential)   | `POST /v1/me/reputation/credential`             | session | Designed — unavailable |
+| [`reputation.credentials`](#reputation-credentials)             | `GET /v1/me/reputation/credentials`             | session | Designed — unavailable |
+| [`reputation.revokeCredential`](#reputation-revokecredential)   | `DELETE /v1/me/reputation/credentials/:id`      | session | Designed — unavailable |
+| [`reputation.verifyCredential`](#reputation-verifycredential)   | `POST /v1/credentials/verify`                   | public  | Designed — unavailable |
+| [`distributors.search`](#distributors-search)                   | `GET /v1/distributors`                          | public  | Core live              |
+| [`distributors.get`](#distributors-get)                         | `GET /v1/distributors/:address`                 | public  | Core live              |
+| [`distributors.recommendations`](#distributors-recommendations) | `GET /v1/merchant/recommendations`              | session | Designed — unavailable |
+
+## links.mine
+
+**GET `/v1/me/links`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L271).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type    | Required | Constraints                              |
+| -------- | ------- | -------- | ---------------------------------------- |
+| `cursor` | string  | No       | See nested schema and runtime validation |
+| `limit`  | integer | No       | Minimum: 1; Maximum: 100                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "code": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "campaign": {
+            "type": "object",
+            "properties": {
+              "campaignId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "chainId": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "contractAddress": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "DRAFT_OFFCHAIN",
+                  "CREATED_UNFUNDED",
+                  "FUNDED_ACTIVE",
+                  "PAUSED",
+                  "ENDED",
+                  "EXPIRED"
+                ]
+              },
+              "merchant": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "$ref": "#/$defs/__schema2"
+                  }
+                },
+                "required": ["name", "slug", "address"],
+                "additionalProperties": false
+              },
+              "product": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "summary": {
+                    "type": "string"
+                  },
+                  "media": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/$defs/__schema3"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": ["image", "download"]
+                        },
+                        "size": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[\\da-f]{64}$"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "width": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "height": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": ["id", "kind", "size", "sha256"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                },
+                "required": ["id", "title", "summary", "media", "category"],
+                "additionalProperties": false
+              },
+              "token": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "symbol": {
+                    "type": "string"
+                  },
+                  "decimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 36
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "testnet": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["address", "symbol", "decimals"],
+                "additionalProperties": false
+              },
+              "price": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "policy": {
+                "type": "object",
+                "properties": {
+                  "rewardToken": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "commissionBps": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000
+                  },
+                  "perSaleCap": {
+                    "$ref": "#/$defs/__schema1"
+                  },
+                  "campaignLiabilityCap": {
+                    "$ref": "#/$defs/__schema1"
+                  },
+                  "maxRewardedAncestors": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "weightsBps": {
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/__schema4"
+                    }
+                  },
+                  "shortPathMode": {
+                    "default": "RENORMALIZE_EXISTING",
+                    "type": "string",
+                    "enum": ["RENORMALIZE_EXISTING", "RETURN_UNUSED"]
+                  },
+                  "holdSeconds": {
+                    "type": "integer",
+                    "minimum": 60,
+                    "maximum": 7776000
+                  },
+                  "expiry": {
+                    "$ref": "#/$defs/__schema1"
+                  },
+                  "eligibilityHash": {
+                    "$ref": "#/$defs/__schema5"
+                  },
+                  "policyHash": {
+                    "$ref": "#/$defs/__schema5"
+                  },
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "effectiveAt": {
+                    "$ref": "#/$defs/__schema6"
+                  },
+                  "regions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "sharingRules": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "registrationTx": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "hash": {
+                            "$ref": "#/$defs/__schema5"
+                          },
+                          "blockNumber": {
+                            "$ref": "#/$defs/__schema1"
+                          },
+                          "explorerUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "at": {
+                            "$ref": "#/$defs/__schema6"
+                          }
+                        },
+                        "required": ["hash", "blockNumber", "explorerUrl"],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "salesCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "rewardToken",
+                  "commissionBps",
+                  "perSaleCap",
+                  "campaignLiabilityCap",
+                  "maxRewardedAncestors",
+                  "weightsBps",
+                  "shortPathMode",
+                  "holdSeconds",
+                  "expiry",
+                  "eligibilityHash",
+                  "policyHash",
+                  "version",
+                  "effectiveAt",
+                  "regions",
+                  "sharingRules"
+                ],
+                "additionalProperties": false
+              },
+              "rewardAvailable": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "rewardTotal": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "settledSales": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "onchainUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "rankReasons": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "inviteOnly": {
+                "type": "boolean"
+              },
+              "endsAt": {
+                "$ref": "#/$defs/__schema6"
+              }
+            },
+            "required": [
+              "campaignId",
+              "chainId",
+              "contractAddress",
+              "state",
+              "merchant",
+              "product",
+              "token",
+              "price",
+              "policy",
+              "rewardAvailable",
+              "rewardTotal",
+              "settledSales",
+              "onchainUrl",
+              "rankReasons"
+            ],
+            "additionalProperties": false
+          },
+          "parentNodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "levelFromMerchant": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "campaignStatus": {
+            "type": "string",
+            "enum": [
+              "DRAFT_OFFCHAIN",
+              "CREATED_UNFUNDED",
+              "FUNDED_ACTIVE",
+              "PAUSED",
+              "ENDED",
+              "EXPIRED"
+            ]
+          },
+          "moderation": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": ["visible", "hidden", "flagged"]
+              },
+              "reason": {
+                "type": ["string", "null"]
+              },
+              "decidedAt": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema6"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["state", "reason", "decidedAt"],
+            "additionalProperties": false
+          },
+          "visitsEstimate": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "conversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "earned": {
+            "type": "object",
+            "properties": {
+              "atRisk": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "readyToFinalize": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "claimable": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "claimed": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "refunded": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "reversed": {
+                "$ref": "#/$defs/__schema1"
+              }
+            },
+            "required": [
+              "atRisk",
+              "readyToFinalize",
+              "claimable",
+              "claimed",
+              "refunded",
+              "reversed"
+            ],
+            "additionalProperties": false
+          },
+          "createdTxHash": {
+            "$ref": "#/$defs/__schema5"
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema6"
+          }
+        },
+        "required": [
+          "nodeId",
+          "code",
+          "url",
+          "campaign",
+          "parentNodeId",
+          "levelFromMerchant",
+          "campaignStatus",
+          "moderation",
+          "visitsEstimate",
+          "conversions",
+          "earned",
+          "createdTxHash",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema4": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema5": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema6": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## links.get
+
+**GET `/v1/links/:nodeId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L272).
+
+**Client input fields**
+
+| Field    | Type   | Required | Constraints                              |
+| -------- | ------ | -------- | ---------------------------------------- |
+| `nodeId` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodeId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  },
+  "required": ["nodeId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "code": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "url": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "campaign": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "parentNodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "levelFromMerchant": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "campaignStatus": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "moderation": {
+          "$ref": "#/$defs/__schema12"
+        },
+        "visitsEstimate": {
+          "type": "null"
+        },
+        "conversions": {
+          "$ref": "#/$defs/__schema13"
+        },
+        "earned": {
+          "type": "null"
+        },
+        "createdTxHash": {
+          "$ref": "#/$defs/__schema8"
+        },
+        "createdAt": {
+          "$ref": "#/$defs/__schema9"
+        }
+      },
+      "required": [
+        "nodeId",
+        "code",
+        "url",
+        "campaign",
+        "parentNodeId",
+        "levelFromMerchant",
+        "campaignStatus",
+        "moderation",
+        "visitsEstimate",
+        "conversions",
+        "earned",
+        "createdTxHash",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "code": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "url": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "campaign": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "parentNodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "levelFromMerchant": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "campaignStatus": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "moderation": {
+          "$ref": "#/$defs/__schema12"
+        },
+        "visitsEstimate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "conversions": {
+          "$ref": "#/$defs/__schema13"
+        },
+        "earned": {
+          "type": "object",
+          "properties": {
+            "atRisk": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "readyToFinalize": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "claimable": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "claimed": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "refunded": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "reversed": {
+              "$ref": "#/$defs/__schema1"
+            }
+          },
+          "required": [
+            "atRisk",
+            "readyToFinalize",
+            "claimable",
+            "claimed",
+            "refunded",
+            "reversed"
+          ],
+          "additionalProperties": false
+        },
+        "createdTxHash": {
+          "$ref": "#/$defs/__schema8"
+        },
+        "createdAt": {
+          "$ref": "#/$defs/__schema9"
+        }
+      },
+      "required": [
+        "nodeId",
+        "code",
+        "url",
+        "campaign",
+        "parentNodeId",
+        "levelFromMerchant",
+        "campaignStatus",
+        "moderation",
+        "visitsEstimate",
+        "conversions",
+        "earned",
+        "createdTxHash",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string"
+    },
+    "__schema3": {
+      "type": "string",
+      "format": "uri"
+    },
+    "__schema4": {
+      "type": "object",
+      "properties": {
+        "campaignId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "chainId": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "contractAddress": {
+          "$ref": "#/$defs/__schema5"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "DRAFT_OFFCHAIN",
+            "CREATED_UNFUNDED",
+            "FUNDED_ACTIVE",
+            "PAUSED",
+            "ENDED",
+            "EXPIRED"
+          ]
+        },
+        "merchant": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "address": {
+              "$ref": "#/$defs/__schema5"
+            }
+          },
+          "required": ["name", "slug", "address"],
+          "additionalProperties": false
+        },
+        "product": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/__schema6"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "media": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/__schema6"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": ["image", "download"]
+                  },
+                  "size": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[\\da-f]{64}$"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": ["id", "kind", "size", "sha256"],
+                "additionalProperties": false
+              }
+            },
+            "category": {
+              "type": "string"
+            }
+          },
+          "required": ["id", "title", "summary", "media", "category"],
+          "additionalProperties": false
+        },
+        "token": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "$ref": "#/$defs/__schema5"
+            },
+            "symbol": {
+              "type": "string"
+            },
+            "decimals": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 36
+            },
+            "name": {
+              "type": "string"
+            },
+            "testnet": {
+              "type": "boolean"
+            }
+          },
+          "required": ["address", "symbol", "decimals"],
+          "additionalProperties": false
+        },
+        "price": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "rewardToken": {
+              "$ref": "#/$defs/__schema5"
+            },
+            "commissionBps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000
+            },
+            "perSaleCap": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "campaignLiabilityCap": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "maxRewardedAncestors": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "weightsBps": {
+              "minItems": 1,
+              "maxItems": 5,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema7"
+              }
+            },
+            "shortPathMode": {
+              "default": "RENORMALIZE_EXISTING",
+              "type": "string",
+              "enum": ["RENORMALIZE_EXISTING", "RETURN_UNUSED"]
+            },
+            "holdSeconds": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 7776000
+            },
+            "expiry": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "eligibilityHash": {
+              "$ref": "#/$defs/__schema8"
+            },
+            "policyHash": {
+              "$ref": "#/$defs/__schema8"
+            },
+            "version": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "effectiveAt": {
+              "$ref": "#/$defs/__schema9"
+            },
+            "regions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sharingRules": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "registrationTx": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "hash": {
+                      "$ref": "#/$defs/__schema8"
+                    },
+                    "blockNumber": {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    "explorerUrl": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "at": {
+                      "$ref": "#/$defs/__schema9"
+                    }
+                  },
+                  "required": ["hash", "blockNumber", "explorerUrl"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "salesCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "rewardToken",
+            "commissionBps",
+            "perSaleCap",
+            "campaignLiabilityCap",
+            "maxRewardedAncestors",
+            "weightsBps",
+            "shortPathMode",
+            "holdSeconds",
+            "expiry",
+            "eligibilityHash",
+            "policyHash",
+            "version",
+            "effectiveAt",
+            "regions",
+            "sharingRules"
+          ],
+          "additionalProperties": false
+        },
+        "rewardAvailable": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "rewardTotal": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "settledSales": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "onchainUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rankReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inviteOnly": {
+          "type": "boolean"
+        },
+        "endsAt": {
+          "$ref": "#/$defs/__schema9"
+        }
+      },
+      "required": [
+        "campaignId",
+        "chainId",
+        "contractAddress",
+        "state",
+        "merchant",
+        "product",
+        "token",
+        "price",
+        "policy",
+        "rewardAvailable",
+        "rewardTotal",
+        "settledSales",
+        "onchainUrl",
+        "rankReasons"
+      ],
+      "additionalProperties": false
+    },
+    "__schema5": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema6": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema7": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema8": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema9": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema10": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "__schema11": {
+      "type": "string",
+      "enum": [
+        "DRAFT_OFFCHAIN",
+        "CREATED_UNFUNDED",
+        "FUNDED_ACTIVE",
+        "PAUSED",
+        "ENDED",
+        "EXPIRED"
+      ]
+    },
+    "__schema12": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": ["visible", "hidden", "flagged"]
+        },
+        "reason": {
+          "type": ["string", "null"]
+        },
+        "decidedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema9"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["state", "reason", "decidedAt"],
+      "additionalProperties": false
+    },
+    "__schema13": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## links.resolveCode
+
+**GET `/v1/referrals/:code`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L273).
+
+**Client input fields**
+
+| Field  | Type   | Required | Constraints                              |
+| ------ | ------ | -------- | ---------------------------------------- |
+| `code` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    }
+  },
+  "required": ["code"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["ok", "unknown", "retired", "otherChain"]
+    },
+    "slug": {
+      "type": "string"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "parentNodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "owner": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "eligiblePath": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema3"
+      }
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "indexingStatus": {
+      "type": "string",
+      "enum": ["live", "syncing", "behind"]
+    }
+  },
+  "required": [
+    "status",
+    "slug",
+    "chainId",
+    "campaignId",
+    "nodeId",
+    "parentNodeId",
+    "owner",
+    "eligiblePath",
+    "depth",
+    "indexingStatus"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^0x[0-9a-fA-F]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "handle": {
+          "type": ["string", "null"]
+        },
+        "displayName": {
+          "type": ["string", "null"]
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "pseudonymous", "private"]
+        }
+      },
+      "required": ["address", "handle", "displayName", "visibility"],
+      "additionalProperties": false
+    },
+    "__schema3": {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "creator": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "paid": {
+          "type": "boolean"
+        },
+        "repeatedWallet": {
+          "type": "boolean"
+        },
+        "outsideWindow": {
+          "type": "boolean"
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "reserved",
+                "claimable",
+                "claimed",
+                "refunded",
+                "reversed"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasonIfUnpaid": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "OUTSIDE_DEPTH",
+                "CAMPAIGN_EXCLUSION",
+                "REFUNDED",
+                "REVERSED"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "nodeId",
+        "creator",
+        "depth",
+        "paid",
+        "repeatedWallet",
+        "outsideWindow",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "reasonIfUnpaid"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## links.recordOpen
+
+**POST `/v1/referrals/:code/open`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L274).
+
+**Client input fields**
+
+| Field  | Type   | Required | Constraints                              |
+| ------ | ------ | -------- | ---------------------------------------- |
+| `code` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    }
+  },
+  "required": ["code"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["ok"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## links.previewJoin
+
+**GET `/v1/campaigns/:campaignId/join-preview`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L275).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type   | Required | Constraints                              |
+| ------------ | ------ | -------- | ---------------------------------------- |
+| `campaignId` | string | Yes      | See nested schema and runtime validation |
+| `parent`     | string | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "parent": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "required": ["campaignId"],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "eligibility": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "already_joined",
+        "is_merchant",
+        "invitation_required",
+        "paused",
+        "ended",
+        "capacity_reached",
+        "invalid_parent",
+        "not_deployed"
+      ]
+    },
+    "nodeId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "enforcedBy": {
+      "type": "string",
+      "enum": ["contract", "spoke"]
+    },
+    "budgetState": {
+      "type": "string",
+      "enum": ["funded", "unfunded", "exhausted"]
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "ancestorsAbove": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "creator": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "paid": {
+            "type": "boolean"
+          },
+          "repeatedWallet": {
+            "type": "boolean"
+          },
+          "outsideWindow": {
+            "type": "boolean"
+          },
+          "effectiveWeightBps": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "reserved",
+                  "claimable",
+                  "claimed",
+                  "refunded",
+                  "reversed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reasonIfUnpaid": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "OUTSIDE_DEPTH",
+                  "CAMPAIGN_EXCLUSION",
+                  "REFUNDED",
+                  "REVERSED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "nodeId",
+          "creator",
+          "depth",
+          "paid",
+          "repeatedWallet",
+          "outsideWindow",
+          "effectiveWeightBps",
+          "amount",
+          "state",
+          "reasonIfUnpaid"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "policy": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "rewardToken": {
+              "$ref": "#/$defs/__schema2"
+            },
+            "commissionBps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000
+            },
+            "perSaleCap": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "campaignLiabilityCap": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "maxRewardedAncestors": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "weightsBps": {
+              "minItems": 1,
+              "maxItems": 5,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema3"
+              }
+            },
+            "shortPathMode": {
+              "default": "RENORMALIZE_EXISTING",
+              "type": "string",
+              "enum": ["RENORMALIZE_EXISTING", "RETURN_UNUSED"]
+            },
+            "holdSeconds": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 7776000
+            },
+            "expiry": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "eligibilityHash": {
+              "$ref": "#/$defs/__schema4"
+            },
+            "policyHash": {
+              "$ref": "#/$defs/__schema4"
+            },
+            "version": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "effectiveAt": {
+              "$ref": "#/$defs/__schema5"
+            },
+            "regions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sharingRules": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "registrationTx": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "hash": {
+                      "$ref": "#/$defs/__schema4"
+                    },
+                    "blockNumber": {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    "explorerUrl": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "at": {
+                      "$ref": "#/$defs/__schema5"
+                    }
+                  },
+                  "required": ["hash", "blockNumber", "explorerUrl"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "salesCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "rewardToken",
+            "commissionBps",
+            "perSaleCap",
+            "campaignLiabilityCap",
+            "maxRewardedAncestors",
+            "weightsBps",
+            "shortPathMode",
+            "holdSeconds",
+            "expiry",
+            "eligibilityHash",
+            "policyHash",
+            "version",
+            "effectiveAt",
+            "regions",
+            "sharingRules"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "exampleAmounts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    }
+  },
+  "required": [
+    "eligibility",
+    "nodeId",
+    "enforcedBy",
+    "budgetState",
+    "depth",
+    "ancestorsAbove",
+    "policy",
+    "exampleAmounts"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema3": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "__schema4": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema5": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## links.stats
+
+**GET `/v1/links/:nodeId/stats`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L276).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type   | Required | Constraints                              |
+| -------- | ------ | -------- | ---------------------------------------- |
+| `nodeId` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodeId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  },
+  "required": ["nodeId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodeId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "visitsEstimate": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "visitsBySource": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "estimate": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": ["source", "count", "estimate"],
+        "additionalProperties": false
+      }
+    },
+    "estimate": {
+      "type": "boolean",
+      "const": true
+    },
+    "directChildren": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "descendants": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "maxDepthBelow": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "sales": {
+      "type": "object",
+      "properties": {
+        "pending": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "finalized": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "refunded": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["pending", "finalized", "refunded"],
+      "additionalProperties": false
+    },
+    "earned": {
+      "type": "object",
+      "properties": {
+        "atRisk": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "readyToFinalize": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "claimable": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "claimed": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "refunded": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "reversed": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": [
+        "atRisk",
+        "readyToFinalize",
+        "claimable",
+        "claimed",
+        "refunded",
+        "reversed"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "nodeId",
+    "visitsEstimate",
+    "visitsBySource",
+    "estimate",
+    "directChildren",
+    "descendants",
+    "maxDepthBelow",
+    "sales",
+    "earned"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.forCampaign
+
+**GET `/v1/campaigns/:campaignId/graph`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L277).
+
+**Client input fields**
+
+| Field        | Type    | Required | Constraints                              |
+| ------------ | ------- | -------- | ---------------------------------------- |
+| `campaignId` | string  | Yes      | See nested schema and runtime validation |
+| `cursor`     | string  | No       | See nested schema and runtime validation |
+| `limit`      | integer | No       | Minimum: 1; Maximum: 100                 |
+| `rootNode`   | string  | No       | See nested schema and runtime validation |
+| `depth`      | integer | No       | Minimum: 1; Maximum: 16                  |
+| `childLimit` | integer | No       | Minimum: 1; Maximum: 100                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "rootNode": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16
+    },
+    "childLimit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  },
+  "required": ["campaignId"],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "parentNodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "childCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "hiddenChildCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "counts": {
+            "type": "object",
+            "properties": {
+              "pending": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "finalized": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "refunded": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["pending", "finalized", "refunded"],
+            "additionalProperties": false
+          },
+          "moderationFlag": {
+            "type": "boolean"
+          },
+          "activity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string"
+                },
+                "amount": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "token": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "$ref": "#/$defs/__schema2"
+                        },
+                        "symbol": {
+                          "type": "string"
+                        },
+                        "decimals": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 36
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "testnet": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["address", "symbol", "decimals"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "txHash": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{64}$"
+                },
+                "blockNumber": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "not_submitted",
+                    "wallet_confirmation",
+                    "submitted",
+                    "included",
+                    "confirmed",
+                    "indexed",
+                    "done",
+                    "rejected",
+                    "unknown",
+                    "replaced",
+                    "failed"
+                  ]
+                },
+                "objectId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9_-]+$"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                }
+              },
+              "required": [
+                "kind",
+                "amount",
+                "token",
+                "txHash",
+                "blockNumber",
+                "status",
+                "objectId",
+                "at"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "nodeId",
+          "campaignId",
+          "parentNodeId",
+          "owner",
+          "depth",
+          "childCount",
+          "hiddenChildCount",
+          "counts",
+          "moderationFlag",
+          "activity"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "to": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "required": ["from", "to"],
+        "additionalProperties": false
+      }
+    },
+    "saleMarkers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+          }
+        },
+        "required": ["saleId", "nodeId", "state"],
+        "additionalProperties": false
+      }
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "indexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["nodes", "edges", "saleMarkers", "truncated", "indexedBlock"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.mine
+
+**GET `/v1/me/graph`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L278).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type    | Required | Constraints                              |
+| ------------ | ------- | -------- | ---------------------------------------- |
+| `cursor`     | string  | No       | See nested schema and runtime validation |
+| `limit`      | integer | No       | Minimum: 1; Maximum: 100                 |
+| `rootNode`   | string  | No       | See nested schema and runtime validation |
+| `depth`      | integer | No       | Minimum: 1; Maximum: 16                  |
+| `childLimit` | integer | No       | Minimum: 1; Maximum: 100                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "rootNode": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16
+    },
+    "childLimit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "parentNodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "childCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "hiddenChildCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "counts": {
+            "type": "object",
+            "properties": {
+              "pending": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "finalized": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "refunded": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["pending", "finalized", "refunded"],
+            "additionalProperties": false
+          },
+          "moderationFlag": {
+            "type": "boolean"
+          },
+          "activity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string"
+                },
+                "amount": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "token": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "$ref": "#/$defs/__schema2"
+                        },
+                        "symbol": {
+                          "type": "string"
+                        },
+                        "decimals": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 36
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "testnet": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["address", "symbol", "decimals"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "txHash": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{64}$"
+                },
+                "blockNumber": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "not_submitted",
+                    "wallet_confirmation",
+                    "submitted",
+                    "included",
+                    "confirmed",
+                    "indexed",
+                    "done",
+                    "rejected",
+                    "unknown",
+                    "replaced",
+                    "failed"
+                  ]
+                },
+                "objectId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9_-]+$"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                }
+              },
+              "required": [
+                "kind",
+                "amount",
+                "token",
+                "txHash",
+                "blockNumber",
+                "status",
+                "objectId",
+                "at"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "nodeId",
+          "campaignId",
+          "parentNodeId",
+          "owner",
+          "depth",
+          "childCount",
+          "hiddenChildCount",
+          "counts",
+          "moderationFlag",
+          "activity"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "to": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "required": ["from", "to"],
+        "additionalProperties": false
+      }
+    },
+    "saleMarkers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+          }
+        },
+        "required": ["saleId", "nodeId", "state"],
+        "additionalProperties": false
+      }
+    },
+    "truncated": {
+      "type": "boolean"
+    },
+    "indexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["nodes", "edges", "saleMarkers", "truncated", "indexedBlock"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.ancestry
+
+**GET `/v1/nodes/:chainId/:nodeId/ancestry`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L279).
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                                           |
+| --------- | ------- | -------- | ----------------------------------------------------- |
+| `nodeId`  | string  | Yes      | See nested schema and runtime validation              |
+| `chainId` | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodeId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": ["nodeId", "chainId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "parentNodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "childCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "hiddenChildCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "counts": {
+            "type": "object",
+            "properties": {
+              "pending": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "finalized": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "refunded": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["pending", "finalized", "refunded"],
+            "additionalProperties": false
+          },
+          "moderationFlag": {
+            "type": "boolean"
+          },
+          "activity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string"
+                },
+                "amount": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "token": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "$ref": "#/$defs/__schema2"
+                        },
+                        "symbol": {
+                          "type": "string"
+                        },
+                        "decimals": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 36
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "testnet": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["address", "symbol", "decimals"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "txHash": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{64}$"
+                },
+                "blockNumber": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "not_submitted",
+                    "wallet_confirmation",
+                    "submitted",
+                    "included",
+                    "confirmed",
+                    "indexed",
+                    "done",
+                    "rejected",
+                    "unknown",
+                    "replaced",
+                    "failed"
+                  ]
+                },
+                "objectId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9_-]+$"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                }
+              },
+              "required": [
+                "kind",
+                "amount",
+                "token",
+                "txHash",
+                "blockNumber",
+                "status",
+                "objectId",
+                "at"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "nodeId",
+          "campaignId",
+          "parentNodeId",
+          "owner",
+          "depth",
+          "childCount",
+          "hiddenChildCount",
+          "counts",
+          "moderationFlag",
+          "activity"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "truncated": {
+      "type": "boolean"
+    }
+  },
+  "required": ["nodes", "truncated"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.salePath
+
+**GET `/v1/receipts/:chainId/:saleId/path`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L283).
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                                           |
+| --------- | ------- | -------- | ----------------------------------------------------- |
+| `saleId`  | string  | Yes      | See nested schema and runtime validation              |
+| `chainId` | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": ["saleId", "chainId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "creator": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "paid": {
+            "type": "boolean"
+          },
+          "repeatedWallet": {
+            "type": "boolean"
+          },
+          "outsideWindow": {
+            "type": "boolean"
+          },
+          "effectiveWeightBps": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "reserved",
+                  "claimable",
+                  "claimed",
+                  "refunded",
+                  "reversed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reasonIfUnpaid": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "OUTSIDE_DEPTH",
+                  "CAMPAIGN_EXCLUSION",
+                  "REFUNDED",
+                  "REVERSED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "nodeId",
+          "creator",
+          "depth",
+          "paid",
+          "repeatedWallet",
+          "outsideWindow",
+          "effectiveWeightBps",
+          "amount",
+          "state",
+          "reasonIfUnpaid"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "blockNumber": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "explorerUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          }
+        },
+        "required": ["hash", "blockNumber", "explorerUrl"],
+        "additionalProperties": false
+      }
+    },
+    "truncated": {
+      "type": "boolean"
+    }
+  },
+  "required": ["saleId", "nodes", "policyHash", "evidence", "truncated"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.search
+
+**GET `/v1/campaigns/:campaignId/graph/search`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L293).
+
+**Client input fields**
+
+| Field        | Type   | Required | Constraints                              |
+| ------------ | ------ | -------- | ---------------------------------------- |
+| `campaignId` | string | Yes      | See nested schema and runtime validation |
+| `q`          | string | Yes      | Min length: 1; Max length: 100           |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    }
+  },
+  "required": ["campaignId", "q"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "nodeId": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "campaignId": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "parentNodeId": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "owner": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "handle": {
+            "type": ["string", "null"]
+          },
+          "displayName": {
+            "type": ["string", "null"]
+          },
+          "visibility": {
+            "type": "string",
+            "enum": ["public", "pseudonymous", "private"]
+          }
+        },
+        "required": ["address", "handle", "displayName", "visibility"],
+        "additionalProperties": false
+      },
+      "depth": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "childCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "hiddenChildCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "counts": {
+        "type": "object",
+        "properties": {
+          "pending": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "finalized": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "refunded": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["pending", "finalized", "refunded"],
+        "additionalProperties": false
+      },
+      "moderationFlag": {
+        "type": "boolean"
+      },
+      "activity": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "amount": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema1"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "token": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "$ref": "#/$defs/__schema2"
+                    },
+                    "symbol": {
+                      "type": "string"
+                    },
+                    "decimals": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 36
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "testnet": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["address", "symbol", "decimals"],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "txHash": {
+              "type": "string",
+              "pattern": "^0x[0-9a-fA-F]{64}$"
+            },
+            "blockNumber": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "not_submitted",
+                "wallet_confirmation",
+                "submitted",
+                "included",
+                "confirmed",
+                "indexed",
+                "done",
+                "rejected",
+                "unknown",
+                "replaced",
+                "failed"
+              ]
+            },
+            "objectId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9_-]+$"
+            },
+            "at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            }
+          },
+          "required": [
+            "kind",
+            "amount",
+            "token",
+            "txHash",
+            "blockNumber",
+            "status",
+            "objectId",
+            "at"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "nodeId",
+      "campaignId",
+      "parentNodeId",
+      "owner",
+      "depth",
+      "childCount",
+      "hiddenChildCount",
+      "counts",
+      "moderationFlag",
+      "activity"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## graph.export
+
+**POST `/v1/graph/exports`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L294).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type                                   | Required | Constraints                              |
+| ------------ | -------------------------------------- | -------- | ---------------------------------------- |
+| `scope`      | "campaign" · "mine"                    | Yes      | See nested schema and runtime validation |
+| `campaignId` | string                                 | No       | See nested schema and runtime validation |
+| `depth`      | integer                                | Yes      | Minimum: 1; Maximum: 256                 |
+| `saleStates` | "PENDING" · "FINALIZED" · "REFUNDED"[] | Yes      | See nested schema and runtime validation |
+| `period`     | object                                 | Yes      | See nested schema and runtime validation |
+| `format`     | "csv" · "json"                         | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "scope": {
+      "type": "string",
+      "enum": ["campaign", "mine"]
+    },
+    "campaignId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 256
+    },
+    "saleStates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+      }
+    },
+    "period": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "format": {
+      "type": "string",
+      "enum": ["csv", "json"]
+    }
+  },
+  "required": ["scope", "depth", "saleStates", "period", "format"],
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "fromBlock": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "toBlock": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[\\da-f]{64}$"
+          }
+        },
+        "required": ["url", "rows", "sha256"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schemaVersion", "chainId", "fromBlock", "toBlock", "files"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.get
+
+**GET `/v1/distributors/:addressOrHandle/profile`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L352).
+
+**Client input fields**
+
+| Field             | Type                    | Required | Constraints                              |
+| ----------------- | ----------------------- | -------- | ---------------------------------------- |
+| `addressOrHandle` | string                  | Yes      | See nested schema and runtime validation |
+| `groupBy`         | "merchant" · "campaign" | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "addressOrHandle": {
+      "type": "string"
+    },
+    "groupBy": {
+      "type": "string",
+      "enum": ["merchant", "campaign"]
+    }
+  },
+  "required": ["addressOrHandle"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "handle": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "displayName": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "methodologyVersion": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "evidencePeriod": {
+          "$ref": "#/$defs/__schema5"
+        },
+        "settledConversions": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "directConversions": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "networkConversions": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "netAttributedValue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema7"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "settledCommission": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema7"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "median": {
+          "$ref": "#/$defs/__schema8"
+        },
+        "merchantCount": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "campaignCount": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "refundAdjustment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema7"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lastIndexedBlock": {
+          "$ref": "#/$defs/__schema9"
+        },
+        "verificationTier": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "evidence": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "perMerchant": {
+          "$ref": "#/$defs/__schema18"
+        },
+        "perCampaign": {
+          "$ref": "#/$defs/__schema25"
+        },
+        "perCategory": {
+          "$ref": "#/$defs/__schema26"
+        },
+        "period": {
+          "$ref": "#/$defs/__schema27"
+        },
+        "totalsByToken": {
+          "$ref": "#/$defs/__schema28"
+        },
+        "pendingConversions": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/__schema29"
+        },
+        "acceptsInvitations": {
+          "$ref": "#/$defs/__schema30"
+        },
+        "visibleFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "indexing": {
+          "type": "string",
+          "enum": ["index", "noindex"]
+        }
+      },
+      "required": [
+        "subject",
+        "handle",
+        "displayName",
+        "methodologyVersion",
+        "evidencePeriod",
+        "settledConversions",
+        "directConversions",
+        "networkConversions",
+        "netAttributedValue",
+        "settledCommission",
+        "median",
+        "merchantCount",
+        "campaignCount",
+        "refundAdjustment",
+        "lastIndexedBlock",
+        "verificationTier",
+        "evidence",
+        "perMerchant",
+        "perCampaign",
+        "pendingConversions",
+        "visibility",
+        "acceptsInvitations",
+        "visibleFields",
+        "indexing"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "handle": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "displayName": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "methodologyVersion": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "evidencePeriod": {
+          "$ref": "#/$defs/__schema5"
+        },
+        "settledConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "directConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "networkConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "netAttributedValue": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "settledCommission": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "median": {
+          "$ref": "#/$defs/__schema8"
+        },
+        "merchantCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "campaignCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "refundAdjustment": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "lastIndexedBlock": {
+          "$ref": "#/$defs/__schema9"
+        },
+        "verificationTier": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "evidence": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "perMerchant": {
+          "$ref": "#/$defs/__schema18"
+        },
+        "perCampaign": {
+          "$ref": "#/$defs/__schema25"
+        },
+        "perCategory": {
+          "$ref": "#/$defs/__schema26"
+        },
+        "period": {
+          "$ref": "#/$defs/__schema27"
+        },
+        "totalsByToken": {
+          "$ref": "#/$defs/__schema28"
+        },
+        "pendingConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "visibility": {
+          "$ref": "#/$defs/__schema29"
+        },
+        "acceptsInvitations": {
+          "$ref": "#/$defs/__schema30"
+        }
+      },
+      "required": [
+        "subject",
+        "handle",
+        "displayName",
+        "methodologyVersion",
+        "evidencePeriod",
+        "settledConversions",
+        "directConversions",
+        "networkConversions",
+        "netAttributedValue",
+        "settledCommission",
+        "median",
+        "merchantCount",
+        "campaignCount",
+        "refundAdjustment",
+        "lastIndexedBlock",
+        "verificationTier",
+        "evidence",
+        "perMerchant",
+        "perCampaign",
+        "pendingConversions",
+        "visibility",
+        "acceptsInvitations"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "hidden": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": ["hidden"],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema2": {
+      "type": ["string", "null"]
+    },
+    "__schema3": {
+      "type": ["string", "null"]
+    },
+    "__schema4": {
+      "type": "string"
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["from", "to"],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema7": {
+      "type": "string"
+    },
+    "__schema8": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema7"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "__schema9": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema7"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "__schema10": {
+      "type": "string"
+    },
+    "__schema11": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "saleId": {
+                "$ref": "#/$defs/__schema12"
+              },
+              "campaignId": {
+                "$ref": "#/$defs/__schema12"
+              },
+              "chainId": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "contractAddress": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "buyer": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "nodeId": {
+                "$ref": "#/$defs/__schema12"
+              },
+              "orderKey": {
+                "$ref": "#/$defs/__schema13"
+              },
+              "policyHash": {
+                "$ref": "#/$defs/__schema13"
+              },
+              "policyVersion": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "source": {
+                "type": "string",
+                "enum": ["native", "merchant_attested"]
+              },
+              "trustMode": {
+                "type": "string",
+                "enum": [
+                  "NATIVE_ONCHAIN",
+                  "MERCHANT_ATTESTED",
+                  "THIRD_PARTY_VERIFIED"
+                ]
+              },
+              "price": {
+                "$ref": "#/$defs/__schema7"
+              },
+              "rewardReserved": {
+                "$ref": "#/$defs/__schema7"
+              },
+              "token": {
+                "$ref": "#/$defs/__schema14"
+              },
+              "state": {
+                "type": "string",
+                "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+              },
+              "purchasedAt": {
+                "$ref": "#/$defs/__schema6"
+              },
+              "unlockAt": {
+                "$ref": "#/$defs/__schema6"
+              },
+              "allocations": {
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema15"
+                }
+              },
+              "proceedsState": {
+                "type": "string",
+                "enum": ["pending", "claimable", "claimed", "refunded"]
+              },
+              "purchaseTx": {
+                "$ref": "#/$defs/__schema16"
+              },
+              "finalizeTx": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema16"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "refundTx": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema16"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "indexedBlock": {
+                "$ref": "#/$defs/__schema7"
+              },
+              "timeline": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "at": {
+                      "$ref": "#/$defs/__schema6"
+                    },
+                    "tx": {
+                      "$ref": "#/$defs/__schema16"
+                    }
+                  },
+                  "required": ["state", "at", "tx"],
+                  "additionalProperties": false
+                }
+              },
+              "refundRequest": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "disputeId": {
+                        "$ref": "#/$defs/__schema17"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "$ref": "#/$defs/__schema6"
+                      }
+                    },
+                    "required": ["disputeId", "status", "createdAt"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "saleId",
+              "campaignId",
+              "chainId",
+              "contractAddress",
+              "buyer",
+              "nodeId",
+              "orderKey",
+              "policyHash",
+              "policyVersion",
+              "source",
+              "trustMode",
+              "price",
+              "rewardReserved",
+              "token",
+              "state",
+              "purchasedAt",
+              "unlockAt",
+              "allocations",
+              "proceedsState",
+              "purchaseTx",
+              "finalizeTx",
+              "refundTx",
+              "indexedBlock",
+              "timeline"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": {
+          "type": ["string", "null"]
+        }
+      },
+      "required": ["items", "nextCursor"],
+      "additionalProperties": false
+    },
+    "__schema12": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema7"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema13": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema14": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "name": {
+          "type": "string"
+        },
+        "testnet": {
+          "type": "boolean"
+        }
+      },
+      "required": ["address", "symbol", "decimals"],
+      "additionalProperties": false
+    },
+    "__schema15": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema1"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+        },
+        "claimTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema16"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "recipient",
+        "level",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "claimTx"
+      ],
+      "additionalProperties": false
+    },
+    "__schema16": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "#/$defs/__schema13"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema6"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    },
+    "__schema17": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema18": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema19"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema20"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema21"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema22"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema23"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema24"
+          },
+          "merchantId": {
+            "$ref": "#/$defs/__schema17"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema12"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["merchantId", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "__schema19": {
+      "type": "string"
+    },
+    "__schema20": {
+      "$ref": "#/$defs/__schema7"
+    },
+    "__schema21": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "__schema22": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "count": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["level", "count"],
+        "additionalProperties": false
+      }
+    },
+    "__schema23": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema6"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "__schema24": {
+      "$ref": "#/$defs/__schema14"
+    },
+    "__schema25": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema19"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema20"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema21"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema22"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema23"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema24"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema12"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema12"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["campaignId", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "__schema26": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema19"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema20"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema21"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema22"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema23"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema24"
+          },
+          "category": {
+            "type": "string"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema12"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["category", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "__schema27": {
+      "type": "string",
+      "enum": ["all", "90d", "30d"]
+    },
+    "__schema28": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "netAttributedValue": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema7"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "settledCommission": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema7"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundAdjustment": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema7"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "token",
+          "netAttributedValue",
+          "settledCommission",
+          "refundAdjustment"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "__schema29": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "__schema30": {
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.mine
+
+**GET `/v1/me/reputation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L360).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "handle": {
+      "type": ["string", "null"]
+    },
+    "displayName": {
+      "type": ["string", "null"]
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "evidencePeriod": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["from", "to"],
+      "additionalProperties": false
+    },
+    "settledConversions": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "directConversions": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "networkConversions": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "netAttributedValue": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "settledCommission": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "median": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "merchantCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "campaignCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "refundAdjustment": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "lastIndexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "verificationTier": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "saleId": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "campaignId": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "chainId": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "contractAddress": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "buyer": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "nodeId": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "orderKey": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "policyHash": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "policyVersion": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "source": {
+                "type": "string",
+                "enum": ["native", "merchant_attested"]
+              },
+              "trustMode": {
+                "type": "string",
+                "enum": [
+                  "NATIVE_ONCHAIN",
+                  "MERCHANT_ATTESTED",
+                  "THIRD_PARTY_VERIFIED"
+                ]
+              },
+              "price": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "rewardReserved": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "token": {
+                "$ref": "#/$defs/__schema5"
+              },
+              "state": {
+                "type": "string",
+                "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+              },
+              "purchasedAt": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "unlockAt": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "allocations": {
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema6"
+                }
+              },
+              "proceedsState": {
+                "type": "string",
+                "enum": ["pending", "claimable", "claimed", "refunded"]
+              },
+              "purchaseTx": {
+                "$ref": "#/$defs/__schema7"
+              },
+              "finalizeTx": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema7"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "refundTx": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema7"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "indexedBlock": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "timeline": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "at": {
+                      "$ref": "#/$defs/__schema1"
+                    },
+                    "tx": {
+                      "$ref": "#/$defs/__schema7"
+                    }
+                  },
+                  "required": ["state", "at", "tx"],
+                  "additionalProperties": false
+                }
+              },
+              "refundRequest": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "disputeId": {
+                        "$ref": "#/$defs/__schema8"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "$ref": "#/$defs/__schema1"
+                      }
+                    },
+                    "required": ["disputeId", "status", "createdAt"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "saleId",
+              "campaignId",
+              "chainId",
+              "contractAddress",
+              "buyer",
+              "nodeId",
+              "orderKey",
+              "policyHash",
+              "policyVersion",
+              "source",
+              "trustMode",
+              "price",
+              "rewardReserved",
+              "token",
+              "state",
+              "purchasedAt",
+              "unlockAt",
+              "allocations",
+              "proceedsState",
+              "purchaseTx",
+              "finalizeTx",
+              "refundTx",
+              "indexedBlock",
+              "timeline"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "nextCursor": {
+          "type": ["string", "null"]
+        }
+      },
+      "required": ["items", "nextCursor"],
+      "additionalProperties": false
+    },
+    "perMerchant": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema10"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema11"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema12"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema13"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "merchantId": {
+            "$ref": "#/$defs/__schema8"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema3"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["merchantId", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "perCampaign": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema10"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema11"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema12"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema13"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema3"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["campaignId", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "perCategory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "settledCommission": {
+            "$ref": "#/$defs/__schema10"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema11"
+          },
+          "levels": {
+            "$ref": "#/$defs/__schema12"
+          },
+          "lastSettledAt": {
+            "$ref": "#/$defs/__schema13"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "category": {
+            "type": "string"
+          },
+          "receiptIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema3"
+            }
+          },
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["category", "receiptIds", "settledConversions"],
+        "additionalProperties": false
+      }
+    },
+    "period": {
+      "type": "string",
+      "enum": ["all", "90d", "30d"]
+    },
+    "totalsByToken": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "$ref": "#/$defs/__schema5"
+          },
+          "netAttributedValue": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "settledCommission": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundAdjustment": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "token",
+          "netAttributedValue",
+          "settledCommission",
+          "refundAdjustment"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "pendingConversions": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "acceptsInvitations": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "subject",
+    "handle",
+    "displayName",
+    "methodologyVersion",
+    "evidencePeriod",
+    "settledConversions",
+    "directConversions",
+    "networkConversions",
+    "netAttributedValue",
+    "settledCommission",
+    "median",
+    "merchantCount",
+    "campaignCount",
+    "refundAdjustment",
+    "lastIndexedBlock",
+    "verificationTier",
+    "evidence",
+    "perMerchant",
+    "perCampaign",
+    "pendingConversions",
+    "visibility",
+    "acceptsInvitations"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "string"
+    },
+    "__schema3": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema4": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "name": {
+          "type": "string"
+        },
+        "testnet": {
+          "type": "boolean"
+        }
+      },
+      "required": ["address", "symbol", "decimals"],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema0"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+        },
+        "claimTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema7"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "recipient",
+        "level",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "claimTx"
+      ],
+      "additionalProperties": false
+    },
+    "__schema7": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    },
+    "__schema8": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema9": {
+      "type": "string"
+    },
+    "__schema10": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "__schema11": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "__schema12": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "count": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["level", "count"],
+        "additionalProperties": false
+      }
+    },
+    "__schema13": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "__schema14": {
+      "$ref": "#/$defs/__schema5"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.updateVisibility
+
+**PATCH `/v1/me/reputation/visibility`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L361).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field                | Type                                                                                                   | Required | Constraints                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
+| `level`              | "public" · "pseudonymous" · "private"                                                                  | Yes      | See nested schema and runtime validation |
+| `fields`             | "settledConversions" · "netAttributedValue" · "merchantCount" · "campaignCount" · "refundAdjustment"[] | No       | Default: `[]`                            |
+| `acceptsInvitations` | boolean                                                                                                | No       | Default: `false`                         |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "level": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "fields": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "acceptsInvitations": {
+      "$ref": "#/$defs/__schema2"
+    }
+  },
+  "required": ["level"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "__schema1": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "settledConversions",
+          "netAttributedValue",
+          "merchantCount",
+          "campaignCount",
+          "refundAdjustment"
+        ]
+      }
+    },
+    "__schema2": {
+      "default": false,
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "level": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "fields": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "acceptsInvitations": {
+      "$ref": "#/$defs/__schema2"
+    }
+  },
+  "required": ["level", "fields", "acceptsInvitations"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "enum": ["public", "pseudonymous", "private"]
+    },
+    "__schema1": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "settledConversions",
+          "netAttributedValue",
+          "merchantCount",
+          "campaignCount",
+          "refundAdjustment"
+        ]
+      }
+    },
+    "__schema2": {
+      "default": false,
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.exportCredential
+
+**POST `/v1/me/reputation/credential`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L362).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "issuer": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "subject": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "issuedAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "evidencePeriod": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["from", "to"],
+      "additionalProperties": false
+    },
+    "expiresAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "settledConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "netAttributedValue": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "merchantCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "campaignCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "refundAdjustment": {
+          "$ref": "#/$defs/__schema2"
+        }
+      },
+      "required": [
+        "settledConversions",
+        "netAttributedValue",
+        "merchantCount",
+        "campaignCount",
+        "refundAdjustment"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceRoot": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "issuerSignature": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "holderSignature": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "revoked", "expired"]
+    }
+  },
+  "required": [
+    "id",
+    "issuer",
+    "subject",
+    "issuedAt",
+    "evidencePeriod",
+    "expiresAt",
+    "metrics",
+    "evidenceRoot",
+    "issuerSignature",
+    "holderSignature",
+    "status"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.credentials
+
+**GET `/v1/me/reputation/credentials`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L363).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100,
+        "pattern": "^[a-zA-Z0-9_-]+$"
+      },
+      "issuer": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "subject": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "issuedAt": {
+        "$ref": "#/$defs/__schema1"
+      },
+      "evidencePeriod": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "to": {
+            "$ref": "#/$defs/__schema1"
+          }
+        },
+        "required": ["from", "to"],
+        "additionalProperties": false
+      },
+      "expiresAt": {
+        "$ref": "#/$defs/__schema1"
+      },
+      "metrics": {
+        "type": "object",
+        "properties": {
+          "settledConversions": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "netAttributedValue": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "merchantCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "campaignCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "refundAdjustment": {
+            "$ref": "#/$defs/__schema2"
+          }
+        },
+        "required": [
+          "settledConversions",
+          "netAttributedValue",
+          "merchantCount",
+          "campaignCount",
+          "refundAdjustment"
+        ],
+        "additionalProperties": false
+      },
+      "evidenceRoot": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]{64}$"
+      },
+      "issuerSignature": {
+        "type": "string",
+        "pattern": "^0x[\\da-fA-F]+$"
+      },
+      "holderSignature": {
+        "type": "string",
+        "pattern": "^0x[\\da-fA-F]+$"
+      },
+      "status": {
+        "type": "string",
+        "enum": ["active", "revoked", "expired"]
+      }
+    },
+    "required": [
+      "id",
+      "issuer",
+      "subject",
+      "issuedAt",
+      "evidencePeriod",
+      "expiresAt",
+      "metrics",
+      "evidenceRoot",
+      "issuerSignature",
+      "holderSignature",
+      "status"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.revokeCredential
+
+**DELETE `/v1/me/reputation/credentials/:id`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L364).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field | Type   | Required | Constraints                                                         |
+| ----- | ------ | -------- | ------------------------------------------------------------------- |
+| `id`  | string | Yes      | Min length: 1; Max length: 100; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    }
+  },
+  "required": ["id"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "issuer": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "subject": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "issuedAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "evidencePeriod": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["from", "to"],
+      "additionalProperties": false
+    },
+    "expiresAt": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "settledConversions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "netAttributedValue": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "merchantCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "campaignCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "refundAdjustment": {
+          "$ref": "#/$defs/__schema2"
+        }
+      },
+      "required": [
+        "settledConversions",
+        "netAttributedValue",
+        "merchantCount",
+        "campaignCount",
+        "refundAdjustment"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceRoot": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "issuerSignature": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "holderSignature": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "revoked", "expired"]
+    }
+  },
+  "required": [
+    "id",
+    "issuer",
+    "subject",
+    "issuedAt",
+    "evidencePeriod",
+    "expiresAt",
+    "metrics",
+    "evidenceRoot",
+    "issuerSignature",
+    "holderSignature",
+    "status"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reputation.verifyCredential
+
+**POST `/v1/credentials/verify`** · **Designed — unavailable** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L365).
+
+**Client input fields**
+
+| Field        | Type   | Required | Constraints                              |
+| ------------ | ------ | -------- | ---------------------------------------- |
+| `credential` | object | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "credential": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "issuer": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "subject": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "issuedAt": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "evidencePeriod": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "to": {
+              "$ref": "#/$defs/__schema1"
+            }
+          },
+          "required": ["from", "to"]
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "settledConversions": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "netAttributedValue": {
+              "$ref": "#/$defs/__schema2"
+            },
+            "merchantCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "campaignCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "refundAdjustment": {
+              "$ref": "#/$defs/__schema2"
+            }
+          },
+          "required": [
+            "settledConversions",
+            "netAttributedValue",
+            "merchantCount",
+            "campaignCount",
+            "refundAdjustment"
+          ]
+        },
+        "evidenceRoot": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{64}$"
+        },
+        "issuerSignature": {
+          "type": "string",
+          "pattern": "^0x[\\da-fA-F]+$"
+        },
+        "holderSignature": {
+          "type": "string",
+          "pattern": "^0x[\\da-fA-F]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "revoked", "expired"]
+        }
+      },
+      "required": [
+        "id",
+        "issuer",
+        "subject",
+        "issuedAt",
+        "evidencePeriod",
+        "expiresAt",
+        "metrics",
+        "evidenceRoot",
+        "issuerSignature",
+        "holderSignature",
+        "status"
+      ]
+    }
+  },
+  "required": ["credential"],
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "string",
+      "maxLength": 78,
+      "pattern": "^(0|[1-9]\\d*)$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "valid": {
+      "type": "boolean"
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "issuerSignature": {
+          "type": "boolean"
+        },
+        "holderSignature": {
+          "type": "boolean"
+        },
+        "revocation": {
+          "type": "boolean"
+        },
+        "expiry": {
+          "type": "boolean"
+        },
+        "evidenceRoot": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "issuerSignature",
+        "holderSignature",
+        "revocation",
+        "expiry",
+        "evidenceRoot"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["valid", "checks"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## distributors.search
+
+**GET `/v1/distributors`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L366).
+
+**Client input fields**
+
+| Field               | Type                                                    | Required | Constraints                                |
+| ------------------- | ------------------------------------------------------- | -------- | ------------------------------------------ |
+| `cursor`            | string                                                  | No       | See nested schema and runtime validation   |
+| `limit`             | integer                                                 | No       | Minimum: 1; Maximum: 100                   |
+| `q`                 | string                                                  | No       | Max length: 200                            |
+| `categories`        | string[]                                                | No       | See nested schema and runtime validation   |
+| `minSettledSales`   | integer                                                 | No       | Minimum: 0; Maximum: 9007199254740991      |
+| `merchantDiversity` | integer                                                 | No       | Minimum: 0; Maximum: 9007199254740991      |
+| `recency`           | integer                                                 | No       | Maximum: 9007199254740991; Greater than: 0 |
+| `sort`              | "balanced" · "settled" · "diversity" · "recent" · "new" | No       | See nested schema and runtime validation   |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "q": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "minSettledSales": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "merchantDiversity": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "recency": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "sort": {
+      "type": "string",
+      "enum": ["balanced", "settled", "diversity", "recent", "new"]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema0"
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    },
+    "newDistributors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema0"
+      }
+    }
+  },
+  "required": ["items", "nextCursor", "newDistributors"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^0x[0-9a-fA-F]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "handle": {
+          "type": ["string", "null"]
+        },
+        "displayName": {
+          "type": ["string", "null"]
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "pseudonymous"]
+        },
+        "settledConversions": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "merchantCount": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lastSettledAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rankSignals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": ["name", "value"],
+            "additionalProperties": false
+          }
+        },
+        "slot": {
+          "type": "string",
+          "enum": ["ranked", "new"]
+        },
+        "rankingVersion": {
+          "type": "string",
+          "const": "discovery-v1"
+        },
+        "methodologyVersion": {
+          "type": "string"
+        },
+        "isPartner": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "address",
+        "handle",
+        "displayName",
+        "visibility",
+        "settledConversions",
+        "merchantCount",
+        "categories",
+        "lastSettledAt",
+        "rankSignals",
+        "slot",
+        "rankingVersion",
+        "methodologyVersion",
+        "isPartner"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## distributors.get
+
+**GET `/v1/distributors/:address`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L370).
+
+**Client input fields**
+
+| Field     | Type   | Required | Constraints                         |
+| --------- | ------ | -------- | ----------------------------------- |
+| `address` | string | Yes      | Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  },
+  "required": ["address"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "address": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "handle": {
+      "type": ["string", "null"]
+    },
+    "displayName": {
+      "type": ["string", "null"]
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "pseudonymous"]
+    },
+    "settledConversions": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "merchantCount": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lastSettledAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rankSignals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": ["name", "value"],
+        "additionalProperties": false
+      }
+    },
+    "slot": {
+      "type": "string",
+      "enum": ["ranked", "new"]
+    },
+    "rankingVersion": {
+      "type": "string",
+      "const": "discovery-v1"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "isPartner": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "address",
+    "handle",
+    "displayName",
+    "visibility",
+    "settledConversions",
+    "merchantCount",
+    "categories",
+    "lastSettledAt",
+    "rankSignals",
+    "slot",
+    "rankingVersion",
+    "methodologyVersion",
+    "isPartner"
+  ],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## distributors.recommendations
+
+**GET `/v1/merchant/recommendations`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L371).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "handle": {
+        "type": ["string", "null"]
+      },
+      "displayName": {
+        "type": ["string", "null"]
+      },
+      "visibility": {
+        "type": "string",
+        "enum": ["public", "pseudonymous"]
+      },
+      "settledConversions": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "merchantCount": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "categories": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "lastSettledAt": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "rankSignals": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            }
+          },
+          "required": ["name", "value"],
+          "additionalProperties": false
+        }
+      },
+      "slot": {
+        "type": "string",
+        "enum": ["ranked", "new"]
+      },
+      "rankingVersion": {
+        "type": "string",
+        "const": "discovery-v1"
+      },
+      "methodologyVersion": {
+        "type": "string"
+      },
+      "isPartner": {
+        "type": "boolean"
+      },
+      "reasons": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "address",
+      "handle",
+      "displayName",
+      "visibility",
+      "settledConversions",
+      "merchantCount",
+      "categories",
+      "lastSettledAt",
+      "rankSignals",
+      "slot",
+      "rankingVersion",
+      "methodologyVersion",
+      "isPartner",
+      "reasons"
+    ],
+    "additionalProperties": false
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>

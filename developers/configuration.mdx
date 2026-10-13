@@ -1,0 +1,65 @@
+---
+title: "Configuration reference"
+description: "Set the API, frontend, indexer, and optional services consistently without exposing server credentials."
+---
+
+The checked `.env.example` files describe names and local defaults. Actual values belong in private deployment configuration. A frontend variable is public once bundled.
+
+## API configuration
+
+| Variable                  | Local default or constraint             | Purpose                                            |
+| ------------------------- | --------------------------------------- | -------------------------------------------------- |
+| `PORT`                    | `8740`; 1–65535                         | API listener                                       |
+| `HOST`                    | `127.0.0.1`                             | Bind address                                       |
+| `NODE_ENV`                | `development`, `test`, or `production`  | Runtime behavior and secure session cookies        |
+| `WEB_ORIGIN`              | Required exact URL                      | Allowed credentialed browser origin                |
+| `API_ORIGIN`              | Public API URL                          | Absolute asset and delivery links                  |
+| `CHAIN_ID`                | `31337` or `10143`                      | Settlement chain; mainnet 143 is not accepted here |
+| `RPC_URL`                 | Server-side URL                         | Settlement RPC verification and transaction reads  |
+| `RPC_REQUESTS_PER_SECOND` | Default 5; range 1–50                   | Bounded shared RPC request budget                  |
+| `PROTOCOL_ADDRESS`        | Empty until deployed, otherwise address | Settlement contract                                |
+| `TOKEN_ADDRESS`           | Empty until deployed, otherwise address | Supported settlement token                         |
+| `DEPLOYMENT_BLOCK`        | Decimal string; local default `0`       | Projection starting point                          |
+| `DATABASE_URL`            | PostgreSQL connection URL               | Application and projection storage                 |
+| `STORAGE_DIRECTORY`       | Private persistent writable directory   | Product assets                                     |
+| `INDEXER_SOURCE`          | `direct_rpc` or `envio`                 | Explicit event-ingestion source                    |
+| `OPERATOR_ADDRESSES`      | Comma-separated wallet addresses        | Operator route authorization                       |
+
+An empty contract address is a not-deployed state, not a reason to substitute fixture data into Live mode. A changed deployment identity requires deliberate index/replay planning.
+
+## Frontend configuration
+
+| Variable                         | Purpose                                             |
+| -------------------------------- | --------------------------------------------------- |
+| `NEXT_PUBLIC_CHAIN_ID`           | Must match the settlement API chain                 |
+| `NEXT_PUBLIC_API_URL`            | API origin, such as `http://localhost:8740` locally |
+| `NEXT_PUBLIC_PROTOCOL_ADDRESS`   | Must match the API's protocol address               |
+| `NEXT_PUBLIC_DEMO_TOKEN_ADDRESS` | Must match the settlement test token                |
+| `NEXT_PUBLIC_REOWN_PROJECT_ID`   | Public wallet-connection project identifier         |
+
+Rebuild the frontend when changing build-time public configuration. Never place the private RPC provider URL, signing key, database URL, or provider application key in a `NEXT_PUBLIC_*` field.
+
+## Optional API services
+
+| Variable                  | Effect                                                               |
+| ------------------------- | -------------------------------------------------------------------- |
+| `GAS_STATION_PRIVATE_KEY` | Enables the limited Monad Testnet MON gas service                    |
+| `NANSEN_API_KEY`          | Server-side access for supported wallet-history queries              |
+| `NANSEN_CREDIT_BUDGET`    | Durable conservative query ceiling; default 50, allowed 0–100        |
+| `NANSEN_REFRESH_ON_START` | Defaults to `false`; prevents unintended refresh spending on restart |
+| `AURORA_APP_KEY`          | Required for optional mainnet funding provider configuration         |
+| `AURORA_MONAD_RPC_URL`    | Independent HTTPS RPC for Monad Mainnet funding verification         |
+
+The Aurora verification RPC is a separate mainnet connection. It does not change the settlement `CHAIN_ID`. A configured provider key is also not proof of a completed real transfer.
+
+## Envio configuration
+
+Use the [indexer environment example](https://github.com/Enoch208/spoke/blob/main/indexer/.env.example). The worker needs `ENVIO_API_TOKEN`, its realtime `MONAD_RPC_URL`, PostgreSQL connection settings, and `ENVIO_PG_SCHEMA=envio`. The API's application tables remain separate from that schema.
+
+Hasura is disabled in this deployment. HyperIndex 3.14 still initializes configuration fields for it, so retain the documented unused loopback endpoint and disabled settings rather than exposing a query server. Bind health/metrics locally if publishing the container port.
+
+Use appropriate TLS verification for database connections across untrusted networks. Keep the worker's system CA bundle installed for its native RPC client. A successful Node RPC check does not prove the native worker can establish TLS.
+
+## Configuration changes that need special care
+
+Changing origins invalidates assumptions about cookies and CSRF. Changing chain, token, contract, or deployment block changes what the index means. Changing an insight budget can permit additional provider spend. Treat those as explicit operational changes, then verify their observable result through status and controlled reads.

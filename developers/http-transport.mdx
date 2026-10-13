@@ -1,0 +1,83 @@
+---
+title: "HTTP transport and pagination"
+description: "Map typed client methods to path, query, body, multipart, and envelope formats without losing validation or idempotency."
+---
+
+The [method reference](/reference/identity) documents the shared **client input object**. The frontend transforms that object into HTTP. Copying the entire client object into a request body is not always correct.
+
+## Mapping rules
+
+| Route shape               | Frontend behavior                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Path placeholders         | Read the matching input fields, encode them into the URL, and remove them from the remaining payload |
+| GET                       | Serialize remaining fields as query parameters                                                       |
+| JSON write                | Send remaining fields as JSON unless the route selects a nested payload                              |
+| Nested payload            | Send the named property, such as `product` or `draft`, as the JSON body                              |
+| Multipart                 | Send a `FormData` body and let the browser set its content-type boundary                             |
+| Idempotent action         | Add `idempotency-key` from the route's configured input field                                        |
+| Protected browser request | Include session credentials; writes also carry `x-csrf-token`                                        |
+
+The frontend client is implemented in [live/http.ts](https://github.com/Enoch208/spoke/blob/main/apps/web/src/lib/client/live/http.ts). The [shared route map](https://github.com/Enoch208/spoke/blob/main/packages/protocol/src/api/transport.ts) is authoritative for each method.
+
+## Path and query example
+
+Client call:
+
+```ts
+spoke.read("receipts.get", { chainId: 10143, saleId: "4" });
+```
+
+HTTP request:
+
+```http
+GET /v1/receipts/10143/4
+Accept: application/json
+```
+
+Campaign discovery can use the supported filters. For example:
+
+```bash
+curl --get --fail 'https://api.usespoke.xyz/v1/campaigns' \
+  --data-urlencode 'status=active' \
+  --data-urlencode 'sort=newest' \
+  --data-urlencode 'limit=10'
+```
+
+Do not infer a filter from another collection. The campaign schema includes query, category, rate bounds, level count, hold/budget limits, merchant, and sort fields; another method can accept a different set.
+
+## Nested body example
+
+The client input for `products.save` contains `id` and `product`. The route uses the ID in `/merchant/products/:id` and sends the **product object itself** as the body. Sending `{ "id": "...", "product": { ... } }` to that HTTP endpoint is a different request and fails its strict schema.
+
+Likewise, campaign draft save uses its nested `draft` body. The generated method page states when a payload selector applies.
+
+## Multipart uploads
+
+For `products.uploadAsset`, place the ID in the path and the file in the `file` form field. Do not JSON-stringify a `File` or manually write a multipart boundary. Authentication and CSRF still apply. See [products and delivery](/guides/product-delivery) for server-enforced file limits.
+
+## Arrays and structured filters
+
+The frontend transport serializes arrays as comma-separated strings and other object-valued query fields as JSON. The public read SDK uses JSON for object/array values. Supported read services normalize their documented query inputs; use the supplied client for its method set instead of inventing a third encoding.
+
+## Pagination
+
+Many collection methods accept an optional `cursor` and `limit`; the shared limit is commonly 1–100, but read the exact method schema. Preserve the server's cursor unchanged and pass it back for the next page. Do not increment it as if it were a page number or a block height.
+
+Inspect the method's output schema for its collection envelope and nullable continuation field. Stop when the response provides no next cursor. Filter changes should start a new traversal rather than reusing a cursor from a different query.
+
+## Headers and failures
+
+- Send `Accept: application/json` for JSON methods.
+- Send `Content-Type: application/json` for JSON writes.
+- The authenticated frontend includes cookies with `credentials: "include"`.
+- Protected writes need the exact allowed browser origin and sign-in CSRF token.
+- Checkout requires an `idempotency-key`; the standard client uses its `orderKey`.
+- Keep `requestId` and any `Retry-After` information when reporting or backing off from failures.
+
+Read-only retries and financial retries have different consequences. An HTTP timeout can occur after a transaction has already been submitted. Reconcile the original intent and hash before asking for another wallet action.
+
+## Special routes outside the method map
+
+The canonical registry covers 189 client methods, not every auxiliary HTTP route. For example, temporary downloads and served image assets are supporting routes with their own authorization/entitlement rules. A public transport label on a tokenized download URL does not make the file public.
+
+`vault.get` also selects a campaign-specific route when `campaignId` is present. This is documented beside that method in [settlement reference](/reference/settlement).

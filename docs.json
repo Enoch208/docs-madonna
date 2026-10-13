@@ -28,7 +28,9 @@
             "pages": [
               "concepts/distribution-graph",
               "concepts/commission-policy",
-              "concepts/settlement"
+              "concepts/settlement",
+              "concepts/economics-examples",
+              "concepts/vault-accounting"
             ]
           }
         ]
@@ -45,11 +47,21 @@
             ]
           },
           {
-            "group": "Your account",
+            "group": "Campaigns and purchases",
+            "pages": [
+              "guides/campaign-launch",
+              "guides/product-delivery",
+              "guides/refunds-and-claims",
+              "guides/reading-receipts"
+            ]
+          },
+          {
+            "group": "Your account and help",
             "pages": [
               "guides/accounts",
               "guides/wallet-funding",
-              "guides/troubleshooting"
+              "guides/troubleshooting",
+              "guides/faq"
             ]
           }
         ]
@@ -61,17 +73,48 @@
             "group": "Understand the system",
             "pages": [
               "developers/architecture",
+              "developers/data-model",
               "developers/local-development",
-              "developers/indexing"
+              "developers/configuration"
             ]
           },
           {
-            "group": "Integrate",
+            "group": "Build an integration",
             "pages": [
               "developers/api",
+              "developers/http-transport",
               "developers/authentication",
+              "developers/checkout-integration",
               "developers/sdk",
-              "developers/contracts"
+              "developers/contracts",
+              "developers/events"
+            ]
+          },
+          {
+            "group": "Operate and verify",
+            "pages": [
+              "developers/indexing",
+              "developers/deployment",
+              "developers/operations",
+              "developers/testing"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Read the contract",
+            "pages": [
+              "reference/overview",
+              "reference/identity",
+              "reference/commerce",
+              "reference/distribution",
+              "reference/settlement",
+              "reference/funding",
+              "reference/platform",
+              "reference/extensions"
             ]
           }
         ]

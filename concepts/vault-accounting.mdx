@@ -1,0 +1,68 @@
+---
+title: "Vault accounting"
+description: "Reconcile reward funding and buyer payments using the two contract ledgers and a worked settlement example."
+---
+
+The contract holds tokens for two separate purposes: merchant-funded rewards and buyer payments. The same token can be used in both ledgers, but the obligations are not interchangeable.
+
+## Reward ledger
+
+| Field              | Meaning                                                          |
+| ------------------ | ---------------------------------------------------------------- |
+| `netDeposited`     | Cumulative reward funding recorded for the campaign              |
+| `available`        | Funding not currently reserved, claimable, claimed, or withdrawn |
+| `pendingReserved`  | Rewards attached to pending sales                                |
+| `vestedUnclaimed`  | Finalized reward liabilities recipients have not claimed         |
+| `rewardsClaimed`   | Rewards already withdrawn by recipients                          |
+| `surplusWithdrawn` | Unused rewards returned to the merchant                          |
+
+The name `netDeposited` is a contract field. In this implementation, funding increases it and unused-budget withdrawals are tracked separately in `surplusWithdrawn`.
+
+```text
+netDeposited = available + pendingReserved + vestedUnclaimed
+             + rewardsClaimed + surplusWithdrawn
+```
+
+## Buyer-payment ledger
+
+| Field               | Meaning                                     |
+| ------------------- | ------------------------------------------- |
+| `received`          | Cumulative product payments received        |
+| `proceedsPending`   | Payments for pending sales                  |
+| `proceedsClaimable` | Finalized merchant proceeds not yet claimed |
+| `proceedsClaimed`   | Merchant proceeds already withdrawn         |
+| `buyerRefunded`     | Payments returned to buyers                 |
+
+```text
+received = proceedsPending + proceedsClaimable
+         + proceedsClaimed + buyerRefunded
+```
+
+Across campaigns, the contract's held balance must cover available rewards, pending rewards, finalized unclaimed rewards, pending buyer escrow, and claimable merchant proceeds. Historical claimed/refunded/withdrawn totals explain where funds went; they are no longer held liabilities.
+
+## Worked example
+
+Assume a merchant deposits **100 SDUSD** for rewards. A product costs **20 SDUSD** and reserves a **2 SDUSD** reward per attributed sale. There is sufficient liability capacity.
+
+| Step                              | Available rewards | Reserved rewards | Claimable rewards | Pending buyer payments | Claimable merchant proceeds |
+| --------------------------------- | ----------------: | ---------------: | ----------------: | ---------------------: | --------------------------: |
+| Fund the campaign                 |               100 |                0 |                 0 |                      0 |                           0 |
+| Buyer A purchases                 |                98 |                2 |                 0 |                     20 |                           0 |
+| Buyer B purchases                 |                96 |                4 |                 0 |                     40 |                           0 |
+| Merchant refunds A before unlock  |                98 |                2 |                 0 |                     20 |                           0 |
+| Finalize B after unlock           |                98 |                0 |                 2 |                      0 |                          20 |
+| Distributors claim B's reward     |                98 |                0 |                 0 |                      0 |                          20 |
+| Merchant claims B's proceeds      |                98 |                0 |                 0 |                      0 |                           0 |
+| Pause and withdraw unused rewards |                 0 |                0 |                 0 |                      0 |                           0 |
+
+At the end, reward funding reconciles as **100 = 2 claimed + 98 withdrawn**. Buyer payments reconcile as **40 = 20 merchant-claimed + 20 refunded**.
+
+## Liability cap versus available funds
+
+For a campaign, used reward liability includes `pendingReserved + vestedUnclaimed + rewardsClaimed`. Finalizing or claiming a reward does not reset that lifetime usage. A refund releases a reservation. Funding the vault increases available coverage but does not automatically increase the policy's campaign liability cap.
+
+A campaign can therefore have available funds and still hit its liability cap. Read both values before assuming a top-up will fix a rejected purchase.
+
+## How to reconcile
+
+Use the contract's `getRewardLedger` and `getPriceLedger` at a consistent block, then compare the API's vault view and receipt allocations. Avoid combining snapshots from different blocks while a purchase or claim is executing. A mismatch should trigger investigation and canonical replay/verification, not a manual balance edit.

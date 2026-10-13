@@ -41,3 +41,28 @@ The testnet gas service has separate funding limits and durable transaction trac
 - Respect the returned retryability and request IDs; use bounded retries.
 
 The implementation has tests and public testnet evidence. These controls do not constitute an independent security audit or mainnet approval. See the [roadmap](/project/roadmap).
+
+## Exact challenge and session behavior
+
+A sign-in challenge expires after **five minutes** and is consumed once. Its message includes the configured web domain, URI, chain, nonce, issue time, and expiration. `accountKind` accepts `wallet`, `passkey`, or `phrase`; `purpose` distinguishes `signIn`, `link`, and `confirm`.
+
+For confirmation, the current session signer must match the challenge address and the action name must be supplied. A successful confirmation creates another five-minute, single-use token bound to the session and action. A linked-wallet challenge is bound to its owning account.
+
+The current session lifetime is **24 hours**. Production uses the secure HTTP-only `__Host-spoke_session` cookie with `SameSite=Lax` and path `/`; development uses `spoke_session`. The response returns a separate CSRF token. The raw session and confirmation credentials are not stored in the database: their hashes are.
+
+Both sign-in endpoints require the configured origin even though their route classification is public. Public in that context means no existing session is required, not that any website may establish a session.
+
+## Example challenge body
+
+```json
+{
+  "address": "0x1111111111111111111111111111111111111111",
+  "chainId": 10143,
+  "accountKind": "wallet",
+  "purpose": "signIn"
+}
+```
+
+The address is illustrative. A user must sign the exact returned message with the actual account being authenticated. Verification takes `message`, `signature`, and `method`; it does not take a password or seed phrase. See the [exact method schemas](/reference/identity).
+
+A successful verification can return a session, an action confirmation, or a new-account recovery result with no session, depending on the purpose and account kind. Validate the union instead of assuming every HTTP 200 contains a CSRF token.

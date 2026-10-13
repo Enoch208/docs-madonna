@@ -1,0 +1,61 @@
+---
+title: "Deployment and release checks"
+description: "Prepare a consistent frontend, API, and indexer release and verify its actual behavior after rollout."
+---
+
+This is an operator checklist for the existing architecture. It describes a repeatable release process; it does not claim that a generic one-command production installer exists in the repository.
+
+## Deploy the components as a system
+
+The frontend, API, generated contract ABI, and shared schemas must agree on the deployment identity. The event worker may run a separately pinned revision, but its event schema and configured contract must remain compatible with the API projector.
+
+| Component         | Release requirement                                                                           |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| Frontend          | Production build with the intended public API origin, chain, token, and contract              |
+| API               | Pinned dependencies, private runtime configuration, database access, persistent asset storage |
+| Indexer           | Compatible event definitions, correct deployment start, separate schema, verified TLS         |
+| Database          | Recoverable backup, compatible migrations, bounded connection pools                           |
+| Edge/TLS          | HTTPS origins and correct routing to internal listeners                                       |
+| Optional services | Explicit configuration and honest health/availability labels                                  |
+
+## Before rollout
+
+1. Select and push the exact source revision; avoid deploying an uncommitted working directory.
+2. Run the relevant quality gates and inspect schema/ABI changes.
+3. Record the previous application and worker revisions and their configuration identities.
+4. Back up the application database and persistent files; check the backup result.
+5. Review migrations and whether the previous binary remains compatible afterward.
+6. Build the frontend against the intended public configuration.
+7. Verify that private runtime files are not included in the public source artifact.
+
+For the current production architecture, ship only tracked release files and preserve runtime configuration outside the release payload. Avoid overwriting persistent uploads or worker state during an application-only update.
+
+## Rollout order
+
+Prepare the new release separately, run non-mutating startup/configuration checks, then switch the application services to the prepared release. Change the indexer only when the release requires it. Keep database and file storage stable through the cutover.
+
+The API applies its idempotent migrations at startup. “Idempotent” means repeat application is safe for those migrations; it does not guarantee an older release can run against every newer schema. Review compatibility before calling rollback safe.
+
+## Verify externally
+
+```bash
+curl -fsS https://api.usespoke.xyz/v1/health
+curl -fsS https://api.usespoke.xyz/v1/system/status
+curl -fsS https://api.usespoke.xyz/v1/system/contracts
+curl -fsS https://api.usespoke.xyz/v1/system/endpoints
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4/verify
+```
+
+Check returned fields, not just HTTP 200. Confirm network/address identity, database/RPC/indexer status, actual indexed timestamp, and advancing progress over multiple samples. Verify a known settled and refunded receipt and load the app in a browser.
+
+For interface changes, inspect desktop and mobile states, authentication boundaries, and overflow. Do not submit a financial action merely to prove that a page rendered.
+
+## Decide whether to roll back
+
+A broken build or incompatible frontend/API combination can justify switching to the previous compatible application artifact. A stale index may instead require provider or worker recovery. An onchain transaction cannot be rolled back by restoring application code.
+
+If migrations or offchain writes make a binary rollback unsafe, stop and choose a forward fix or a reviewed restore procedure. Preserve evidence and avoid restoring a database over newer accepted records without reconciliation.
+
+## Release record
+
+Record revision, deployment identities, migration result, backup result, worker revision, smoke checks, known limitations, and rollback decision. Update [project status](/project/status) only with observed results. Optional features must remain labeled disabled or unverified until their complete live path has been exercised.

@@ -1,0 +1,6584 @@
+---
+title: "Checkout, receipts, and earnings"
+description: "Checkout intents, delivery access, receipt proof, earnings, vault accounting, reports, and refund-request workflows."
+---
+
+Checkout intents, delivery access, receipt proof, earnings, vault accounting, reports, and refund-request workflows.
+
+This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **28 client methods** in this group.
+
+<Note>
+  Input schemas describe the typed client call before path/query/body mapping.
+  Output schemas describe the envelope's `data`, not the full HTTP response.
+  Custom refinements, transforms, and runtime permissions are enforced by the
+  [shared Zod
+  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  Read [transport rules](/developers/http-transport) before copying a client
+  object into an HTTP body. Designed methods reject live calls; optional funding
+  still requires provider configuration.
+</Note>
+
+[Download all method schemas](https://raw.githubusercontent.com/Enoch208/docs-madonna/main/schemas/client-methods.json) · [Live endpoint registry](https://api.usespoke.xyz/v1/system/endpoints)
+
+## Methods at a glance
+
+| Client method                                               | HTTP route                                       | Access  | Availability |
+| ----------------------------------------------------------- | ------------------------------------------------ | ------- | ------------ |
+| [`checkout.preview`](#checkout-preview)                     | `GET /v1/campaigns/:campaignId/checkout-preview` | public  | Core live    |
+| [`checkout.createIntent`](#checkout-createintent)           | `POST /v1/checkout/intents`                      | session | Core live    |
+| [`checkout.getIntent`](#checkout-getintent)                 | `GET /v1/checkout/intents/:id`                   | session | Core live    |
+| [`checkout.attachTransaction`](#checkout-attachtransaction) | `POST /v1/checkout/intents/:id/transaction`      | session | Core live    |
+| [`receipts.get`](#receipts-get)                             | `GET /v1/receipts/:chainId/:saleId`              | public  | Core live    |
+| [`receipts.events`](#receipts-events)                       | `GET /v1/receipts/:chainId/:saleId/events`       | public  | Core live    |
+| [`receipts.verify`](#receipts-verify)                       | `GET /v1/receipts/:chainId/:saleId/verify`       | public  | Core live    |
+| [`receipts.recent`](#receipts-recent)                       | `GET /v1/receipts`                               | public  | Core live    |
+| [`receipts.forBuyer`](#receipts-forbuyer)                   | `GET /v1/me/purchases`                           | session | Core live    |
+| [`receipts.forMerchant`](#receipts-formerchant)             | `GET /v1/merchant/sales`                         | session | Core live    |
+| [`receipts.forCampaign`](#receipts-forcampaign)             | `GET /v1/campaigns/:campaignId/sales`            | public  | Core live    |
+| [`fulfillment.access`](#fulfillment-access)                 | `POST /v1/fulfillment/:saleId/access`            | session | Core live    |
+| [`earnings.summary`](#earnings-summary)                     | `GET /v1/me/earnings`                            | session | Core live    |
+| [`earnings.byCampaign`](#earnings-bycampaign)               | `GET /v1/me/earnings/campaigns`                  | session | Core live    |
+| [`earnings.byConversion`](#earnings-byconversion)           | `GET /v1/me/earnings/conversions`                | session | Core live    |
+| [`earnings.missed`](#earnings-missed)                       | `GET /v1/me/earnings/missed`                     | session | Core live    |
+| [`earnings.claimable`](#earnings-claimable)                 | `GET /v1/me/claimable`                           | session | Core live    |
+| [`earnings.claims`](#earnings-claims)                       | `GET /v1/me/claims`                              | session | Core live    |
+| [`vault.get`](#vault-get)                                   | `GET /v1/merchant/vault`                         | session | Core live    |
+| [`vault.movements`](#vault-movements)                       | `GET /v1/merchant/vault/movements`               | session | Core live    |
+| [`reports.export`](#reports-export)                         | `POST /v1/merchant/reports`                      | session | Core live    |
+| [`reports.preview`](#reports-preview)                       | `GET /v1/merchant/reports/preview`               | session | Core live    |
+| [`reports.list`](#reports-list)                             | `GET /v1/merchant/reports`                       | session | Core live    |
+| [`disputes.open`](#disputes-open)                           | `POST /v1/me/refund-requests`                    | session | Core live    |
+| [`disputes.list`](#disputes-list)                           | `GET /v1/merchant/disputes`                      | session | Core live    |
+| [`disputes.get`](#disputes-get)                             | `GET /v1/merchant/disputes/:id`                  | session | Core live    |
+| [`disputes.respond`](#disputes-respond)                     | `POST /v1/merchant/disputes/:id/responses`       | session | Core live    |
+| [`disputes.exposure`](#disputes-exposure)                   | `GET /v1/merchant/disputes/exposure`             | session | Core live    |
+
+## checkout.preview
+
+**GET `/v1/campaigns/:campaignId/checkout-preview`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L305).
+
+**Client input fields**
+
+| Field        | Type   | Required | Constraints                              |
+| ------------ | ------ | -------- | ---------------------------------------- |
+| `campaignId` | string | Yes      | See nested schema and runtime validation |
+| `node`       | string | No       | See nested schema and runtime validation |
+| `buyer`      | string | No       | Pattern validated; see input schema      |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "node": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "buyer": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  },
+  "required": ["campaignId"],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "price": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "recipients": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "rewardTotal": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "unallocated": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "policyVersion": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "nextPolicy": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "policyHash": {
+              "$ref": "#/$defs/__schema3"
+            },
+            "effectiveAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            }
+          },
+          "required": ["policyHash", "effectiveAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "directPurchaseAvailable": {
+      "type": "boolean"
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "holdSeconds": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "refundPolicy": {
+      "type": "string"
+    },
+    "blocking": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "enum": [
+                "RATE_LIMITED",
+                "CONFLICT",
+                "REAUTH_REQUIRED",
+                "NOT_ELIGIBLE",
+                "HANDLE_TAKEN",
+                "HANDLE_RESERVED",
+                "HANDLE_CHANGE_TOO_SOON",
+                "WALLET_ALREADY_LINKED",
+                "SLUG_TAKEN",
+                "BUSINESS_NOT_CLOSABLE",
+                "ACCOUNT_HAS_ACTIVE_CAMPAIGNS",
+                "PROTOCOL_NOT_DEPLOYED",
+                "FEATURE_NOT_AVAILABLE",
+                "POLICY_MISMATCH",
+                "CAMPAIGN_NOT_FUNDED",
+                "EXPORT_RECONCILIATION_MISMATCH",
+                "GAS_ALREADY_RECEIVED",
+                "GAS_STATION_EMPTY",
+                "CAMPAIGN_FROZEN",
+                "TEAM_ALREADY_MEMBER",
+                "WEBHOOK_URL_NOT_ALLOWED",
+                "CHECKOUT_PAYMENT_FAILED",
+                "ATTESTATION_UNTRUSTED",
+                "SOURCE_REFUND_UNRESOLVED",
+                "UNAUTHENTICATED",
+                "INVALID_SIGNATURE",
+                "WRONG_NETWORK",
+                "CAMPAIGN_NOT_ACTIVE",
+                "CAMPAIGN_PAUSED",
+                "TOKEN_NOT_ALLOWED",
+                "PRODUCT_VERSION_MISMATCH",
+                "INVALID_REFERRAL_PATH",
+                "SELF_REFERRAL",
+                "DUPLICATE_CHECKOUT",
+                "INSUFFICIENT_REWARD_ESCROW",
+                "PAYMENT_ALLOWANCE_INSUFFICIENT",
+                "SALE_NOT_MATURE",
+                "SALE_ALREADY_FINALIZED",
+                "SALE_REFUNDED",
+                "NOT_AUTHORIZED_TO_REFUND",
+                "TX_REJECTED",
+                "TX_PENDING",
+                "INDEXER_LAGGING",
+                "UPSTREAM_UNAVAILABLE",
+                "NANSEN_UNAVAILABLE",
+                "REFUND_WINDOW_CLOSED",
+                "NOTHING_TO_CLAIM",
+                "NOT_AUTHORIZED",
+                "NOT_FOUND",
+                "VALIDATION_FAILED",
+                "INTERNAL"
+              ]
+            },
+            "contractError": {
+              "type": ["string", "null"]
+            }
+          },
+          "required": ["code", "contractError"],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "buyer": {
+      "type": "object",
+      "properties": {
+        "tokenBalance": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "allowance": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "monWei": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "alreadyPurchasedSaleId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "buyerOnPath": {
+          "type": "boolean"
+        },
+        "buyerIsMerchant": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tokenBalance",
+        "allowance",
+        "monWei",
+        "alreadyPurchasedSaleId",
+        "buyerOnPath",
+        "buyerIsMerchant"
+      ],
+      "additionalProperties": false
+    },
+    "feeEstimate": {
+      "type": "object",
+      "properties": {
+        "gasUnits": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "gasPriceWei": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "feeWei": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "basis": {
+          "type": "string",
+          "enum": ["estimate", "recentPurchase", "sample"]
+        }
+      },
+      "required": ["gasUnits", "gasPriceWei", "feeWei", "basis"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "price",
+    "recipients",
+    "rewardTotal",
+    "unallocated",
+    "policyHash",
+    "policyVersion",
+    "nextPolicy",
+    "directPurchaseAvailable",
+    "blockNumber",
+    "holdSeconds",
+    "refundPolicy",
+    "blocking"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "creator": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{40}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "paid": {
+          "type": "boolean"
+        },
+        "repeatedWallet": {
+          "type": "boolean"
+        },
+        "outsideWindow": {
+          "type": "boolean"
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "state": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "reserved",
+                "claimable",
+                "claimed",
+                "refunded",
+                "reversed"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasonIfUnpaid": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "OUTSIDE_DEPTH",
+                "CAMPAIGN_EXCLUSION",
+                "REFUNDED",
+                "REVERSED"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "nodeId",
+        "creator",
+        "depth",
+        "paid",
+        "repeatedWallet",
+        "outsideWindow",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "reasonIfUnpaid"
+      ],
+      "additionalProperties": false
+    },
+    "__schema2": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## checkout.createIntent
+
+**POST `/v1/checkout/intents`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L309).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+Idempotency field: `orderKey`. The frontend also sends this value in the `idempotency-key` header. Preserve the same identifier when resuming the same logical action.
+
+**Client input fields**
+
+| Field            | Type    | Required | Constraints                                           |
+| ---------------- | ------- | -------- | ----------------------------------------------------- |
+| `campaignId`     | string  | Yes      | See nested schema and runtime validation              |
+| `nodeId`         | string  | No       | Default: `"0"`                                        |
+| `orderKey`       | string  | Yes      | Pattern validated; see input schema                   |
+| `expectedPrice`  | string  | Yes      | Max length: 78; Pattern validated; see input schema   |
+| `expectedReward` | string  | Yes      | Max length: 78; Pattern validated; see input schema   |
+| `policyHash`     | string  | Yes      | Pattern validated; see input schema                   |
+| `chainId`        | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodeId": {
+      "default": "0",
+      "$ref": "#/$defs/__schema0"
+    },
+    "orderKey": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "expectedPrice": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "expectedReward": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": [
+    "campaignId",
+    "orderKey",
+    "expectedPrice",
+    "expectedReward",
+    "policyHash",
+    "chainId"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string",
+      "maxLength": 78,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "orderKey": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "expectedPrice": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "expectedReward": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "buyer": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "submitted",
+        "included",
+        "confirmed",
+        "expired",
+        "failed"
+      ]
+    },
+    "txHash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "saleId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "expiresAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "to": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "data": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]*$"
+    },
+    "value": {
+      "$ref": "#/$defs/__schema1"
+    }
+  },
+  "required": [
+    "id",
+    "campaignId",
+    "nodeId",
+    "orderKey",
+    "expectedPrice",
+    "expectedReward",
+    "policyHash",
+    "chainId",
+    "buyer",
+    "status",
+    "txHash",
+    "saleId",
+    "createdAt",
+    "expiresAt",
+    "to",
+    "data",
+    "value"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## checkout.getIntent
+
+**GET `/v1/checkout/intents/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L313).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field | Type   | Required | Constraints                                                         |
+| ----- | ------ | -------- | ------------------------------------------------------------------- |
+| `id`  | string | Yes      | Min length: 1; Max length: 100; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    }
+  },
+  "required": ["id"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "orderKey": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "expectedPrice": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "expectedReward": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "buyer": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "submitted",
+        "included",
+        "confirmed",
+        "expired",
+        "failed"
+      ]
+    },
+    "txHash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "saleId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "expiresAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "to": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "data": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]*$"
+    },
+    "value": {
+      "$ref": "#/$defs/__schema1"
+    }
+  },
+  "required": [
+    "id",
+    "campaignId",
+    "nodeId",
+    "orderKey",
+    "expectedPrice",
+    "expectedReward",
+    "policyHash",
+    "chainId",
+    "buyer",
+    "status",
+    "txHash",
+    "saleId",
+    "createdAt",
+    "expiresAt",
+    "to",
+    "data",
+    "value"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## checkout.attachTransaction
+
+**POST `/v1/checkout/intents/:id/transaction`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L314).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type   | Required | Constraints                                                         |
+| -------- | ------ | -------- | ------------------------------------------------------------------- |
+| `id`     | string | Yes      | Min length: 1; Max length: 100; Pattern validated; see input schema |
+| `txHash` | string | Yes      | Pattern validated; see input schema                                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "txHash": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  },
+  "required": ["id", "txHash"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "orderKey": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "expectedPrice": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "expectedReward": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "buyer": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "created",
+        "submitted",
+        "included",
+        "confirmed",
+        "expired",
+        "failed"
+      ]
+    },
+    "txHash": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "saleId": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "expiresAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "to": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "data": {
+      "type": "string",
+      "pattern": "^0x[\\da-fA-F]*$"
+    },
+    "value": {
+      "$ref": "#/$defs/__schema1"
+    }
+  },
+  "required": [
+    "id",
+    "campaignId",
+    "nodeId",
+    "orderKey",
+    "expectedPrice",
+    "expectedReward",
+    "policyHash",
+    "chainId",
+    "buyer",
+    "status",
+    "txHash",
+    "saleId",
+    "createdAt",
+    "expiresAt",
+    "to",
+    "data",
+    "value"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.get
+
+**GET `/v1/receipts/:chainId/:saleId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L315).
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                                           |
+| --------- | ------- | -------- | ----------------------------------------------------- |
+| `saleId`  | string  | Yes      | See nested schema and runtime validation              |
+| `chainId` | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": ["saleId", "chainId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "contractAddress": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "buyer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "orderKey": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "policyVersion": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "source": {
+      "type": "string",
+      "enum": ["native", "merchant_attested"]
+    },
+    "trustMode": {
+      "type": "string",
+      "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED", "THIRD_PARTY_VERIFIED"]
+    },
+    "price": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "rewardReserved": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "token": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "name": {
+          "type": "string"
+        },
+        "testnet": {
+          "type": "boolean"
+        }
+      },
+      "required": ["address", "symbol", "decimals"],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "string",
+      "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+    },
+    "purchasedAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "unlockAt": {
+      "$ref": "#/$defs/__schema4"
+    },
+    "allocations": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema5"
+      }
+    },
+    "proceedsState": {
+      "type": "string",
+      "enum": ["pending", "claimable", "claimed", "refunded"]
+    },
+    "purchaseTx": {
+      "$ref": "#/$defs/__schema6"
+    },
+    "finalizeTx": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema6"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "refundTx": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema6"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "indexedBlock": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string"
+          },
+          "at": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "tx": {
+            "$ref": "#/$defs/__schema6"
+          }
+        },
+        "required": ["state", "at", "tx"],
+        "additionalProperties": false
+      }
+    },
+    "refundRequest": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "disputeId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[a-zA-Z0-9_-]+$"
+            },
+            "status": {
+              "type": "string"
+            },
+            "createdAt": {
+              "$ref": "#/$defs/__schema4"
+            }
+          },
+          "required": ["disputeId", "status", "createdAt"],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "saleId",
+    "campaignId",
+    "chainId",
+    "contractAddress",
+    "buyer",
+    "nodeId",
+    "orderKey",
+    "policyHash",
+    "policyVersion",
+    "source",
+    "trustMode",
+    "price",
+    "rewardReserved",
+    "token",
+    "state",
+    "purchasedAt",
+    "unlockAt",
+    "allocations",
+    "proceedsState",
+    "purchaseTx",
+    "finalizeTx",
+    "refundTx",
+    "indexedBlock",
+    "timeline"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema2"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+        },
+        "claimTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "recipient",
+        "level",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "claimTx"
+      ],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema4"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.events
+
+**GET `/v1/receipts/:chainId/:saleId/events`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L316).
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                                           |
+| --------- | ------- | -------- | ----------------------------------------------------- |
+| `saleId`  | string  | Yes      | See nested schema and runtime validation              |
+| `chainId` | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": ["saleId", "chainId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "tx": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$"
+          },
+          "blockNumber": {
+            "type": "string"
+          },
+          "explorerUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "at": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "required": ["hash", "blockNumber", "explorerUrl"],
+        "additionalProperties": false
+      },
+      "logIndex": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "at": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "actor": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "args": {
+        "type": "object",
+        "propertyNames": {
+          "type": "string"
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "required": ["name", "tx", "logIndex", "at", "actor", "args"],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.verify
+
+**GET `/v1/receipts/:chainId/:saleId/verify`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L317).
+
+**Client input fields**
+
+| Field     | Type    | Required | Constraints                                           |
+| --------- | ------- | -------- | ----------------------------------------------------- |
+| `saleId`  | string  | Yes      | See nested schema and runtime validation              |
+| `chainId` | integer | Yes      | Minimum: -9007199254740991; Maximum: 9007199254740991 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "chainId": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": ["saleId", "chainId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sale": {
+      "type": "object",
+      "properties": {
+        "saleId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "campaignId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "chainId": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "contractAddress": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "buyer": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema2"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodeId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "orderKey": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "policyHash": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "policyVersion": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "source": {
+          "type": "string",
+          "enum": ["native", "merchant_attested"]
+        },
+        "trustMode": {
+          "type": "string",
+          "enum": [
+            "NATIVE_ONCHAIN",
+            "MERCHANT_ATTESTED",
+            "THIRD_PARTY_VERIFIED"
+          ]
+        },
+        "price": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "rewardReserved": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "token": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "$ref": "#/$defs/__schema2"
+            },
+            "symbol": {
+              "type": "string"
+            },
+            "decimals": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 36
+            },
+            "name": {
+              "type": "string"
+            },
+            "testnet": {
+              "type": "boolean"
+            }
+          },
+          "required": ["address", "symbol", "decimals"],
+          "additionalProperties": false
+        },
+        "state": {
+          "type": "string",
+          "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+        },
+        "purchasedAt": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "unlockAt": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "allocations": {
+          "maxItems": 8,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema5"
+          }
+        },
+        "proceedsState": {
+          "type": "string",
+          "enum": ["pending", "claimable", "claimed", "refunded"]
+        },
+        "purchaseTx": {
+          "$ref": "#/$defs/__schema6"
+        },
+        "finalizeTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "refundTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "indexedBlock": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string"
+              },
+              "at": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "tx": {
+                "$ref": "#/$defs/__schema6"
+              }
+            },
+            "required": ["state", "at", "tx"],
+            "additionalProperties": false
+          }
+        },
+        "refundRequest": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "disputeId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "pattern": "^[a-zA-Z0-9_-]+$"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "$ref": "#/$defs/__schema4"
+                }
+              },
+              "required": ["disputeId", "status", "createdAt"],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "saleId",
+        "campaignId",
+        "chainId",
+        "contractAddress",
+        "buyer",
+        "nodeId",
+        "orderKey",
+        "policyHash",
+        "policyVersion",
+        "source",
+        "trustMode",
+        "price",
+        "rewardReserved",
+        "token",
+        "state",
+        "purchasedAt",
+        "unlockAt",
+        "allocations",
+        "proceedsState",
+        "purchaseTx",
+        "finalizeTx",
+        "refundTx",
+        "indexedBlock",
+        "timeline"
+      ],
+      "additionalProperties": false
+    },
+    "allocations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema5"
+      }
+    },
+    "policyHash": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "matchesIndex": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "sale",
+    "allocations",
+    "policyHash",
+    "blockNumber",
+    "matchesIndex"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema2"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+        },
+        "claimTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "recipient",
+        "level",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "claimTx"
+      ],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema4"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.recent
+
+**GET `/v1/receipts`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L327).
+
+**Client input fields**
+
+| Field          | Type                                   | Required | Constraints                                            |
+| -------------- | -------------------------------------- | -------- | ------------------------------------------------------ |
+| `cursor`       | string                                 | No       | See nested schema and runtime validation               |
+| `limit`        | integer                                | No       | Minimum: 1; Maximum: 100                               |
+| `range`        | object                                 | No       | See nested schema and runtime validation               |
+| `campaignIds`  | string[]                               | No       | See nested schema and runtime validation               |
+| `q`            | string                                 | No       | Max length: 200                                        |
+| `state`        | "PENDING" · "FINALIZED" · "REFUNDED"   | No       | See nested schema and runtime validation               |
+| `campaignId`   | string                                 | No       | See nested schema and runtime validation               |
+| `source`       | "NATIVE_ONCHAIN" · "MERCHANT_ATTESTED" | No       | See nested schema and runtime validation               |
+| `provider`     | string                                 | No       | See nested schema and runtime validation               |
+| `unlockBefore` | string                                 | No       | Format: date-time; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "q": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "state": {
+      "type": "string",
+      "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED"]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "unlockBefore": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "contractAddress": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "buyer": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "orderKey": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "policyHash": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "policyVersion": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "source": {
+            "type": "string",
+            "enum": ["native", "merchant_attested"]
+          },
+          "trustMode": {
+            "type": "string",
+            "enum": [
+              "NATIVE_ONCHAIN",
+              "MERCHANT_ATTESTED",
+              "THIRD_PARTY_VERIFIED"
+            ]
+          },
+          "price": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "rewardReserved": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "REFUNDED", "FINALIZED"]
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "allocations": {
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema5"
+            }
+          },
+          "proceedsState": {
+            "type": "string",
+            "enum": ["pending", "claimable", "claimed", "refunded"]
+          },
+          "purchaseTx": {
+            "$ref": "#/$defs/__schema6"
+          },
+          "finalizeTx": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema6"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundTx": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema6"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "indexedBlock": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "timeline": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "at": {
+                  "$ref": "#/$defs/__schema4"
+                },
+                "tx": {
+                  "$ref": "#/$defs/__schema6"
+                }
+              },
+              "required": ["state", "at", "tx"],
+              "additionalProperties": false
+            }
+          },
+          "refundRequest": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "disputeId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "pattern": "^[a-zA-Z0-9_-]+$"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "$ref": "#/$defs/__schema4"
+                  }
+                },
+                "required": ["disputeId", "status", "createdAt"],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "saleId",
+          "campaignId",
+          "chainId",
+          "contractAddress",
+          "buyer",
+          "nodeId",
+          "orderKey",
+          "policyHash",
+          "policyVersion",
+          "source",
+          "trustMode",
+          "price",
+          "rewardReserved",
+          "token",
+          "state",
+          "purchasedAt",
+          "unlockAt",
+          "allocations",
+          "proceedsState",
+          "purchaseTx",
+          "finalizeTx",
+          "refundTx",
+          "indexedBlock",
+          "timeline"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "__schema4": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema2"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "handle": {
+              "type": ["string", "null"]
+            },
+            "displayName": {
+              "type": ["string", "null"]
+            },
+            "visibility": {
+              "type": "string",
+              "enum": ["public", "pseudonymous", "private"]
+            }
+          },
+          "required": ["address", "handle", "displayName", "visibility"],
+          "additionalProperties": false
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "effectiveWeightBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "amount": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+        },
+        "claimTx": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/__schema6"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "recipient",
+        "level",
+        "effectiveWeightBps",
+        "amount",
+        "state",
+        "claimTx"
+      ],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema4"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.forBuyer
+
+**GET `/v1/me/purchases`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L328).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field          | Type                                   | Required | Constraints                                            |
+| -------------- | -------------------------------------- | -------- | ------------------------------------------------------ |
+| `cursor`       | string                                 | No       | See nested schema and runtime validation               |
+| `limit`        | integer                                | No       | Minimum: 1; Maximum: 100                               |
+| `range`        | object                                 | No       | See nested schema and runtime validation               |
+| `campaignIds`  | string[]                               | No       | See nested schema and runtime validation               |
+| `q`            | string                                 | No       | Max length: 200                                        |
+| `state`        | "PENDING" · "FINALIZED" · "REFUNDED"   | No       | See nested schema and runtime validation               |
+| `campaignId`   | string                                 | No       | See nested schema and runtime validation               |
+| `source`       | "NATIVE_ONCHAIN" · "MERCHANT_ATTESTED" | No       | See nested schema and runtime validation               |
+| `provider`     | string                                 | No       | See nested schema and runtime validation               |
+| `unlockBefore` | string                                 | No       | Format: date-time; Pattern validated; see input schema |
+| `since`        | string                                 | No       | Format: date-time; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "q": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "state": {
+      "type": "string",
+      "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED"]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "unlockBefore": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "since": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "referrerHandle": {
+            "type": ["string", "null"]
+          },
+          "amountPaid": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "refundedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundRequestStatus": {
+            "type": ["string", "null"]
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "finalizedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "saleId",
+          "chainId",
+          "campaignId",
+          "productTitle",
+          "image",
+          "merchantName",
+          "referrerHandle",
+          "amountPaid",
+          "purchasedAt",
+          "state",
+          "unlockAt",
+          "refundedAt",
+          "refundRequestStatus"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.forMerchant
+
+**GET `/v1/merchant/sales`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L332).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field          | Type                                   | Required | Constraints                                            |
+| -------------- | -------------------------------------- | -------- | ------------------------------------------------------ |
+| `cursor`       | string                                 | No       | See nested schema and runtime validation               |
+| `limit`        | integer                                | No       | Minimum: 1; Maximum: 100                               |
+| `range`        | object                                 | No       | See nested schema and runtime validation               |
+| `campaignIds`  | string[]                               | No       | See nested schema and runtime validation               |
+| `q`            | string                                 | No       | Max length: 200                                        |
+| `state`        | "PENDING" · "FINALIZED" · "REFUNDED"   | No       | See nested schema and runtime validation               |
+| `campaignId`   | string                                 | No       | See nested schema and runtime validation               |
+| `source`       | "NATIVE_ONCHAIN" · "MERCHANT_ATTESTED" | No       | See nested schema and runtime validation               |
+| `provider`     | string                                 | No       | See nested schema and runtime validation               |
+| `unlockBefore` | string                                 | No       | Format: date-time; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "q": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "state": {
+      "type": "string",
+      "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED"]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "unlockBefore": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "referrerHandle": {
+            "type": ["string", "null"]
+          },
+          "amountPaid": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "refundedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundRequestStatus": {
+            "type": ["string", "null"]
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "finalizedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "orderKey": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$"
+          },
+          "reward": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "paidCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8
+          },
+          "maxPaid": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "trustMode": {
+            "type": "string"
+          },
+          "proceedsState": {
+            "type": "string",
+            "enum": ["pending", "claimable", "claimed", "refunded"]
+          },
+          "buyer": {
+            "$ref": "#/$defs/__schema3"
+          }
+        },
+        "required": [
+          "saleId",
+          "chainId",
+          "campaignId",
+          "productTitle",
+          "image",
+          "merchantName",
+          "referrerHandle",
+          "amountPaid",
+          "purchasedAt",
+          "state",
+          "unlockAt",
+          "refundedAt",
+          "refundRequestStatus",
+          "orderKey",
+          "reward",
+          "paidCount",
+          "maxPaid",
+          "trustMode",
+          "proceedsState"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    },
+    "countsByState": {
+      "type": "object",
+      "properties": {
+        "pending": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "finalized": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "refunded": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": ["pending", "finalized", "refunded"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["items", "nextCursor", "countsByState"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## receipts.forCampaign
+
+**GET `/v1/campaigns/:campaignId/sales`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L336).
+
+**Client input fields**
+
+| Field          | Type                                   | Required | Constraints                                            |
+| -------------- | -------------------------------------- | -------- | ------------------------------------------------------ |
+| `campaignId`   | string                                 | No       | See nested schema and runtime validation               |
+| `cursor`       | string                                 | No       | See nested schema and runtime validation               |
+| `limit`        | integer                                | No       | Minimum: 1; Maximum: 100                               |
+| `range`        | object                                 | No       | See nested schema and runtime validation               |
+| `campaignIds`  | string[]                               | No       | See nested schema and runtime validation               |
+| `q`            | string                                 | No       | Max length: 200                                        |
+| `state`        | "PENDING" · "FINALIZED" · "REFUNDED"   | No       | See nested schema and runtime validation               |
+| `source`       | "NATIVE_ONCHAIN" · "MERCHANT_ATTESTED" | No       | See nested schema and runtime validation               |
+| `provider`     | string                                 | No       | See nested schema and runtime validation               |
+| `unlockBefore` | string                                 | No       | Format: date-time; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema0"
+      }
+    },
+    "q": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "state": {
+      "type": "string",
+      "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED"]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "unlockBefore": {
+      "$ref": "#/$defs/__schema1"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "referrerHandle": {
+            "type": ["string", "null"]
+          },
+          "amountPaid": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "refundedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundRequestStatus": {
+            "type": ["string", "null"]
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "finalizedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reward": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "paidCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8
+          },
+          "maxPaid": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "trustMode": {
+            "type": "string"
+          },
+          "proceedsState": {
+            "type": "string",
+            "enum": ["pending", "claimable", "claimed", "refunded"]
+          },
+          "buyer": {
+            "$ref": "#/$defs/__schema3"
+          }
+        },
+        "required": [
+          "saleId",
+          "chainId",
+          "campaignId",
+          "productTitle",
+          "image",
+          "merchantName",
+          "referrerHandle",
+          "amountPaid",
+          "purchasedAt",
+          "state",
+          "unlockAt",
+          "refundedAt",
+          "refundRequestStatus",
+          "reward",
+          "paidCount",
+          "maxPaid",
+          "trustMode",
+          "proceedsState"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## fulfillment.access
+
+**POST `/v1/fulfillment/:saleId/access`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L340).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type   | Required | Constraints                              |
+| -------- | ------ | -------- | ---------------------------------------- |
+| `saleId` | string | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  },
+  "required": ["saleId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["file", "link", "text"]
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["id", "url", "expiresAt"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["saleId", "items"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.summary
+
+**GET `/v1/me/earnings`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L341).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field   | Type   | Required | Constraints                         |
+| ------- | ------ | -------- | ----------------------------------- |
+| `token` | string | No       | Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "atRisk": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "readyToFinalize": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "claimable": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "claimed": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "refunded": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "reversed": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "atRisk",
+          "readyToFinalize",
+          "claimable",
+          "claimed",
+          "refunded",
+          "reversed",
+          "token"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextUnlockAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "indexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "required": ["tokens", "nextUnlockAt", "indexedBlock", "blockNumber"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.byCampaign
+
+**GET `/v1/me/earnings/campaigns`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L342).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field         | Type                                                           | Required | Constraints                              |
+| ------------- | -------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `cursor`      | string                                                         | No       | See nested schema and runtime validation |
+| `limit`       | integer                                                        | No       | Minimum: 1; Maximum: 100                 |
+| `range`       | object                                                         | No       | See nested schema and runtime validation |
+| `campaignIds` | string[]                                                       | No       | See nested schema and runtime validation |
+| `campaignId`  | string                                                         | No       | See nested schema and runtime validation |
+| `nodeId`      | string                                                         | No       | See nested schema and runtime validation |
+| `state`       | "reserved" · "claimable" · "claimed" · "refunded" · "reversed" | No       | See nested schema and runtime validation |
+| `holdEnded`   | boolean                                                        | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+    },
+    "holdEnded": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "atRisk": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "readyToFinalize": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "claimable": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "claimed": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "refunded": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "reversed": {
+        "$ref": "#/$defs/__schema0"
+      },
+      "campaignId": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/__schema0"
+          },
+          {
+            "type": "string",
+            "pattern": "^demo-[\\w-]+$"
+          }
+        ]
+      },
+      "token": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "decimals": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 36
+          },
+          "name": {
+            "type": "string"
+          },
+          "testnet": {
+            "type": "boolean"
+          }
+        },
+        "required": ["address", "symbol", "decimals"],
+        "additionalProperties": false
+      },
+      "productTitle": {
+        "type": "string"
+      },
+      "sales": {
+        "type": "object",
+        "properties": {
+          "pending": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "finalized": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "refunded": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["pending", "finalized", "refunded"],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "atRisk",
+      "readyToFinalize",
+      "claimable",
+      "claimed",
+      "refunded",
+      "reversed",
+      "campaignId",
+      "token",
+      "productTitle",
+      "sales"
+    ],
+    "additionalProperties": false
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.byConversion
+
+**GET `/v1/me/earnings/conversions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L343).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field         | Type                                                           | Required | Constraints                              |
+| ------------- | -------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `cursor`      | string                                                         | No       | See nested schema and runtime validation |
+| `limit`       | integer                                                        | No       | Minimum: 1; Maximum: 100                 |
+| `range`       | object                                                         | No       | See nested schema and runtime validation |
+| `campaignIds` | string[]                                                       | No       | See nested schema and runtime validation |
+| `campaignId`  | string                                                         | No       | See nested schema and runtime validation |
+| `nodeId`      | string                                                         | No       | See nested schema and runtime validation |
+| `state`       | "reserved" · "claimable" · "claimed" · "refunded" · "reversed" | No       | See nested schema and runtime validation |
+| `holdEnded`   | boolean                                                        | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+    },
+    "holdEnded": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "pathLength": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "effectiveWeightBps": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "finalizedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "claimTxHash": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema3"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hash": {
+                  "$ref": "#/$defs/__schema3"
+                },
+                "blockNumber": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "explorerUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "at": {
+                  "$ref": "#/$defs/__schema2"
+                }
+              },
+              "required": ["hash", "blockNumber", "explorerUrl"],
+              "additionalProperties": false
+            }
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "refundRequested": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "saleId",
+          "campaignId",
+          "token",
+          "level",
+          "pathLength",
+          "effectiveWeightBps",
+          "amount",
+          "state",
+          "unlockAt",
+          "finalizedAt",
+          "claimTxHash",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema3": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.missed
+
+**GET `/v1/me/earnings/missed`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L344).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field         | Type                                                           | Required | Constraints                              |
+| ------------- | -------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `cursor`      | string                                                         | No       | See nested schema and runtime validation |
+| `limit`       | integer                                                        | No       | Minimum: 1; Maximum: 100                 |
+| `range`       | object                                                         | No       | See nested schema and runtime validation |
+| `campaignIds` | string[]                                                       | No       | See nested schema and runtime validation |
+| `campaignId`  | string                                                         | No       | See nested schema and runtime validation |
+| `nodeId`      | string                                                         | No       | See nested schema and runtime validation |
+| `state`       | "reserved" · "claimable" · "claimed" · "refunded" · "reversed" | No       | See nested schema and runtime validation |
+| `holdEnded`   | boolean                                                        | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema1"
+      }
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "nodeId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+    },
+    "holdEnded": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "sale"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "OUTSIDE_DEPTH",
+                  "CAMPAIGN_EXCLUSION",
+                  "REFUNDED",
+                  "REVERSED"
+                ]
+              },
+              "campaignId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "nodeId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "saleId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "position": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxRewardedAncestors": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 8
+              },
+              "ruleLabel": {
+                "type": ["string", "null"]
+              },
+              "at": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema3"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "reason",
+              "campaignId",
+              "nodeId",
+              "saleId",
+              "position",
+              "maxRewardedAncestors",
+              "ruleLabel",
+              "at",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "blocked_checkout"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "SELF_REFERRAL",
+                  "INVALID_BUYER",
+                  "DEPLETED_POOL",
+                  "CAMPAIGN_INACTIVE"
+                ]
+              },
+              "campaignId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "nodeId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "at": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema3"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "reason",
+              "campaignId",
+              "nodeId",
+              "at",
+              "evidence"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema3": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{64}$"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "explorerUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/__schema2"
+        }
+      },
+      "required": ["hash", "blockNumber", "explorerUrl"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.claimable
+
+**GET `/v1/me/claimable`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L345).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field   | Type   | Required | Constraints                         |
+| ------- | ------ | -------- | ----------------------------------- |
+| `token` | string | No       | Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "campaigns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "campaignId": {
+                  "$ref": "#/$defs/__schema2"
+                },
+                "amount": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": ["campaignId", "amount"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["token", "amount", "campaigns"],
+        "additionalProperties": false
+      }
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "readyToFinalize": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "saleId": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "pathLength": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "effectiveWeightBps": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["reserved", "claimable", "claimed", "refunded", "reversed"]
+          },
+          "unlockAt": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "finalizedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema3"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "claimTxHash": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema4"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "hash": {
+                  "$ref": "#/$defs/__schema4"
+                },
+                "blockNumber": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "explorerUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "at": {
+                  "$ref": "#/$defs/__schema3"
+                }
+              },
+              "required": ["hash", "blockNumber", "explorerUrl"],
+              "additionalProperties": false
+            }
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "purchasedAt": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "refundRequested": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "saleId",
+          "campaignId",
+          "token",
+          "level",
+          "pathLength",
+          "effectiveWeightBps",
+          "amount",
+          "state",
+          "unlockAt",
+          "finalizedAt",
+          "claimTxHash",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["tokens", "blockNumber", "readyToFinalize"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{40}$"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "name": {
+          "type": "string"
+        },
+        "testnet": {
+          "type": "boolean"
+        }
+      },
+      "required": ["address", "symbol", "decimals"],
+      "additionalProperties": false
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema3": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema4": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## earnings.claims
+
+**GET `/v1/me/claims`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L346).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type    | Required | Constraints                              |
+| -------- | ------- | -------- | ---------------------------------------- |
+| `cursor` | string  | No       | See nested schema and runtime validation |
+| `limit`  | integer | No       | Minimum: 1; Maximum: 100                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tx": {
+            "type": "object",
+            "properties": {
+              "hash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{64}$"
+              },
+              "blockNumber": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "explorerUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "at": {
+                "$ref": "#/$defs/__schema1"
+              }
+            },
+            "required": ["hash", "blockNumber", "explorerUrl"],
+            "additionalProperties": false
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "campaignId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "string",
+                "pattern": "^demo-[\\w-]+$"
+              }
+            ]
+          },
+          "source": {
+            "type": "string",
+            "enum": ["REWARD", "SALE_PROCEEDS"]
+          },
+          "at": {
+            "$ref": "#/$defs/__schema1"
+          }
+        },
+        "required": ["tx", "amount", "token", "campaignId", "source", "at"],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## vault.get
+
+**GET `/v1/merchant/vault`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L347).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+With a `campaignId`, the frontend selects `GET /v1/merchant/campaigns/:campaignId/vault`. Without it, the route above is the aggregate view.
+
+**Client input fields**
+
+| Field        | Type   | Required | Constraints                              |
+| ------------ | ------ | -------- | ---------------------------------------- |
+| `campaignId` | string | No       | See nested schema and runtime validation |
+| `token`      | string | No       | Pattern validated; see input schema      |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "token": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "token": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "rewards": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "proceeds": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "rewardPerSale": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "liabilityCap": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "settledSalesReadyToFinalize": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema0"
+            }
+          }
+        },
+        "required": [
+          "campaignId",
+          "token",
+          "rewards",
+          "proceeds",
+          "rewardPerSale",
+          "liabilityCap",
+          "settledSalesReadyToFinalize"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "totals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "rewards": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "proceeds": {
+            "$ref": "#/$defs/__schema4"
+          }
+        },
+        "required": ["token", "rewards", "proceeds"],
+        "additionalProperties": false
+      }
+    },
+    "lastIndexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "blockNumber": {
+      "$ref": "#/$defs/__schema1"
+    }
+  },
+  "required": ["campaigns", "totals", "lastIndexedBlock", "blockNumber"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{40}$"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36
+        },
+        "name": {
+          "type": "string"
+        },
+        "testnet": {
+          "type": "boolean"
+        }
+      },
+      "required": ["address", "symbol", "decimals"],
+      "additionalProperties": false
+    },
+    "__schema3": {
+      "type": "object",
+      "properties": {
+        "netDeposited": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "available": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "pendingReserved": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "vestedUnclaimed": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "rewardsClaimed": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "surplusWithdrawn": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": [
+        "netDeposited",
+        "available",
+        "pendingReserved",
+        "vestedUnclaimed",
+        "rewardsClaimed",
+        "surplusWithdrawn"
+      ],
+      "additionalProperties": false
+    },
+    "__schema4": {
+      "type": "object",
+      "properties": {
+        "proceedsPending": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "proceedsClaimable": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "proceedsClaimed": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "buyerRefunded": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": [
+        "proceedsPending",
+        "proceedsClaimable",
+        "proceedsClaimed",
+        "buyerRefunded"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## vault.movements
+
+**GET `/v1/merchant/vault/movements`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L348).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type    | Required | Constraints                              |
+| ------------ | ------- | -------- | ---------------------------------------- |
+| `campaignId` | string  | No       | See nested schema and runtime validation |
+| `cursor`     | string  | No       | See nested schema and runtime validation |
+| `limit`      | integer | No       | Minimum: 1; Maximum: 100                 |
+| `kind`       | string  | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "campaignId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "kind": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tx": {
+            "type": "object",
+            "properties": {
+              "hash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{64}$"
+              },
+              "blockNumber": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "explorerUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "at": {
+                "$ref": "#/$defs/__schema1"
+              }
+            },
+            "required": ["hash", "blockNumber", "explorerUrl"],
+            "additionalProperties": false
+          },
+          "amount": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": ["address", "symbol", "decimals"],
+            "additionalProperties": false
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["REWARD", "SALE_PROCEEDS"]
+          },
+          "at": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "deposited",
+              "reserved",
+              "finalized",
+              "refunded",
+              "claimed",
+              "withdrawn"
+            ]
+          },
+          "saleId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "tx",
+          "amount",
+          "token",
+          "campaignId",
+          "source",
+          "at",
+          "kind",
+          "saleId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema0"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reports.export
+
+**POST `/v1/merchant/reports`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L415).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field         | Type                                                                 | Required | Constraints                              |
+| ------------- | -------------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `range`       | object                                                               | No       | See nested schema and runtime validation |
+| `campaignIds` | string[]                                                             | No       | See nested schema and runtime validation |
+| `kind`        | "sales" · "vault" · "distributorEarnings" · "partners" · "analytics" | Yes      | See nested schema and runtime validation |
+| `filters`     | object                                                               | No       | See nested schema and runtime validation |
+| `format`      | "csv" · "json"                                                       | Yes      | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "range": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "campaignIds": {
+      "$ref": "#/$defs/__schema2"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["sales", "vault", "distributorEarnings", "partners", "analytics"]
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "range": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "campaignIds": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "q": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "state": {
+          "type": "string",
+          "enum": ["PENDING", "FINALIZED", "REFUNDED"]
+        },
+        "campaignId": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["NATIVE_ONCHAIN", "MERCHANT_ATTESTED"]
+        },
+        "provider": {
+          "type": "string"
+        },
+        "unlockBefore": {
+          "$ref": "#/$defs/__schema1"
+        }
+      }
+    },
+    "format": {
+      "type": "string",
+      "enum": ["csv", "json"]
+    }
+  },
+  "required": ["kind", "format"],
+  "$defs": {
+    "__schema0": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema1"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "__schema1": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema2": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema3"
+      }
+    },
+    "__schema3": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["url"],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["queued", "running", "ready", "failed"]
+        },
+        "url": {
+          "type": ["string", "null"]
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        }
+      },
+      "required": ["jobId", "status", "url"],
+      "additionalProperties": false
+    }
+  ]
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reports.preview
+
+**GET `/v1/merchant/reports/preview`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L416).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field         | Type     | Required | Constraints                              |
+| ------------- | -------- | -------- | ---------------------------------------- |
+| `range`       | object   | No       | See nested schema and runtime validation |
+| `campaignIds` | string[] | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "range": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "to": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": ["from", "to"]
+    },
+    "campaignIds": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 78,
+            "pattern": "^(0|[1-9]\\d*)$"
+          },
+          {
+            "type": "string",
+            "pattern": "^demo-[\\w-]+$"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "counts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["kind", "rows"],
+        "additionalProperties": false
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "properties": {
+        "matches": {
+          "type": "boolean"
+        },
+        "blockNumber": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "rewardIndex": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "rewardChain": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "proceedsIndex": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "proceedsChain": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "mismatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "campaignId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^demo-[\\w-]+$"
+                  }
+                ]
+              },
+              "field": {
+                "type": "string"
+              },
+              "indexed": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "canonical": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            "required": ["campaignId", "field", "indexed", "canonical"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "matches",
+        "blockNumber",
+        "rewardIndex",
+        "rewardChain",
+        "proceedsIndex",
+        "proceedsChain",
+        "mismatches"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["counts", "reconciliation"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    },
+    "__schema1": {
+      "type": "object",
+      "properties": {
+        "netDeposited": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "available": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "pendingReserved": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "vestedUnclaimed": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "rewardsClaimed": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "surplusWithdrawn": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": [
+        "netDeposited",
+        "available",
+        "pendingReserved",
+        "vestedUnclaimed",
+        "rewardsClaimed",
+        "surplusWithdrawn"
+      ],
+      "additionalProperties": false
+    },
+    "__schema2": {
+      "type": "object",
+      "properties": {
+        "proceedsPending": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "proceedsClaimable": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "proceedsClaimed": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "buyerRefunded": {
+          "$ref": "#/$defs/__schema0"
+        }
+      },
+      "required": [
+        "proceedsPending",
+        "proceedsClaimable",
+        "proceedsClaimed",
+        "buyerRefunded"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## reports.list
+
+**GET `/v1/merchant/reports`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L417).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type    | Required | Constraints                              |
+| -------- | ------- | -------- | ---------------------------------------- |
+| `cursor` | string  | No       | See nested schema and runtime validation |
+| `limit`  | integer | No       | Minimum: 1; Maximum: 100                 |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "running", "ready", "failed"]
+          },
+          "url": {
+            "type": ["string", "null"]
+          },
+          "expiresAt": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "sales",
+              "vault",
+              "distributorEarnings",
+              "partners",
+              "analytics"
+            ]
+          },
+          "period": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "to": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            "required": ["from", "to"],
+            "additionalProperties": false
+          },
+          "campaignIds": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/__schema1"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^demo-[\\w-]+$"
+                }
+              ]
+            }
+          },
+          "blockNumber": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[\\da-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "required": [
+          "jobId",
+          "status",
+          "url",
+          "kind",
+          "period",
+          "campaignIds",
+          "blockNumber",
+          "rows",
+          "size",
+          "sha256",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    },
+    "__schema1": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## disputes.open
+
+**POST `/v1/me/refund-requests`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L431).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field     | Type   | Required | Constraints                              |
+| --------- | ------ | -------- | ---------------------------------------- |
+| `saleId`  | string | Yes      | See nested schema and runtime validation |
+| `reason`  | string | Yes      | Min length: 3; Max length: 100           |
+| `message` | string | Yes      | Min length: 20; Max length: 3000         |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "saleId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^(0|[1-9]\\d*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "message": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 3000
+    }
+  },
+  "required": ["saleId", "reason", "message"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "disputeId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "status": {
+      "type": "string",
+      "const": "open"
+    }
+  },
+  "required": ["disputeId", "status"],
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## disputes.list
+
+**GET `/v1/merchant/disputes`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L439).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field    | Type                                                                         | Required | Constraints                              |
+| -------- | ---------------------------------------------------------------------------- | -------- | ---------------------------------------- |
+| `cursor` | string                                                                       | No       | See nested schema and runtime validation |
+| `limit`  | integer                                                                      | No       | Minimum: 1; Maximum: 100                 |
+| `kind`   | "refund_request" · "attribution_appeal" · "moderation_appeal" · "chargeback" | No       | See nested schema and runtime validation |
+| `status` | string                                                                       | No       | See nested schema and runtime validation |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "cursor": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "refund_request",
+        "attribution_appeal",
+        "moderation_appeal",
+        "chargeback"
+      ]
+    },
+    "status": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "saleId": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "refund_request",
+              "attribution_appeal",
+              "moderation_appeal",
+              "chargeback"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "refunded",
+              "declined",
+              "explained",
+              "escalated",
+              "appealed",
+              "covered"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "#/$defs/__schema0"
+                },
+                "at": {
+                  "$ref": "#/$defs/__schema3"
+                },
+                "actor": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-fA-F]{40}$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "handle": {
+                      "type": ["string", "null"]
+                    },
+                    "displayName": {
+                      "type": ["string", "null"]
+                    },
+                    "visibility": {
+                      "type": "string",
+                      "enum": ["public", "pseudonymous", "private"]
+                    }
+                  },
+                  "required": [
+                    "address",
+                    "handle",
+                    "displayName",
+                    "visibility"
+                  ],
+                  "additionalProperties": false
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "tx": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "hash": {
+                          "type": "string",
+                          "pattern": "^0x[0-9a-fA-F]{64}$"
+                        },
+                        "blockNumber": {
+                          "$ref": "#/$defs/__schema2"
+                        },
+                        "explorerUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "at": {
+                          "$ref": "#/$defs/__schema3"
+                        }
+                      },
+                      "required": ["hash", "blockNumber", "explorerUrl"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": ["id", "at", "actor", "kind", "message", "tx"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "saleId",
+          "campaignId",
+          "kind",
+          "status",
+          "reason",
+          "message",
+          "createdAt",
+          "events"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "nextCursor": {
+      "type": ["string", "null"]
+    }
+  },
+  "required": ["items", "nextCursor"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema2": {
+      "type": "string"
+    },
+    "__schema3": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## disputes.get
+
+**GET `/v1/merchant/disputes/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L448).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field | Type   | Required | Constraints                                                         |
+| ----- | ------ | -------- | ------------------------------------------------------------------- |
+| `id`  | string | Yes      | Min length: 1; Max length: 100; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    }
+  },
+  "required": ["id"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "saleId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "refund_request",
+        "attribution_appeal",
+        "moderation_appeal",
+        "chargeback"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "refunded",
+        "declined",
+        "explained",
+        "escalated",
+        "appealed",
+        "covered"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "at": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "actor": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "kind": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "tx": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "hash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{64}$"
+                  },
+                  "blockNumber": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "explorerUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "at": {
+                    "$ref": "#/$defs/__schema3"
+                  }
+                },
+                "required": ["hash", "blockNumber", "explorerUrl"],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["id", "at", "actor", "kind", "message", "tx"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "id",
+    "saleId",
+    "campaignId",
+    "kind",
+    "status",
+    "reason",
+    "message",
+    "createdAt",
+    "events"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema2": {
+      "type": "string"
+    },
+    "__schema3": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## disputes.respond
+
+**POST `/v1/merchant/disputes/:id/responses`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L449).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field     | Type                                                                         | Required | Constraints                                                         |
+| --------- | ---------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------- |
+| `id`      | string                                                                       | Yes      | Min length: 1; Max length: 100; Pattern validated; see input schema |
+| `outcome` | "refunded" · "declined" · "explained" · "escalated" · "appealed" · "covered" | Yes      | See nested schema and runtime validation                            |
+| `message` | string                                                                       | Yes      | Min length: 10; Max length: 3000                                    |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "refunded",
+        "declined",
+        "explained",
+        "escalated",
+        "appealed",
+        "covered"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 3000
+    }
+  },
+  "required": ["id", "outcome", "message"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "saleId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "refund_request",
+        "attribution_appeal",
+        "moderation_appeal",
+        "chargeback"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "refunded",
+        "declined",
+        "explained",
+        "escalated",
+        "appealed",
+        "covered"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "createdAt": {
+      "$ref": "#/$defs/__schema3"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "at": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "actor": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{40}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": ["string", "null"]
+              },
+              "displayName": {
+                "type": ["string", "null"]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": ["public", "pseudonymous", "private"]
+              }
+            },
+            "required": ["address", "handle", "displayName", "visibility"],
+            "additionalProperties": false
+          },
+          "kind": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "tx": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "hash": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{64}$"
+                  },
+                  "blockNumber": {
+                    "$ref": "#/$defs/__schema2"
+                  },
+                  "explorerUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "at": {
+                    "$ref": "#/$defs/__schema3"
+                  }
+                },
+                "required": ["hash", "blockNumber", "explorerUrl"],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": ["id", "at", "actor", "kind", "message", "tx"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "id",
+    "saleId",
+    "campaignId",
+    "kind",
+    "status",
+    "reason",
+    "message",
+    "createdAt",
+    "events"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
+    },
+    "__schema2": {
+      "type": "string"
+    },
+    "__schema3": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## disputes.exposure
+
+**GET `/v1/merchant/disputes/exposure`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L456).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "openRefundRequests": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "refundValue": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "appeals": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "chargebacks": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "riskDebt": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "required": [
+    "openRefundRequests",
+    "refundValue",
+    "appeals",
+    "chargebacks",
+    "riskDebt"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>

@@ -34,7 +34,7 @@ The existing reorg recovery and transaction handling provide a foundation; broad
 
 For Aurora, finish provider setup and record a user-executed mainnet transfer through verified USDC delivery. Test route expiry and failure handling. Preserve the separation between mainnet funding and testnet settlement.
 
-For developer access, SDK 0.1.1 now has a versioned GitHub release archive, tested installation, ESM/CommonJS builds, declarations, examples and compatibility guidance. Complete npm account/scope setup for registry distribution. Define any future write SDK around explicit user signing and idempotency. Improve insight coverage without letting external history determine payout eligibility.
+For developer access, SDK 0.1.2 is published on npm as `@enochid/spoke-sdk`, with a matching GitHub release archive, tested installation, ESM/CommonJS builds, declarations, examples and compatibility guidance. Initial SDK distribution is complete. Define any future write SDK around explicit user signing and idempotency. Improve insight coverage without letting external history determine payout eligibility.
 
 **Exit criteria:** real integration evidence, supported configurations, published integration instructions, and accurate availability labels.
 
@@ -62,15 +62,15 @@ Update [current status](/project/status) when functionality is actually deployed
 
 The roles below describe ownership needed for each workstream; they are not assignments to named people or commitments to release dates.
 
-| Workstream             | Role needed                               | Acceptance evidence                                                                                                  | Dependency                                       |
-| ---------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Wallet and recovery UX | Frontend and wallet integration           | Recorded supported-device sign-in, recovery, cancellation, and resume journeys                                       | Defined supported wallet/device matrix           |
-| Product delivery       | Application and security                  | Private asset ownership, refund revocation, grant expiry, and restore tests                                          | Reliable persistent file storage                 |
-| Indexing operations    | Backend and infrastructure                | Provider-failure drill, canonical replay, measured catch-up, alerts and restore evidence                             | Independent RPC capacity and durable checkpoints |
-| Aurora activation      | Integration owner and transfer authorizer | User-executed source transfer, verified canonical USDC receipt, expiry/failure handling                              | Provider application configuration               |
-| SDK distribution       | Developer tooling                         | GitHub package delivered; npm listing pending publisher login/scope; isolated install and versioned examples checked | Stable intended public method set                |
-| Live extensions        | Product and implementation owners         | Backend permissions, failure paths, end-to-end proof, and updated method availability                                | Validated scope for each workflow                |
-| Mainnet settlement     | Contract/security and operations          | Independent review, remediation, capacity analysis, verified deployment, readiness sign-off                          | Completion of release gates                      |
+| Workstream             | Role needed                               | Acceptance evidence                                                                                                      | Dependency                                       |
+| ---------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| Wallet and recovery UX | Frontend and wallet integration           | Recorded supported-device sign-in, recovery, cancellation, and resume journeys                                           | Defined supported wallet/device matrix           |
+| Product delivery       | Application and security                  | Private asset ownership, refund revocation, grant expiry, and restore tests                                              | Reliable persistent file storage                 |
+| Indexing operations    | Backend and infrastructure                | Provider-failure drill, canonical replay, measured catch-up, alerts and restore evidence                                 | Independent RPC capacity and durable checkpoints |
+| Aurora activation      | Integration owner and transfer authorizer | User-executed source transfer, verified canonical USDC receipt, expiry/failure handling                                  | Provider application configuration               |
+| SDK distribution       | Developer tooling                         | Complete: npm package and matching GitHub archive, isolated installation, versioned examples and live API reads verified | Stable intended public method set                |
+| Live extensions        | Product and implementation owners         | Backend permissions, failure paths, end-to-end proof, and updated method availability                                    | Validated scope for each workflow                |
+| Mainnet settlement     | Contract/security and operations          | Independent review, remediation, capacity analysis, verified deployment, readiness sign-off                              | Completion of release gates                      |
 
 ## Known limitations to close explicitly
 

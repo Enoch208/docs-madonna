@@ -3,21 +3,21 @@ title: "Public read SDK"
 description: "Install the versioned Spoke SDK and read public campaigns, receipts, graphs, and system status with validated types."
 ---
 
-A typed, credential-free client for 32 public Spoke API methods. Version **0.1.0** targets API `/v1`, schema `3.0`, and the current Monad Testnet deployment. Monetary amounts remain base-unit strings.
+A typed, credential-free client for 32 public Spoke API methods. Version **0.1.1** targets API `/v1`, schema `3.0`, and the current Monad Testnet deployment. Monetary amounts remain base-unit strings.
 
 ## Install
 
 Install the versioned release package from GitHub:
 
 ```bash
-npm install https://github.com/Enoch208/spoke/releases/download/sdk-v0.1.0/spoke-sdk-0.1.0.tgz
+npm install https://github.com/Enoch208/docs-madonna/releases/download/sdk-v0.1.1/spoke-sdk-0.1.1.tgz
 ```
 
 <Note>
-  Version 0.1.0 is distributed through the [GitHub
-  release](https://github.com/Enoch208/spoke/releases/tag/sdk-v0.1.0). An npm
-  registry listing is pending publisher login and scope verification. Use the
-  archive URL above; `npm install @spoke/sdk` is not yet available.
+  Version 0.1.1 is distributed through the [GitHub
+  release](https://github.com/Enoch208/docs-madonna/releases/tag/sdk-v0.1.1). An
+  npm registry listing is pending publisher login and scope verification. Use
+  the archive URL above; `npm install @spoke/sdk` is not yet available.
 </Note>
 
 The archive includes compiled ESM/CommonJS and TypeScript declarations. It bundles the shared protocol schemas, so consumers do not need the Spoke monorepo or `@spoke/protocol`. Node.js 22 or later is supported. Browser integrations require native `fetch` and `AbortSignal.timeout`; their API deployment must also allow the browser origin through CORS. A server-side integration works without browser CORS restrictions. Browser credentials are always omitted.
@@ -80,7 +80,7 @@ The SDK only reads public data. It does not sign transactions, hold keys, mainta
 
 ## Versions and releases
 
-Pin exact SDK versions for repeatable integrations. Before 1.0, breaking changes increment the minor version; compatible fixes increment the patch version. The first release validates schema 3.0 responses, but the HTTP deployment is independently versioned and an SDK update may be required when its contract changes. Read [SDK changelog](https://github.com/Enoch208/spoke/blob/sdk-v0.1.0/packages/sdk/CHANGELOG.md) before upgrading.
+Pin exact SDK versions for repeatable integrations. Before 1.0, breaking changes increment the minor version; compatible fixes increment the patch version. The first release validates schema 3.0 responses, but the HTTP deployment is independently versioned and an SDK update may be required when its contract changes. Read [SDK changelog](https://github.com/Enoch208/docs-madonna/releases/tag/sdk-v0.1.1) before upgrading.
 
 Maintainers build and check an isolated installation before publication:
 
@@ -91,3 +91,5 @@ pnpm --filter @spoke/sdk exec npm pack --ignore-scripts
 ```
 
 `release:check` installs the actual packed archive in a temporary project, checks the file allowlist, loads both module formats and typechecks ESM/CommonJS consumers. Publish that verified archive, never the repository root. npm registry publication additionally requires access to the `@spoke` scope and a valid npm login. GitHub release assets provide a direct, versioned installation path independently of registry setup.
+
+The application source repository requires repository access. The SDK archive, documentation and release notes are public through the documentation repository.

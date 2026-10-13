@@ -27,7 +27,7 @@ description: "A dated, evidence-based view of live testnet capabilities, optiona
 
 **Nansen insights:** cached supported-mainnet history is integrated. Seeded demonstration wallets currently have no observed history. It does not prove customer revenue or determine payouts.
 
-**Public SDK:** 32 read methods are available in the workspace package. A published package and a complete authenticated write SDK are not claimed.
+**Public SDK:** version 0.1.0 distributes 32 public read methods as an installable [GitHub release package](https://github.com/Enoch208/spoke/releases/tag/sdk-v0.1.0), with ESM/CommonJS and TypeScript declarations. The npm registry listing still needs publisher login and scope verification. Authenticated writes remain outside this read SDK.
 
 **Account onboarding:** settings and recovery surfaces exist; further cross-device progress persistence and onboarding polish remain.
 
@@ -36,6 +36,10 @@ description: "A dated, evidence-based view of live testnet capabilities, optiona
 Additional invitation/community flows, partner discovery and recommendations, team/API-key management, commerce connectors, webhooks, buyer incentives, advanced growth analytics, and other extension surfaces have designs or Demo presentations. Check the method-level registry before building against them.
 
 At this release, the shared contract contains **189 client methods**: **135 core live**, **4 optional mainnet funding**, and **50 unavailable-by-design** methods. Unsupported methods intentionally return `FEATURE_NOT_AVAILABLE`.
+
+## Documentation and SDK releases
+
+The hosted documentation is live at [docs.usespoke.xyz](https://docs.usespoke.xyz). Its expanded reference covers all 189 client methods; that is broader than the 32 public methods exposed by the SDK. The SDK is versioned separately from the deployed application, so publishing it does not change the settlement deployment described above.
 
 ## Evidence and verification
 

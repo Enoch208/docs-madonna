@@ -1,0 +1,67 @@
+---
+title: "Contracts and networks"
+description: "Find the verified testnet deployment, exact core signatures, settlement invariants, and prototype limits."
+---
+
+## Current deployment
+
+| Item                    | Value                                        |
+| ----------------------- | -------------------------------------------- |
+| Network                 | Monad Testnet                                |
+| Chain ID                | `10143`                                      |
+| Protocol                | `0x1Fa5e94e44DB2101664C0a24dBf1e52912af3eca` |
+| SDUSD token             | `0xb6279237003eD710bB4ccE6fbd126e07eD4D8E23` |
+| Token decimals          | `6`                                          |
+| Local development chain | Anvil, `31337`                               |
+
+Inspect the [protocol on Monadvision](https://testnet.monadvision.com/address/0x1Fa5e94e44DB2101664C0a24dBf1e52912af3eca) and the [checked deployment manifest](https://github.com/Enoch208/spoke/blob/main/packages/contracts/deployments/10143.json). The sources have exact creation/runtime verification recorded through Sourcify. Source verification is not a security audit.
+
+## Core link and purchase signatures
+
+```solidity
+function createNode(
+    uint256 campaignId,
+    uint256 parentNodeId,
+    bytes32 metadataHash
+) external returns (uint256 nodeId);
+
+function purchase(
+    uint256 campaignId,
+    uint256 nodeId,
+    bytes32 orderKey
+) external returns (uint256 saleId);
+```
+
+The client generates `orderKey` for a logical purchase. Direct purchases use `nodeId = 0`. Use the generated ABI for the complete interface, return values, mutability, events, and errors; do not reconstruct calldata from a prose summary.
+
+The contract also supports policy registration, campaign funding and lifecycle actions, refunds, finalization, distributor reward claims, merchant proceeds claims, and unused-budget withdrawals.
+
+## Settlement invariants
+
+- Merchant reward funding and buyer payments are accounted separately.
+- Pending sales preserve the accepted policy and recipients.
+- A sale is refunded before unlock or finalized at/after unlock; terminal outcomes cannot overlap.
+- Beneficiaries pull their own claimable balances.
+- Unused-budget withdrawal cannot spend pending or claimable obligations.
+- Future policy versions require at least 24 hours' notice and at most one upcoming version.
+- Direct sales do not reserve distributor commission.
+
+## Prototype limits
+
+The current deployment bounds storage and claim work with **128 campaigns**, **256 nodes per campaign**, and **100 sales per campaign**. Policies support **1–5 paid levels**. A wallet can create one node and make one purchase per campaign in this prototype. Raising these bounds requires gas and capacity review, not just a frontend setting change.
+
+The SDUSD token is freely mintable and non-redeemable. Deployment tooling accepts Anvil and Monad Testnet; this is not a mainnet settlement release.
+
+## Build and test
+
+From the Spoke repository:
+
+```bash
+pnpm contracts:build
+pnpm contracts:test
+pnpm abi
+```
+
+The contract suite includes unit, fuzz, security, and stateful invariant checks. For gas measurements, run `forge test --gas-report` inside `packages/contracts`.
+
+See [source and deployment scripts](https://github.com/Enoch208/spoke/tree/main/packages/contracts) and [recorded testnet proof](/project/proof).

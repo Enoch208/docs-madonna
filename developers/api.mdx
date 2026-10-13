@@ -1,0 +1,126 @@
+---
+title: "API reference"
+description: "Use the versioned HTTP API, discover available methods, and handle money, errors, and transaction uncertainty correctly."
+---
+
+The public API base is **`https://api.usespoke.xyz/v1`**. Client methods share Zod input and output schemas with the frontend. Routes, authentication requirements, and availability are published through the [endpoint registry](https://api.usespoke.xyz/v1/system/endpoints).
+
+<Note>
+  At the documented release, the contract defines **189 client methods**: **135
+  core live methods**, **4 optional Aurora funding methods**, and **50 designed
+  but unavailable methods**. A method appearing in the registry does not mean it
+  is enabled. Unavailable methods return `FEATURE_NOT_AVAILABLE`.
+</Note>
+
+## Make your first request
+
+```bash
+curl -fsS https://api.usespoke.xyz/v1/campaigns
+curl -fsS https://api.usespoke.xyz/v1/receipts/10143/4
+curl -fsS https://api.usespoke.xyz/v1/system/status
+```
+
+Public reads do not require a session. Account and merchant reads require an authenticated session; writes additionally require the application's origin and CSRF controls. See [authentication](/developers/authentication).
+
+## Response shape
+
+A successful response contains `data`, `requestId`, and an ISO `timestamp`. Depending on the method, it can also include `schemaVersion`, `chainId`, `contractAddress`, `blockNumber`, and `indexingStatus`.
+
+```ts
+type Envelope<T> = {
+  requestId: string;
+  timestamp: string;
+  schemaVersion?: string;
+  chainId?: number | null;
+  contractAddress?: `0x${string}` | null;
+  blockNumber?: string | null;
+  indexingStatus?: "live" | "syncing" | "behind";
+  data: T;
+};
+```
+
+This is a readable summary. The [shared Zod schemas](https://github.com/Enoch208/spoke/tree/main/packages/protocol/src/api) are the exact field-level source, including method-specific models and optional values.
+
+## Core read routes
+
+All paths below are relative to `/v1`.
+
+| Method | Route                                     | Access  | Purpose                                |
+| ------ | ----------------------------------------- | ------- | -------------------------------------- |
+| GET    | `/campaigns`                              | Public  | Discover campaigns                     |
+| GET    | `/campaigns/:campaignId`                  | Public  | Campaign details                       |
+| GET    | `/campaigns/:campaignId/policy`           | Public  | Published policy                       |
+| GET    | `/campaigns/:campaignId/graph`            | Public  | Distribution graph                     |
+| GET    | `/campaigns/:campaignId/checkout-preview` | Public  | Checkout terms                         |
+| GET    | `/products/:id`                           | Public  | Product details                        |
+| GET    | `/merchants/:slug`                        | Public  | Merchant profile                       |
+| GET    | `/links/:nodeId`                          | Public  | Link and attribution data              |
+| GET    | `/receipts/:chainId/:saleId`              | Public  | Sale receipt                           |
+| GET    | `/receipts/:chainId/:saleId/verify`       | Public  | Receipt checked against contract state |
+| GET    | `/receipts/:chainId/:saleId/path`         | Public  | Sale attribution path                  |
+| GET    | `/me/purchases`                           | Session | Purchases for the authenticated buyer  |
+| GET    | `/merchant/sales`                         | Session | Merchant sales                         |
+| GET    | `/merchant/vault`                         | Session | Merchant reward budget and liabilities |
+| GET    | `/me/earnings`                            | Session | Six earnings buckets                   |
+| GET    | `/me/claimable`                           | Session | Claimable rewards                      |
+| GET    | `/system/endpoints`                       | Public  | Client methods and their availability  |
+
+Path IDs and money amounts are canonical unsigned decimal strings, except the numeric chain ID. Use the exact method schema for query filters and pagination; do not assume every collection shares the same filters.
+
+## Checkout and delivery
+
+| Method | Route                               | Purpose                                                           |
+| ------ | ----------------------------------- | ----------------------------------------------------------------- |
+| POST   | `/checkout/intents`                 | Create an authenticated intent with a client-generated `orderKey` |
+| GET    | `/checkout/intents/:id`             | Read your intent                                                  |
+| POST   | `/checkout/intents/:id/transaction` | Attach the submitted transaction hash                             |
+| POST   | `/fulfillment/:saleId/access`       | Request buyer-authorized delivery access                          |
+
+Keep the same order key when retrying the same logical checkout. For direct checkout use `nodeId: "0"`. The API intent is not the payment: the wallet must execute the contract purchase, and the chain result must be indexed.
+
+Product and policy versions are checked. Handle `PRODUCT_VERSION_MISMATCH` or `POLICY_MISMATCH` by refreshing the preview and obtaining the user's confirmation of the updated terms.
+
+## Optional mainnet funding routes
+
+| Method | Route                          | Access                                |
+| ------ | ------------------------------ | ------------------------------------- |
+| GET    | `/funding/aurora`              | Public configuration                  |
+| POST   | `/funding/aurora/preview`      | Session                               |
+| POST   | `/funding/aurora/deposits`     | Session; idempotency uses `requestId` |
+| GET    | `/funding/aurora/deposits/:id` | Owning session                        |
+
+The current provider configuration is disabled. Read [wallet funding](/guides/wallet-funding) before integrating; mainnet USDC never credits testnet checkout.
+
+## Money and identifiers
+
+A value such as `"1000000"` means **1 SDUSD** when token decimals are 6. Keep values as strings across JSON and use `bigint` for arithmetic. Do not convert token base units to JavaScript floating-point numbers for settlement calculations.
+
+Addresses are 20-byte hexadecimal strings; hashes and order keys are 32-byte hexadecimal strings. Check both `chainId` and `contractAddress` when combining data from different deployments.
+
+## Errors and retries
+
+```ts
+type ApiFailure = {
+  error: {
+    code: string;
+    message: string;
+    retryable: boolean;
+    requestId: string;
+    details?: Record<string, unknown>;
+  };
+};
+```
+
+| Code family                                     | Typical response                                                      |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| `UNAUTHENTICATED`, `REAUTH_REQUIRED`            | Sign in again or perform the requested fresh confirmation             |
+| `VALIDATION_FAILED`, `WRONG_NETWORK`            | Correct the request or network                                        |
+| `POLICY_MISMATCH`, `PRODUCT_VERSION_MISMATCH`   | Refresh terms and review them again                                   |
+| `INSUFFICIENT_REWARD_ESCROW`, `CAMPAIGN_PAUSED` | Inspect current campaign conditions                                   |
+| `DUPLICATE_CHECKOUT`                            | Reconcile the existing order; do not create a new order automatically |
+| `SALE_NOT_MATURE`, `REFUND_WINDOW_CLOSED`       | Respect the sale's actual unlock time                                 |
+| `TX_PENDING`, `INDEXER_LAGGING`                 | Track the existing transaction and wait for its state                 |
+| `RATE_LIMITED`, `UPSTREAM_UNAVAILABLE`          | Apply bounded backoff when the response is retryable                  |
+| `FEATURE_NOT_AVAILABLE`                         | Treat the feature as unavailable; do not simulate a live success      |
+
+The [error definitions](https://github.com/Enoch208/spoke/blob/main/packages/protocol/src/errors.ts) contain the full union. Preserve `requestId` in bug reports. A retryable transport error does not authorize a duplicate financial action.

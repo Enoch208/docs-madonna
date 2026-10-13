@@ -1,0 +1,60 @@
+---
+title: "For merchants"
+description: "Create a product, fund a reward policy, publish a campaign, and manage the resulting sales."
+---
+
+A merchant supplies the product and pays for its distribution. Your reward budget is committed before purchases use it, so contributors can inspect how a successful sale will be rewarded.
+
+## Prepare your campaign
+
+Have a product title, description, image, delivery details, price, reward budget, and intended commission policy ready. The live settlement flow uses SDUSD on Monad Testnet. Decide how many levels to reward and how long buyers have before settlement can finalize.
+
+<Steps>
+  <Step title="Set up your merchant profile">
+    Create an account or log in, switch to **Sell**, and complete merchant
+    setup. Use a recognizable name, a clear description, and a public slug that
+    you can share.
+  </Step>
+  <Step title="Create the product">
+    Add the product description, image, price, and delivery content. Product
+    versions preserve the terms a purchase accepted. Private delivery files are
+    distinct from public marketing images.
+  </Step>
+  <Step title="Configure the campaign">
+    Select your product and define the reward rate, per-sale cap, campaign
+    liability cap, paid levels, weights, short-path rule, and settlement hold.
+    Review the policy preview with both full and short paths.
+  </Step>
+  <Step title="Fund and publish">
+    Review the wallet requests required to create and fund the campaign. Confirm
+    the chain and token. Wait for confirmed and indexed transactions, then open
+    the public campaign page to check the price, split, and available budget.
+  </Step>
+  <Step title="Follow your sales">
+    Use campaign activity, network views, receipts, and the vault to inspect
+    purchases and reward reservations. Resolve eligible refunds before the hold
+    ends; finalize eligible sales after it ends. Claim available merchant
+    proceeds through the wallet flow.
+  </Step>
+</Steps>
+
+<Frame caption="A published testnet campaign makes its price, reward rate, paid levels, and hold visible before checkout.">
+  <img
+    src="/images/screenshots/campaign-live.jpg"
+    alt="Public Spoke campaign showing a 1 SDUSD price and a 10 percent reward across two levels"
+  />
+</Frame>
+
+## Manage budget responsibly
+
+The vault distinguishes available reward funds from money already committed to sales or claims. Use the campaign's actual available amount when planning additional distribution.
+
+To stop new activity, pause or end the campaign. After that, withdraw only unused rewards. Existing recipients can still finalize and claim their eligible obligations.
+
+## Update future terms
+
+Policy changes require at least 24 hours' notice, and only one version can be upcoming. Existing sales keep their accepted policy. Explain significant changes to your distributors before the new policy takes effect.
+
+## Know what the prototype supports
+
+Core product, campaign, checkout, and settlement journeys are live on testnet. Screens for additional partnerships, integrations, or growth tools may carry **Demo** labels. The current contract also has finite capacity limits; review [contract reference](/developers/contracts) before seeding large campaigns.

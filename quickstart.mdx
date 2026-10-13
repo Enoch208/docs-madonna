@@ -1,47 +1,52 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Your first five minutes"
+description: "Inspect the live testnet flow without a wallet, then choose a merchant, distributor, or buyer journey."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+You can understand Spoke before connecting a wallet. This walkthrough uses public pages from the deployed application.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Explore an offer">
+    Open [Spoke Explore](https://usespoke.xyz/explore). Look for the **Live testnet** label. Open a campaign and read its product price, reward rate, maximum paid levels, and settlement hold.
 
-    ```bash
-    npm install your-package
-    ```
+    A campaign's reward is paid from its merchant's funded budget. The amount shown is a policy calculation, not a guarantee that a sale will happen.
+
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+  <Step title="Inspect the reward path">
+    Open the campaign's network view. Each node represents a sharing link with a fixed parent. A branch can grow without every ancestor being paid: the policy limits the number of eligible levels.
 
-    ```bash
-    your-cli init
-    ```
+    The [recorded demonstration network](https://usespoke.xyz/c/3/network) contains a settled sale and a refunded sale. Select a sale to inspect its path.
+
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+  <Step title="Read a settled receipt">
+    Open [sale 4](https://usespoke.xyz/receipts/10143/4). Compare the buyer payment, merchant-funded reward, paid path, settlement timeline, and transaction proof.
 
-    ```bash
-    your-cli start
-    ```
+    This is a scripted testnet demonstration. The receipt proves contract behavior, not commercial activity.
+
+  </Step>
+  <Step title="Choose what you want to do">
+    [Merchants](/guides/merchants) create and fund offers. [Distributors](/guides/distributors) create links and claim eligible rewards. [Buyers](/guides/buyers) purchase and access their delivery.
+
+    Use **Create account** or **Log in** when you are ready for an action that requires an account. Review each wallet request before signing.
+
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+<Frame caption="A settled testnet receipt shows the buyer payment, separate reward allocation, and claim state.">
+  <img
+    src="/images/screenshots/receipt-live.jpg"
+    alt="Sale 4 receipt showing a 1 SDUSD buyer payment, 0.10 SDUSD reward, and two claimed allocations"
+  />
+</Frame>
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+## Want to explore without transactions?
+
+Open [Demo mode](https://usespoke.xyz/demo). It uses sample data to explain the interface and preview additional workflows. Demo balances and activity do not represent onchain funds. Read [live and demo environments](/guides/live-and-demo) before switching between them.
+
+## Before your first testnet transaction
+
+- Use **Monad Testnet**, chain ID **10143**, for the current settlement flow.
+- SDUSD is the test token used for prices and rewards; MON pays network gas.
+- Testnet gas assistance may be available from the application, subject to its limits.
+- A wallet confirmation is only the beginning. Wait for transaction confirmation and indexing before treating the action as complete.
+- Mainnet USDC obtained through a future funding activation will not buy testnet products.

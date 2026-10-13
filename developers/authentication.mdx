@@ -1,0 +1,43 @@
+---
+title: "Authentication and security boundaries"
+description: "Understand wallet challenges, sessions, CSRF, sensitive confirmations, and the limits of server authority."
+---
+
+Spoke authenticates wallet ownership before providing account-specific API access. Authentication and transaction signing are separate: a session does not authorize the API to spend the user's tokens.
+
+## Wallet challenge flow
+
+1. Request a challenge through `POST /v1/auth/challenge` using the exact shared input schema.
+2. Present the returned domain- and chain-bound message to the connected wallet.
+3. Submit the signature and challenge through `POST /v1/auth/verify`.
+4. The server validates the signature and the challenge's purpose, expiry, and single-use status, then returns the appropriate account/session result.
+
+Use the application client and [auth schemas](https://github.com/Enoch208/spoke/blob/main/packages/protocol/src/api/methods.ts) when implementing this flow. Do not construct a different message and assume it will verify.
+
+## Sessions
+
+The service stores hashed, expiring session credentials and uses an HTTP-only cookie. Browser requests to protected routes must use the intended session transport. The public read SDK deliberately omits credentials and cannot replace the authenticated application client.
+
+State-changing requests enforce the configured allowed origin and CSRF requirements. Do not disable those protections to make a third-party integration work; design a supported integration boundary instead.
+
+## Sensitive account changes
+
+Destructive or sensitive actions can require a fresh, single-use signed confirmation. A normal sign-in challenge and a confirmation challenge serve different purposes. Expired or reused confirmation produces a reauthentication requirement rather than silently allowing the action.
+
+Account deletion and session revocation affect application access. They cannot erase immutable public chain history.
+
+## Server-side protections
+
+The API validates both inputs and successful outputs with shared Zod schemas. Account resources are ownership-scoped. Private delivery checks the buyer and sale state, including refund revocation. Image uploads are sanitized and re-encoded rather than served as arbitrary untrusted content.
+
+The testnet gas service has separate funding limits and durable transaction tracking. Its purpose is MON gas assistance; it never supplies merchant commission rewards or signs a user's purchases.
+
+## Integrator guidance
+
+- Keep private signing keys, provider credentials, session cookies, and delivery URLs out of logs and public repositories.
+- Do not put secrets into frontend `NEXT_PUBLIC_*` variables.
+- Treat a signed wallet challenge as authentication, not a payment.
+- Check chain and contract identity before showing transaction-specific data.
+- Respect the returned retryability and request IDs; use bounded retries.
+
+The implementation has tests and public testnet evidence. These controls do not constitute an independent security audit or mainnet approval. See the [roadmap](/project/roadmap).

@@ -1,0 +1,36 @@
+---
+title: "Accounts and navigation"
+description: "Choose a sign-in method, manage your profile, and move between earning and selling."
+---
+
+Spoke supports an account experience around wallet-backed actions. Public discovery and receipt pages can be read without signing in. Creating links, purchasing, claiming, and account-specific views require an authenticated account and the relevant wallet authorization.
+
+## Sign in
+
+Use **Create account** or **Log in**. The frontend supports passkey onboarding and external wallet connections. An external wallet signs an account challenge; passkey flows use the integrated account wallet experience. Review the requested action before approving it.
+
+A session authenticates API access. It does not give the API permission to transfer your tokens. Contract actions still require the wallet flow.
+
+## Earn and Sell workspaces
+
+The workspace switcher separates distributor and merchant tasks. On desktop, the sidebar groups related pages and lets you collapse groups or switch to a compact icon rail. On smaller screens, open the menu to navigate.
+
+- **Discover:** browse offers and people.
+- **Earn:** start your distributor journey and find purchases.
+- **Distribution:** manage links and inspect the network.
+- **Earnings and record:** follow rewards, payouts, and reputation.
+- **Sell:** access the merchant's product, campaign, sales, and budget workflows.
+
+The interface marks sample-only destinations with **Demo**.
+
+## Manage your account
+
+Settings includes profile and privacy preferences, connected wallet records, passkeys, notifications, recovery checks, and session management. Use recovery guidance before depending on a new sign-in method. Revoking a session ends that session's API access; it does not reverse completed transactions.
+
+Some multi-device onboarding and intent-persistence improvements remain on the [roadmap](/project/roadmap). A supported settings screen is not a guarantee that every future onboarding step is already synchronized across devices.
+
+## Privacy boundaries
+
+Public graph and reputation views respect supported presentation preferences. Public blockchain transactions remain inspectable on the network. Deleting an application account cannot erase immutable chain history or undo settlement.
+
+Aurora mainnet funding, when enabled, requires a supported external wallet session. The current passkey transaction flow is scoped to the testnet experience.

@@ -1,0 +1,60 @@
+---
+title: "Commission policies"
+description: "Learn how reward rates, caps, weights, short paths, and versioned terms determine a sale’s allocation."
+---
+
+Every campaign has a published commission policy. The policy defines the amount the merchant is willing to reward and how that amount is divided across eligible contributors.
+
+## The policy fields
+
+| Field                  | Meaning                                              |
+| ---------------------- | ---------------------------------------------------- |
+| `commissionBps`        | Reward rate in basis points; 1,000 means 10%         |
+| `perSaleCap`           | Maximum reward for an individual sale                |
+| `campaignLiabilityCap` | Campaign-wide bound on reward liability              |
+| `maxRewardedAncestors` | Maximum paid levels, from 1 to 5                     |
+| `weightsBps`           | Nearest-first split, totaling 10,000 basis points    |
+| `shortPathMode`        | How to handle fewer eligible people than paid levels |
+| `holdSeconds`          | Refund hold before a sale can finalize               |
+| Policy hash            | Commitment to the exact version accepted by a sale   |
+
+Money is calculated in integer token base units. The API represents it as decimal strings, avoiding floating-point rounding.
+
+## A worked example
+
+This is an illustrative policy, not an offer or revenue claim:
+
+- Product price: **100 SDUSD**.
+- Reward rate: **10%**, with a per-sale cap high enough to allow **10 SDUSD**.
+- Four paid levels with nearest-first weights **50% / 25% / 15% / 10%**.
+- Sufficient funded budget and remaining campaign liability capacity.
+
+| Recipient on the purchase path | Weight | Reward     |
+| ------------------------------ | ------ | ---------- |
+| Nearest contributor            | 50%    | 5.00 SDUSD |
+| One level above                | 25%    | 2.50 SDUSD |
+| Two levels above               | 15%    | 1.50 SDUSD |
+| Three levels above             | 10%    | 1.00 SDUSD |
+
+The **100 SDUSD buyer payment** and the **10 SDUSD merchant-funded reward** are separate. The reward is not silently deducted from the buyer payment.
+
+## Short paths
+
+If a sale has fewer eligible contributors than the policy's maximum, the configured short-path rule determines the result:
+
+- **Renormalize existing:** divide the reward proportionally across the eligible weights. With only the first two people in the example, the ratio is 50:25, or approximately two-thirds and one-third.
+- **Return unused:** allocate the existing levels' original shares and leave the unused share in the merchant's reward budget.
+
+Integer rounding is deterministic. Any allocation remainder is assigned to the nearest eligible contributor. The application preview shows the actual amounts for the current path.
+
+## Budget and liability are real constraints
+
+A percentage alone does not promise a payout. The contract also checks the funded budget, policy caps, campaign state, and path eligibility. A campaign that cannot meet its required reward reservation cannot accept the purchase under those terms.
+
+Direct purchases with `nodeId = 0` reserve no distributor reward.
+
+## Changing a policy
+
+A merchant can register **one upcoming version at a time**, with **at least 24 hours' notice**. The version becomes eligible at its effective time. Existing purchases retain the policy and allocations they accepted; later policy changes do not rewrite them.
+
+The hold period, rate, and path on the receipt are the terms to inspect when reviewing an existing sale.

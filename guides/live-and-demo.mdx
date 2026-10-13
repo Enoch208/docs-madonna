@@ -1,0 +1,34 @@
+---
+title: "Live, demo, and mainnet"
+description: "Know which network, data source, and token you are using before taking an action."
+---
+
+Spoke exposes several experiences with different purposes. Check the page's environment label before interpreting a balance or transaction.
+
+| Experience                | Data and network                                       | What it proves                                                                     |
+| ------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| **Live testnet**          | Real transactions on Monad Testnet, chain 10143; SDUSD | Contract, API, indexing, and interface behavior                                    |
+| **Demo**                  | Local sample fixtures and simulated workflows          | Product design and workflows, including features not live yet                      |
+| **Local development**     | Anvil, chain 31337, and your local API/database        | Reproducible development and testing                                               |
+| **Aurora wallet funding** | Intended mainnet flow into USDC on Monad, chain 143    | Separate wallet funding; currently disabled pending configuration and verification |
+
+## Understand the labels
+
+**Live testnet** means the screen reads the deployed testnet system. It does not mean SDUSD has financial value. The deployment includes scripted demonstration campaigns and transactions; those are not customer revenue.
+
+**Demo** and **Sample** identify illustrative content. A realistic interface, balance, chart, or confirmation in Demo mode does not prove that a live API or blockchain action exists for that feature.
+
+## Keep the tokens separate
+
+| Token                  | Purpose                                                       | Financial value in this application               |
+| ---------------------- | ------------------------------------------------------------- | ------------------------------------------------- |
+| SDUSD on Monad Testnet | Product prices, reward budgets, refunds, and claims           | Non-redeemable test token; no cash value          |
+| MON on Monad Testnet   | Transaction gas                                               | Testnet gas token                                 |
+| USDC on Monad Mainnet  | Destination asset for the optional Aurora wallet funding flow | A mainnet asset, separate from testnet settlement |
+| MON on Monad Mainnet   | Gas for subsequent mainnet wallet transactions                | A mainnet asset, separate from testnet MON        |
+
+The application does not convert a mainnet deposit into a testnet purchase balance. Mainnet funding does not credit your Spoke reward vault, earnings, or SDUSD checkout.
+
+## What to rely on
+
+For settlement, rely on the chain receipt and its verified state. For indexed views, check the displayed indexing freshness. For implementation scope, use [current status](/project/status) and the [endpoint registry](https://api.usespoke.xyz/v1/system/endpoints). For future work, use the [roadmap](/project/roadmap).

@@ -1,0 +1,96 @@
+---
+title: "Run Spoke locally"
+description: "Start the frontend, API, PostgreSQL, and a local settlement deployment with the repository’s pinned tools."
+---
+
+## Prerequisites
+
+Use **Node.js 24 or later**, **pnpm 10.33.0**, **Foundry 1.5.1**, and **PostgreSQL 16**. Docker is convenient for the database. Use a disposable local wallet and database for development.
+
+## 1. Clone and install
+
+```bash
+git clone https://github.com/Enoch208/spoke.git
+cd spoke
+pnpm install --frozen-lockfile
+```
+
+## 2. Start PostgreSQL
+
+```bash
+docker run --name spoke-postgres -d \
+  -e POSTGRES_USER=spoke \
+  -e POSTGRES_PASSWORD=spoke \
+  -e POSTGRES_DB=spoke \
+  -p 127.0.0.1:54332:5432 \
+  postgres:16.10-bookworm
+```
+
+These are local development credentials. If this container already exists, start it with `docker start spoke-postgres` rather than creating a duplicate.
+
+## 3. Create local environment files
+
+```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env.local
+```
+
+The examples default to local Anvil and the local API. Keep real credentials out of Git. Do not put private provider URLs, signing keys, or database credentials in `NEXT_PUBLIC_*` variables.
+
+## 4. Start Anvil
+
+Run in its own terminal:
+
+```bash
+pnpm chain
+```
+
+This starts a local chain on port `8545` with chain ID `31337`.
+
+## 5. Deploy the local contracts
+
+In a second terminal, privately set `DEPLOYER_PRIVATE_KEY` to a funded, disposable Anvil account, then run:
+
+```bash
+pnpm deploy:local
+```
+
+Copy the printed protocol and token addresses into the API's `PROTOCOL_ADDRESS` and `TOKEN_ADDRESS`, and the web application's `NEXT_PUBLIC_PROTOCOL_ADDRESS` and `NEXT_PUBLIC_DEMO_TOKEN_ADDRESS`.
+
+## 6. Run the application
+
+```bash
+pnpm dev
+```
+
+Open `http://localhost:3040`. The API listens at `http://localhost:8740`; routes use the `/v1` prefix. API startup runs its migrations against the configured database.
+
+## Configuration that must agree
+
+| Concern            | API                                | Web                                         |
+| ------------------ | ---------------------------------- | ------------------------------------------- |
+| Network            | `CHAIN_ID=31337`                   | `NEXT_PUBLIC_CHAIN_ID=31337`                |
+| Protocol           | `PROTOCOL_ADDRESS`                 | `NEXT_PUBLIC_PROTOCOL_ADDRESS`              |
+| Test token         | `TOKEN_ADDRESS`                    | `NEXT_PUBLIC_DEMO_TOKEN_ADDRESS`            |
+| API origin         | `API_ORIGIN=http://localhost:8740` | `NEXT_PUBLIC_API_URL=http://localhost:8740` |
+| Allowed web origin | `WEB_ORIGIN=http://localhost:3040` | Browser runs on the same origin             |
+
+The default local database URL uses `127.0.0.1:54332/spoke`. The default local indexer mode is `direct_rpc`; the production deployment uses Envio ingestion and verified projection.
+
+## Verify your setup
+
+```bash
+curl -fsS http://localhost:8740/v1/health
+curl -fsS http://localhost:8740/v1/system/status
+pnpm typecheck
+pnpm test
+pnpm contracts:test
+```
+
+Some API integration and gas-station tests require their documented disposable database or local chain fixtures. Consult the [API README](https://github.com/Enoch208/spoke/blob/main/apps/api/README.md) for those test-specific environments instead of pointing a test suite at production.
+
+## Reproduce settlement
+
+The [contract fixture guide](https://github.com/Enoch208/spoke/blob/main/packages/contracts/README.md) explains how to create fresh demonstration wallets, fund test gas, seed paths and purchases, refund, finalize, and claim. Keep fixture signing material and full broadcast recovery files private.
+
+For deployment evidence without running transactions, use [public proof](/project/proof).

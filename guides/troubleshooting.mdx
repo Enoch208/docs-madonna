@@ -1,0 +1,44 @@
+---
+title: "Troubleshooting"
+description: "Resolve indexing delays, wallet uncertainty, unavailable features, delivery issues, and environment mismatches."
+---
+
+## My transaction succeeded, but the page has not changed
+
+An included transaction and an indexed view update are separate steps. Check the transaction on the explorer, then inspect the application's indexing status or [system status endpoint](https://api.usespoke.xyz/v1/system/status). The UI can lag while a confirmed event is projected into its read model.
+
+Do not submit a duplicate purchase to refresh a screen. Keep the original order key and transaction hash while investigating.
+
+## My transaction says unknown or replaced
+
+**Unknown** means the client cannot yet determine the outcome. Check the existing hash before retrying. **Replaced** means the tracked transaction has been superseded; follow the replacement result. Neither state should be translated automatically into a new purchase.
+
+If you rejected the wallet request before broadcast, the client can show **Rejected**. If a transaction reverted, inspect the error and current policy or campaign state before another attempt.
+
+## I have rewards, but cannot claim them
+
+Only **Claimable** rewards can be withdrawn. **At risk** rewards are still inside the hold. **Ready to finalize** rewards need sale finalization. Refunded and reversed allocations are historical outcomes rather than withdrawable funds.
+
+## The campaign refuses a purchase or new link
+
+Check whether it is paused, ended, expired, missing sufficient reward budget, or at a prototype capacity limit. A changed policy or stale quote may require a fresh preview. Pausing stops new activity but does not stop existing settlement obligations.
+
+## Delivery access fails
+
+Use the account that purchased and verify that the sale was not refunded. Reauthenticate if your session expired. The receipt is public, but private delivery is buyer-specific and is checked again when accessed.
+
+## A feature shows Demo or FEATURE_NOT_AVAILABLE
+
+The route or screen may describe a future workflow. The backend intentionally rejects unavailable methods instead of returning fabricated success. Consult [current status](/project/status); Demo data does not activate the live service.
+
+## Aurora funding is unavailable
+
+Check its [configuration endpoint](https://api.usespoke.xyz/v1/funding/aurora). The current integration is disabled pending provider configuration and a verified mainnet transfer. Testnet SDUSD balances cannot activate it.
+
+## My wallet is on the wrong chain
+
+Current settlement uses **10143**. Local Anvil uses **31337**. The optional mainnet funding destination uses **143**. Similar token names do not make balances interchangeable across networks.
+
+## Report a reproducible issue
+
+Include the page URL, environment label, approximate time, API request ID if available, transaction hash if public, and the behavior you expected. Remove private keys, seed phrases, session cookies, provider credentials, and private delivery files. Repository contributors can use the [Spoke repository](https://github.com/Enoch208/spoke) to track a reproducible defect.

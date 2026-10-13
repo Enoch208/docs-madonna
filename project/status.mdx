@@ -1,0 +1,46 @@
+---
+title: "What is built"
+description: "A dated, evidence-based view of live testnet capabilities, optional integrations, and planned surfaces."
+---
+
+**Reviewed 13 October 2026 · application release `1c90c5e`.** This page describes the documented deployment, not a promise that every designed screen is a live service.
+
+## Live on Monad Testnet
+
+| Area               | Implemented behavior                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Discovery          | Public campaigns, merchant profiles, products, policies, and distributor views                                   |
+| Merchant workflow  | Merchant setup, product versions, campaign preparation, funding, publication, and vault views                    |
+| Distribution       | Immutable parent links, branching graph, ancestry, and sale attribution paths                                    |
+| Checkout           | Preview, client-generated order keys, wallet purchase, intent tracking, and indexed receipts                     |
+| Delivery           | Buyer-only access with sale and refund rechecks                                                                  |
+| Settlement         | Reward reservation, refunds, finalization, beneficiary claims, and unused-budget rules                           |
+| Earnings           | Six distinct buckets, claimable balances, claims history, and campaign/conversion views                          |
+| Account experience | Wallet sessions, passkey onboarding, profile/privacy settings, recovery and notification surfaces                |
+| Infrastructure     | Canonical indexing, independent RPC verification, transactional projection, reorg recovery, and status reporting |
+| Developer access   | Typed API schemas, endpoint registry, public read SDK, and contract/source verification                          |
+| Interface          | Grouped collapsible navigation, compact sidebar rail, mobile navigation, and corrected dialog overflow           |
+
+## Implemented with a narrower or conditional scope
+
+**Aurora funding:** code and UI are deployed, but configuration is disabled and a real mainnet transfer has not been verified. It is separate from testnet settlement.
+
+**Nansen insights:** cached supported-mainnet history is integrated. Seeded demonstration wallets currently have no observed history. It does not prove customer revenue or determine payouts.
+
+**Public SDK:** 32 read methods are available in the workspace package. A published package and a complete authenticated write SDK are not claimed.
+
+**Account onboarding:** settings and recovery surfaces exist; further cross-device progress persistence and onboarding polish remain.
+
+## Demo or designed, not live commitments
+
+Additional invitation/community flows, partner discovery and recommendations, team/API-key management, commerce connectors, webhooks, buyer incentives, advanced growth analytics, and other extension surfaces have designs or Demo presentations. Check the method-level registry before building against them.
+
+At this release, the shared contract contains **189 client methods**: **135 core live**, **4 optional mainnet funding**, and **50 unavailable-by-design** methods. Unsupported methods intentionally return `FEATURE_NOT_AVAILABLE`.
+
+## Evidence and verification
+
+The recorded production journey contains **15 confirmed testnet transactions** covering campaign setup, links, purchase, delivery access, refund and access revocation, finalization, and claims. The broader scripted settlement fixture records **58 confirmed transactions**, including gas top-ups.
+
+The application's [release CI](https://github.com/Enoch208/spoke/actions/runs/38371406203) completed successfully. The release's frontend validation included **494 tests across 42 files**, type checks, lint, formatting, and a production build. Tests and source verification do not substitute for an independent audit.
+
+Read [proof and deployments](/project/proof) for inspectable artifacts and the [roadmap](/project/roadmap) for remaining work.

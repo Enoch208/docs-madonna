@@ -1,0 +1,59 @@
+---
+title: "Roadmap"
+description: "A practical sequence from the working testnet loop to reliable integrations and a reviewed mainnet release."
+---
+
+The core testnet loop is working. The next milestones focus on broader verification, operational readiness, and carefully scoped integrations. This roadmap uses acceptance criteria rather than speculative release dates.
+
+## Phase 1 — Prove the core loop
+
+**Status: delivered on testnet.**
+
+- Publish a product and merchant-funded campaign.
+- Create a branching distribution graph with fixed parent links.
+- Purchase with a client-generated order key and exact policy attribution.
+- Verify buyer delivery, refunds, finalization, and claims.
+- Expose receipts, six earnings buckets, canonical indexing, and public read access.
+- Publish source verification and reproducible demonstration evidence.
+
+**Evidence:** the [production journey and contract fixture](/project/proof).
+
+## Phase 2 — Harden the experience and operations
+
+**Status: continuing.**
+
+Improve cross-device onboarding progress and intent recovery, exercise additional passkey and external-wallet/device combinations, and expand operational checks around provider outages, replay, restore, capacity, and monitoring.
+
+**Exit criteria:** repeatable recovery exercises, documented alert ownership, meaningful load and gas measurements within the prototype limits, and reproducible user journeys across the supported wallet/device set.
+
+The existing reorg recovery and transaction handling provide a foundation; broader operational testing is still required before stronger reliability claims.
+
+## Phase 3 — Activate and verify optional integrations
+
+**Status: implementation exists; activation and broader delivery remain.**
+
+For Aurora, finish provider setup and record a user-executed mainnet transfer through verified USDC delivery. Test route expiry and failure handling. Preserve the separation between mainnet funding and testnet settlement.
+
+For developer access, package the read SDK for external consumption with versioning and examples. Define any future write SDK around explicit user signing and idempotency. Improve insight coverage without letting external history determine payout eligibility.
+
+**Exit criteria:** real integration evidence, supported configurations, published integration instructions, and accurate availability labels.
+
+## Phase 4 — Extend distribution workflows
+
+**Status: designed or demonstrated in parts.**
+
+Validate demand and implementation scope for invitations, communities, partner workflows, merchant growth tools, teams, API keys, webhooks, and commerce connectors. Move each feature from Demo to live only when its backend, permissions, failure handling, and end-to-end journey are complete.
+
+**Exit criteria:** tested live behavior and an updated method registry for each shipped feature. A finished screen alone does not satisfy this milestone.
+
+## Phase 5 — Prepare mainnet settlement
+
+**Status: future release gate.**
+
+Mainnet commerce requires an independent security review, remediation and verification, reviewed token and deployment configuration, gas/capacity analysis, operational readiness, and explicit release approval. The current freely mintable SDUSD deployment is not a mainnet payment system.
+
+**Exit criteria:** published scope and limitations, verified deployment artifacts, tested recovery and monitoring, and an explicit announcement of supported mainnet functionality.
+
+## How progress is reported
+
+Update [current status](/project/status) when functionality is actually deployed and verified. Attach source, transaction, or test evidence where possible. Keep future work in this roadmap and keep sample activity labeled as sample activity.

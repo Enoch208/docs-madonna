@@ -1,72 +1,115 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "name": "Spoke",
+  "description": "Understand Spoke, run your first testnet sale, and build on the open distribution graph.",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#43600D",
+    "light": "#C7F35F",
+    "dark": "#587B12"
   },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
+  "favicon": "/images/brand/spoke-icon.png",
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "/"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Start here",
+        "groups": [
+          {
+            "group": "Welcome",
+            "pages": ["index", "quickstart", "guides/live-and-demo"]
+          },
+          {
+            "group": "How Spoke works",
+            "pages": [
+              "concepts/distribution-graph",
+              "concepts/commission-policy",
+              "concepts/settlement"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Use Spoke",
+        "groups": [
+          {
+            "group": "Your journey",
+            "pages": [
+              "guides/merchants",
+              "guides/distributors",
+              "guides/buyers"
+            ]
+          },
+          {
+            "group": "Your account",
+            "pages": [
+              "guides/accounts",
+              "guides/wallet-funding",
+              "guides/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "Understand the system",
+            "pages": [
+              "developers/architecture",
+              "developers/local-development",
+              "developers/indexing"
+            ]
+          },
+          {
+            "group": "Integrate",
+            "pages": [
+              "developers/api",
+              "developers/authentication",
+              "developers/sdk",
+              "developers/contracts"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Project",
+        "groups": [
+          {
+            "group": "Progress and evidence",
+            "pages": ["project/status", "project/proof", "project/roadmap"]
+          },
+          {
+            "group": "Reference",
+            "pages": ["project/glossary"]
+          }
+        ]
+      }
+    ]
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:support@mintlify.com"
+        "label": "GitHub",
+        "href": "https://github.com/Enoch208/spoke"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Open Spoke",
+      "href": "https://usespoke.xyz/explore"
     }
   },
   "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
+    "options": ["copy", "view", "chatgpt", "claude", "cursor", "vscode"]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/Enoch208/spoke"
     }
   }
 }

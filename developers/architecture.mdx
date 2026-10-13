@@ -1,0 +1,89 @@
+---
+title: "System architecture"
+description: "Understand which layer owns money, how events become application views, and where optional services fit."
+mode: wide
+---
+
+Spoke separates settlement, indexed reads, account services, and user interaction. The contract is the authority for money. The API provides validated access to derived views and offchain records; it cannot invent settlement outcomes.
+
+```mermaid
+flowchart TB
+  U[User] --> Web[Next.js frontend]
+  Web --> Wallet[External wallet or passkey wallet]
+  Wallet --> Chain[SpokeProtocol on Monad Testnet]
+  Web --> API[Hono API /v1]
+  API --> DB[(PostgreSQL application data)]
+  API --> RPC[Independent RPC verification]
+  RPC --> Chain
+  Chain --> Indexer[Envio HyperIndex]
+  Indexer --> Events[(Canonical events and checkpoints)]
+  Events --> Projector[Transactional projection and reorg recovery]
+  Projector --> DB
+  API --> Files[Private delivery and sanitized images]
+  API -. cached insight context .-> Nansen[Nansen]
+  API -. optional wallet funding .-> Aurora[Aurora Intents]
+  Aurora -. USDC to user's wallet .-> Mainnet[Monad Mainnet]
+```
+
+The dotted paths are separate integrations. Neither Nansen context nor Aurora funding determines testnet reward allocation.
+
+## Components and responsibilities
+
+| Layer                   | Implementation                                              | Owns                                                                                           |
+| ----------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Web application         | Next.js, React, TypeScript                                  | Navigation, wallet interaction, previews, account and settlement UI                            |
+| Shared protocol package | TypeScript and Zod                                          | Client method inputs/outputs, routes, statuses, errors, API envelopes                          |
+| API                     | Hono on Node.js                                             | Authentication, validation, product metadata, checkout intents, delivery access, read services |
+| Settlement              | Solidity and Foundry                                        | Campaigns, policies, immutable parent links, purchases, refunds, liabilities, claims           |
+| Event ingestion         | Envio HyperIndex                                            | Chain events, checkpoints, historical sync, realtime ingestion                                 |
+| Projection              | API-side canonical verification and PostgreSQL transactions | Read-model updates, cursor consistency, reorg recovery                                         |
+| Storage                 | PostgreSQL and private file storage                         | Application records, indexed views, products, delivery assets                                  |
+| Public SDK              | Workspace TypeScript package                                | Validated public read calls with typed errors                                                  |
+
+## A purchase across the stack
+
+```mermaid
+sequenceDiagram
+  actor Buyer
+  participant Web as Frontend
+  participant API
+  participant Wallet
+  participant Chain as SpokeProtocol
+  participant Indexer
+  Buyer->>Web: Review checkout
+  Web->>API: Create intent with client orderKey
+  API-->>Web: Validated intent and expected terms
+  Web->>Wallet: Request approval and purchase
+  Wallet->>Chain: purchase(campaignId, nodeId, orderKey)
+  Chain-->>Indexer: Canonical purchase event
+  Web->>API: Attach transaction hash
+  Indexer->>API: Events and verified checkpoint
+  API-->>Web: Indexed receipt and allocations
+```
+
+A wallet signature, a transaction inclusion, and an indexed receipt are separate states. The UI tracks them rather than treating a successful HTTP request as an onchain sale.
+
+## Trust boundaries
+
+**Money:** buyer payments and merchant-funded rewards stay separate in the contract. Claims are pulled by beneficiaries. Public receipts expose the settlement evidence.
+
+**Identity:** wallet-bound sessions protect account routes. State-changing API calls require the allowed origin and CSRF protections. Sensitive account actions require fresh confirmation.
+
+**Files:** public images are sanitized and re-encoded. Private product assets require ownership or buyer entitlement; delivery access rechecks sale state and refunds.
+
+**Read models:** the API verifies canonical block hashes independently before projecting events. A stale read cannot redefine a contract balance.
+
+**Provider data:** Nansen insight context is cached and labeled. It does not produce a trust score or affect payout amounts. Aurora status requires destination-chain verification before funding confirmation.
+
+## Repository map
+
+```text
+apps/web/             Application and wallet-facing client
+apps/api/             Hono routes, services, authentication, projection
+packages/protocol/    Shared schemas, routes, errors, and statuses
+packages/contracts/   Solidity, tests, ABIs, and deployment evidence
+packages/sdk/         Typed public read client
+indexer/              Envio configuration and event ingestion
+```
+
+The public source is [Enoch208/spoke](https://github.com/Enoch208/spoke). This documentation lives separately in [Enoch208/docs-madonna](https://github.com/Enoch208/docs-madonna) and is published through Mintlify.

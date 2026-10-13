@@ -1,0 +1,54 @@
+---
+title: "Public read SDK"
+description: "Read campaigns, receipts, graphs, and system status with validated TypeScript inputs and outputs."
+---
+
+`@spoke/sdk` is a **workspace package in the Spoke repository**. It is not currently presented as a published npm package. Use it within the monorepo, inspect its source for your integration, or use the public HTTP API directly.
+
+## Read a receipt
+
+```ts
+import { createSpokeClient, SpokeApiError } from "@spoke/sdk";
+
+const spoke = createSpokeClient({
+  baseUrl: "https://api.usespoke.xyz",
+});
+
+try {
+  const receipt = await spoke.read("receipts.get", {
+    saleId: "4",
+    chainId: 10143,
+  });
+  console.log(receipt);
+} catch (error) {
+  if (error instanceof SpokeApiError) {
+    console.error(error.code, error.requestId, error.retryable);
+  } else {
+    throw error;
+  }
+}
+```
+
+Pass the API **origin**, not a method path. The SDK maps method names to `/v1` routes, validates inputs, and validates the returned envelope and data.
+
+## Keep indexing metadata
+
+```ts
+const result = await spoke.readEnvelope("receipts.get", {
+  saleId: "4",
+  chainId: 10143,
+});
+
+console.log(result.chainId, result.blockNumber, result.indexingStatus);
+console.log(result.data);
+```
+
+Use the envelope when your interface needs to explain freshness or compare a receipt against a specific chain deployment.
+
+## Scope
+
+The SDK exports **32 public read methods** covering campaigns, products, merchants, links, graphs, checkout previews, receipts, distributor profiles, networks, tokens, and system information. It uses a 10-second request timeout and omits browser credentials.
+
+It does not sign transactions, maintain authenticated sessions, issue claims, or implement a production write/widget integration. Those extensions remain separate work.
+
+For the exact method list and implementation, read [packages/sdk](https://github.com/Enoch208/spoke/tree/main/packages/sdk). For HTTP routes and availability, use the [endpoint registry](https://api.usespoke.xyz/v1/system/endpoints).

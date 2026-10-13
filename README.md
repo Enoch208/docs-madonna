@@ -1,55 +1,41 @@
-# Mintlify Starter Kit
+# Spoke documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+The Mintlify documentation for [Spoke](https://usespoke.xyz), an open distribution protocol on Monad. This repository is connected to Mintlify for publishing from `main`.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+The site contains product explanations, merchant/distributor/buyer guides, real testnet screenshots, architecture diagrams, developer setup, API and contract references, deployment evidence, and a phased roadmap.
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+## Preview and validate
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
-
-## AI-assisted writing
-
-Set up your AI coding tool to work with Mintlify:
+Use Node.js 24 or later and the official [Mintlify CLI](https://www.mintlify.com/docs/installation):
 
 ```bash
-npx skills add https://mintlify.com/docs
+npm install -g mint
+mint dev --no-open
+mint validate
+mint broken-links --check-anchors
+mint a11y
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+The local preview defaults to `http://localhost:3000`. Configuration and navigation live in `docs.json`; pages are MDX files with title and description frontmatter. Add every published page to navigation, use root-relative internal links, and store images under `images/`.
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
+## Content map
 
-## Development
+- `index.mdx`, `quickstart.mdx`: introduction and first walkthrough.
+- `concepts/`: graph, policy math, settlement, and earnings.
+- `guides/`: user journeys, accounts, environments, funding, and troubleshooting.
+- `developers/`: architecture, setup, indexing, API, authentication, SDK, and contracts.
+- `project/`: implemented scope, public proof, roadmap, and glossary.
+- `images/screenshots/`: unmodified captures of the deployed testnet application.
+- `images/brand/`, `logo/`: Spoke brand assets and header lockups.
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+## Keep documentation accurate
 
-```
-npm i -g mint
-```
+The current settlement deployment uses Monad Testnet and non-redeemable SDUSD. Keep Live, Demo, disabled optional integrations, and roadmap items clearly labeled. Never describe scripted fixture transactions as customer revenue, source verification as an audit, or a planned route as a live service.
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+Verify API claims against the [shared protocol schemas](https://github.com/Enoch208/spoke/tree/main/packages/protocol/src/api) and [live registry](https://api.usespoke.xyz/v1/system/endpoints). Date release-specific status claims. Preserve private keys, sessions, provider credentials, private files, and internal planning material outside this public repository.
 
-```
-mint dev
-```
+Screenshots were captured on 13 October 2026 from the hosted testnet application. They are illustrative views of scripted demonstrations; live chain heights, times, and balances can change.
 
-View your local preview at `http://localhost:3000`.
+## Source
 
-## Publishing changes
-
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+Application and contracts: [Enoch208/spoke](https://github.com/Enoch208/spoke). Documentation: [Enoch208/docs-madonna](https://github.com/Enoch208/docs-madonna).

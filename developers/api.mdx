@@ -6,7 +6,7 @@ description: "Use the versioned HTTP API, discover available methods, and handle
 The public API base is **`https://api.usespoke.xyz/v1`**. Client methods share Zod input and output schemas with the frontend. Routes, authentication requirements, and availability are published through the [endpoint registry](https://api.usespoke.xyz/v1/system/endpoints).
 
 <Note>
-  At the documented release, the contract defines **189 client methods**: **135
+  At the documented release, the contract defines **194 client methods**: **140
   core live methods**, **4 optional Aurora funding methods**, and **50 designed
   but unavailable methods**. A method appearing in the registry does not mean it
   is enabled. Unavailable methods return `FEATURE_NOT_AVAILABLE`.
@@ -89,7 +89,7 @@ Product and policy versions are checked. Handle `PRODUCT_VERSION_MISMATCH` or `P
 | POST   | `/funding/aurora/deposits`     | Session; idempotency uses `requestId` |
 | GET    | `/funding/aurora/deposits/:id` | Owning session                        |
 
-The current provider configuration is disabled. Read [wallet funding](/guides/wallet-funding) before integrating; mainnet USDC never credits testnet checkout.
+The hosted provider integration is configured. Read [wallet funding](/guides/wallet-funding) before integrating; mainnet USDC never credits testnet checkout.
 
 ## Money and identifiers
 
@@ -127,4 +127,4 @@ The [error definitions](https://github.com/Enoch208/spoke/blob/main/packages/pro
 
 ## Complete field-level reference
 
-The earlier tables are a quick entry point. The [complete client reference](/reference/overview) covers every one of the 189 methods with typed field tables, input/output schema projections, availability labels, and pinned source links. The [HTTP transport guide](/developers/http-transport) explains request serialization; the [checkout integration guide](/developers/checkout-integration) explains the multi-step purchase flow.
+The earlier tables are a quick entry point. The [complete client reference](/reference/overview) covers every one of the 194 methods with typed field tables, input/output schema projections, availability labels, and pinned source links. The [HTTP transport guide](/developers/http-transport) explains request serialization; the [checkout integration guide](/developers/checkout-integration) explains the multi-step purchase flow.

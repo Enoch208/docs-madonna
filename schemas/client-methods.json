@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "1c90c5e408592d5b4e87944ea79b998890633249",
+  "sourceCommit": "2e8a48d31ca861a44821671a50cd23b66b50769b",
   "description": "Structural JSON Schema projections of the shared Zod client contract. Custom refinements, transforms, binary values, and runtime authorization require the original Zod schemas and server implementation. Inputs are client method objects before HTTP transport mapping.",
   "methods": [
     {
@@ -77,7 +77,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L120"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L121"
     },
     {
       "name": "auth.verify",
@@ -201,7 +201,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L121"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L122"
     },
     {
       "name": "auth.signOut",
@@ -232,7 +232,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L129"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L130"
     },
     {
       "name": "account.me",
@@ -742,7 +742,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L130"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L131"
     },
     {
       "name": "account.updateProfile",
@@ -1293,7 +1293,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L131"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L132"
     },
     {
       "name": "account.handleAvailable",
@@ -1358,7 +1358,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L132"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L133"
     },
     {
       "name": "account.activity",
@@ -1514,7 +1514,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L133"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L134"
     },
     {
       "name": "account.balances",
@@ -1579,7 +1579,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L137"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L138"
     },
     {
       "name": "account.recordRecoveryCheck",
@@ -1611,7 +1611,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L138"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L139"
     },
     {
       "name": "account.passkeys",
@@ -1686,7 +1686,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L139"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L140"
     },
     {
       "name": "account.addPasskey",
@@ -1843,7 +1843,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L140"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L141"
     },
     {
       "name": "account.updatePasskey",
@@ -1929,7 +1929,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L150"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L151"
     },
     {
       "name": "account.removePasskey",
@@ -1974,7 +1974,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L154"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L155"
     },
     {
       "name": "account.passkeyVault",
@@ -2045,7 +2045,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L155"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L156"
     },
     {
       "name": "account.wallets",
@@ -2126,7 +2126,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L156"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L157"
     },
     {
       "name": "account.linkWallet",
@@ -2248,7 +2248,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L157"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L158"
     },
     {
       "name": "account.unlinkWallet",
@@ -2292,7 +2292,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L168"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L169"
     },
     {
       "name": "account.labelWallet",
@@ -2382,7 +2382,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L169"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L170"
     },
     {
       "name": "account.setPayoutAddress",
@@ -2473,7 +2473,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L170"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L171"
     },
     {
       "name": "account.sessions",
@@ -2545,7 +2545,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L171"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L172"
     },
     {
       "name": "account.revokeSession",
@@ -2604,7 +2604,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L172"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L173"
     },
     {
       "name": "account.preferences",
@@ -2671,7 +2671,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L179"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L180"
     },
     {
       "name": "account.updatePreferences",
@@ -2775,7 +2775,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L180"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L181"
     },
     {
       "name": "account.exportData",
@@ -2838,7 +2838,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L181"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L182"
     },
     {
       "name": "account.deleteAccount",
@@ -2882,7 +2882,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L182"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L183"
     },
     {
       "name": "funding.status",
@@ -3072,7 +3072,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L186"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L187"
     },
     {
       "name": "funding.requestGas",
@@ -3107,7 +3107,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L187"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L188"
     },
     {
       "name": "funding.auroraConfig",
@@ -3224,7 +3224,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L188"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L189"
     },
     {
       "name": "funding.auroraPreview",
@@ -3428,7 +3428,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L189"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L190"
     },
     {
       "name": "funding.auroraCreateDeposit",
@@ -3580,6 +3580,9 @@
           "deadline": {
             "$ref": "#/$defs/__schema3"
           },
+          "providerDeadline": {
+            "$ref": "#/$defs/__schema3"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -3748,7 +3751,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L190"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L191"
     },
     {
       "name": "funding.auroraDeposit",
@@ -3852,6 +3855,9 @@
           "deadline": {
             "$ref": "#/$defs/__schema3"
           },
+          "providerDeadline": {
+            "$ref": "#/$defs/__schema3"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -4020,7 +4026,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L191"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L192"
     },
     {
       "name": "notifications.list",
@@ -4141,7 +4147,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L192"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L193"
     },
     {
       "name": "notifications.markRead",
@@ -4207,7 +4213,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L196"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L197"
     },
     {
       "name": "notifications.preferences",
@@ -4263,7 +4269,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L203"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L204"
     },
     {
       "name": "notifications.updatePreferences",
@@ -4344,7 +4350,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L204"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L205"
     },
     {
       "name": "campaigns.list",
@@ -4831,7 +4837,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L208"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L209"
     },
     {
       "name": "campaigns.get",
@@ -5593,7 +5599,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L212"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L213"
     },
     {
       "name": "campaigns.policy",
@@ -5812,7 +5818,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L213"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L214"
     },
     {
       "name": "campaigns.stats",
@@ -5936,7 +5942,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L214"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L215"
     },
     {
       "name": "campaigns.activity",
@@ -5992,6 +5998,12 @@
             "items": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "nodeId": {
+                  "$ref": "#/$defs/__schema0"
+                },
                 "kind": {
                   "type": "string",
                   "enum": [
@@ -6054,7 +6066,7 @@
                 "amount": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema0"
+                      "$ref": "#/$defs/__schema1"
                     },
                     {
                       "type": "null"
@@ -6069,7 +6081,7 @@
                       "pattern": "^0x[0-9a-fA-F]{64}$"
                     },
                     "blockNumber": {
-                      "$ref": "#/$defs/__schema0"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "explorerUrl": {
                       "anyOf": [
@@ -6083,7 +6095,7 @@
                       ]
                     },
                     "at": {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema2"
                     }
                   },
                   "required": [
@@ -6094,18 +6106,10 @@
                   "additionalProperties": false
                 },
                 "at": {
-                  "$ref": "#/$defs/__schema1"
+                  "$ref": "#/$defs/__schema2"
                 },
                 "saleId": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/$defs/__schema0"
-                    },
-                    {
-                      "type": "string",
-                      "pattern": "^demo-[\\w-]+$"
-                    }
-                  ]
+                  "$ref": "#/$defs/__schema0"
                 }
               },
               "required": [
@@ -6123,6 +6127,72 @@
               "string",
               "null"
             ]
+          },
+          "growth": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "totalLinks": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "newLinks": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "purchases": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "finalized": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "refunded": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "day",
+                "totalLinks",
+                "newLinks",
+                "purchases",
+                "finalized",
+                "refunded"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "indexedBlock": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema1"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "indexedAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -6132,16 +6202,27 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string"
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema1"
+              },
+              {
+                "type": "string",
+                "pattern": "^demo-[\\w-]+$"
+              }
+            ]
           },
           "__schema1": {
+            "type": "string"
+          },
+          "__schema2": {
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L215"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L216"
     },
     {
       "name": "campaigns.mine",
@@ -6530,7 +6611,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L216"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L217"
     },
     {
       "name": "campaigns.saveDraft",
@@ -7050,7 +7131,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L222"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L223"
     },
     {
       "name": "campaigns.getDraft",
@@ -7296,7 +7377,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L223"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L224"
     },
     {
       "name": "campaigns.deleteDraft",
@@ -7336,7 +7417,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L224"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L225"
     },
     {
       "name": "campaigns.prepareCreate",
@@ -7627,7 +7708,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L225"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L226"
     },
     {
       "name": "campaigns.updateSettings",
@@ -7681,7 +7762,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L226"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L227"
     },
     {
       "name": "campaigns.distributors",
@@ -7866,7 +7947,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L230"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L231"
     },
     {
       "name": "products.list",
@@ -8219,7 +8300,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L234"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L235"
     },
     {
       "name": "products.get",
@@ -8547,7 +8628,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L238"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L239"
     },
     {
       "name": "products.save",
@@ -8991,7 +9072,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L239"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L240"
     },
     {
       "name": "products.uploadAsset",
@@ -9074,7 +9155,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L240"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L241"
     },
     {
       "name": "products.categories",
@@ -9111,7 +9192,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L241"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L242"
     },
     {
       "name": "merchants.get",
@@ -9285,7 +9366,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L242"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L243"
     },
     {
       "name": "merchants.record",
@@ -9391,7 +9472,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L243"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L244"
     },
     {
       "name": "merchants.me",
@@ -9705,7 +9786,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L244"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L245"
     },
     {
       "name": "merchants.setup",
@@ -10104,7 +10185,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L245"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L246"
     },
     {
       "name": "merchants.update",
@@ -10492,7 +10573,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L246"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L247"
     },
     {
       "name": "merchants.slugAvailable",
@@ -10551,7 +10632,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L247"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L248"
     },
     {
       "name": "merchants.uploadLogo",
@@ -10617,7 +10698,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L255"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L256"
     },
     {
       "name": "merchants.requestVerification",
@@ -10685,7 +10766,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L259"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L260"
     },
     {
       "name": "merchants.close",
@@ -10728,7 +10809,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L266"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L267"
     },
     {
       "name": "merchants.offers",
@@ -11146,7 +11227,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L267"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L268"
     },
     {
       "name": "links.mine",
@@ -11694,7 +11775,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L271"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L272"
     },
     {
       "name": "links.get",
@@ -12316,7 +12397,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L272"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L273"
     },
     {
       "name": "links.resolveCode",
@@ -12545,7 +12626,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L273"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L274"
     },
     {
       "name": "links.recordOpen",
@@ -12582,7 +12663,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L274"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L275"
     },
     {
       "name": "links.previewJoin",
@@ -12987,7 +13068,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L275"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L276"
     },
     {
       "name": "links.stats",
@@ -13162,7 +13243,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L276"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L277"
     },
     {
       "name": "graph.forCampaign",
@@ -13532,7 +13613,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L277"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L278"
     },
     {
       "name": "graph.mine",
@@ -13891,7 +13972,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L278"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L279"
     },
     {
       "name": "graph.ancestry",
@@ -14181,7 +14262,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L279"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L280"
     },
     {
       "name": "graph.salePath",
@@ -14421,7 +14502,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L283"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L284"
     },
     {
       "name": "graph.search",
@@ -14698,7 +14779,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L293"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L294"
     },
     {
       "name": "graph.export",
@@ -14847,7 +14928,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L294"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L295"
     },
     {
       "name": "checkout.preview",
@@ -15262,7 +15343,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L305"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L306"
     },
     {
       "name": "checkout.createIntent",
@@ -15469,7 +15550,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L309"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L310"
     },
     {
       "name": "checkout.getIntent",
@@ -15629,7 +15710,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L313"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L314"
     },
     {
       "name": "checkout.attachTransaction",
@@ -15794,7 +15875,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L314"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L315"
     },
     {
       "name": "receipts.get",
@@ -16211,7 +16292,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L315"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L316"
     },
     {
       "name": "receipts.events",
@@ -16395,7 +16476,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L316"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L317"
     },
     {
       "name": "receipts.verify",
@@ -16840,7 +16921,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L317"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L318"
     },
     {
       "name": "receipts.recent",
@@ -17331,7 +17412,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L327"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L328"
     },
     {
       "name": "receipts.forBuyer",
@@ -17596,7 +17677,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L328"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L329"
     },
     {
       "name": "receipts.forMerchant",
@@ -17926,7 +18007,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L332"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L333"
     },
     {
       "name": "receipts.forCampaign",
@@ -18224,7 +18305,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L336"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L337"
     },
     {
       "name": "fulfillment.access",
@@ -18327,7 +18408,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L340"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L341"
     },
     {
       "name": "earnings.summary",
@@ -18456,7 +18537,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L341"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L342"
     },
     {
       "name": "earnings.byCampaign",
@@ -18655,7 +18736,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L342"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L343"
     },
     {
       "name": "earnings.byConversion",
@@ -18934,7 +19015,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L343"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L344"
     },
     {
       "name": "earnings.missed",
@@ -19210,7 +19291,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L344"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L345"
     },
     {
       "name": "earnings.claimable",
@@ -19465,7 +19546,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L345"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L346"
     },
     {
       "name": "earnings.claims",
@@ -19619,7 +19700,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L346"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L347"
     },
     {
       "name": "vault.get",
@@ -19845,7 +19926,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L347"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L348"
     },
     {
       "name": "vault.movements",
@@ -20041,7 +20122,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L348"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L349"
     },
     {
       "name": "reputation.get",
@@ -20077,20 +20158,23 @@
           {
             "type": "object",
             "properties": {
-              "subject": {
+              "passport": {
                 "$ref": "#/$defs/__schema0"
               },
+              "subject": {
+                "$ref": "#/$defs/__schema7"
+              },
               "handle": {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema8"
               },
               "displayName": {
-                "$ref": "#/$defs/__schema3"
+                "$ref": "#/$defs/__schema9"
               },
               "methodologyVersion": {
-                "$ref": "#/$defs/__schema4"
+                "$ref": "#/$defs/__schema10"
               },
               "evidencePeriod": {
-                "$ref": "#/$defs/__schema5"
+                "$ref": "#/$defs/__schema11"
               },
               "settledConversions": {
                 "anyOf": [
@@ -20131,7 +20215,7 @@
               "netAttributedValue": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema7"
+                    "$ref": "#/$defs/__schema2"
                   },
                   {
                     "type": "null"
@@ -20141,7 +20225,7 @@
               "settledCommission": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema7"
+                    "$ref": "#/$defs/__schema2"
                   },
                   {
                     "type": "null"
@@ -20149,7 +20233,7 @@
                 ]
               },
               "median": {
-                "$ref": "#/$defs/__schema8"
+                "$ref": "#/$defs/__schema12"
               },
               "merchantCount": {
                 "anyOf": [
@@ -20178,7 +20262,7 @@
               "refundAdjustment": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema7"
+                    "$ref": "#/$defs/__schema2"
                   },
                   {
                     "type": "null"
@@ -20186,28 +20270,28 @@
                 ]
               },
               "lastIndexedBlock": {
-                "$ref": "#/$defs/__schema9"
+                "$ref": "#/$defs/__schema13"
               },
               "verificationTier": {
-                "$ref": "#/$defs/__schema10"
+                "$ref": "#/$defs/__schema14"
               },
               "evidence": {
-                "$ref": "#/$defs/__schema11"
+                "$ref": "#/$defs/__schema15"
               },
               "perMerchant": {
-                "$ref": "#/$defs/__schema18"
+                "$ref": "#/$defs/__schema20"
               },
               "perCampaign": {
-                "$ref": "#/$defs/__schema25"
-              },
-              "perCategory": {
-                "$ref": "#/$defs/__schema26"
-              },
-              "period": {
                 "$ref": "#/$defs/__schema27"
               },
-              "totalsByToken": {
+              "perCategory": {
                 "$ref": "#/$defs/__schema28"
+              },
+              "period": {
+                "$ref": "#/$defs/__schema29"
+              },
+              "totalsByToken": {
+                "$ref": "#/$defs/__schema30"
               },
               "pendingConversions": {
                 "anyOf": [
@@ -20222,10 +20306,10 @@
                 ]
               },
               "visibility": {
-                "$ref": "#/$defs/__schema29"
+                "$ref": "#/$defs/__schema31"
               },
               "acceptsInvitations": {
-                "$ref": "#/$defs/__schema30"
+                "$ref": "#/$defs/__schema32"
               },
               "visibleFields": {
                 "type": "array",
@@ -20272,20 +20356,23 @@
           {
             "type": "object",
             "properties": {
-              "subject": {
+              "passport": {
                 "$ref": "#/$defs/__schema0"
               },
+              "subject": {
+                "$ref": "#/$defs/__schema7"
+              },
               "handle": {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema8"
               },
               "displayName": {
-                "$ref": "#/$defs/__schema3"
+                "$ref": "#/$defs/__schema9"
               },
               "methodologyVersion": {
-                "$ref": "#/$defs/__schema4"
+                "$ref": "#/$defs/__schema10"
               },
               "evidencePeriod": {
-                "$ref": "#/$defs/__schema5"
+                "$ref": "#/$defs/__schema11"
               },
               "settledConversions": {
                 "type": "integer",
@@ -20303,13 +20390,13 @@
                 "maximum": 9007199254740991
               },
               "netAttributedValue": {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               "settledCommission": {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               "median": {
-                "$ref": "#/$defs/__schema8"
+                "$ref": "#/$defs/__schema12"
               },
               "merchantCount": {
                 "type": "integer",
@@ -20322,31 +20409,31 @@
                 "maximum": 9007199254740991
               },
               "refundAdjustment": {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               "lastIndexedBlock": {
-                "$ref": "#/$defs/__schema9"
+                "$ref": "#/$defs/__schema13"
               },
               "verificationTier": {
-                "$ref": "#/$defs/__schema10"
+                "$ref": "#/$defs/__schema14"
               },
               "evidence": {
-                "$ref": "#/$defs/__schema11"
+                "$ref": "#/$defs/__schema15"
               },
               "perMerchant": {
-                "$ref": "#/$defs/__schema18"
+                "$ref": "#/$defs/__schema20"
               },
               "perCampaign": {
-                "$ref": "#/$defs/__schema25"
-              },
-              "perCategory": {
-                "$ref": "#/$defs/__schema26"
-              },
-              "period": {
                 "$ref": "#/$defs/__schema27"
               },
-              "totalsByToken": {
+              "perCategory": {
                 "$ref": "#/$defs/__schema28"
+              },
+              "period": {
+                "$ref": "#/$defs/__schema29"
+              },
+              "totalsByToken": {
+                "$ref": "#/$defs/__schema30"
               },
               "pendingConversions": {
                 "type": "integer",
@@ -20354,10 +20441,10 @@
                 "maximum": 9007199254740991
               },
               "visibility": {
-                "$ref": "#/$defs/__schema29"
+                "$ref": "#/$defs/__schema31"
               },
               "acceptsInvitations": {
-                "$ref": "#/$defs/__schema30"
+                "$ref": "#/$defs/__schema32"
               }
             },
             "required": [
@@ -20404,7 +20491,138 @@
           "__schema0": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema1"
+                "type": "object",
+                "properties": {
+                  "history": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "month": {
+                          "type": "string",
+                          "pattern": "^\\d{4}-\\d{2}$"
+                        },
+                        "direct": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "network": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "receiptIds": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/__schema1"
+                          }
+                        }
+                      },
+                      "required": [
+                        "month",
+                        "direct",
+                        "network",
+                        "receiptIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "positions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "campaignId": {
+                          "$ref": "#/$defs/__schema1"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "merchant": {
+                          "$ref": "#/$defs/__schema3"
+                        },
+                        "nodeId": {
+                          "$ref": "#/$defs/__schema1"
+                        },
+                        "parentNodeId": {
+                          "$ref": "#/$defs/__schema1"
+                        },
+                        "joinedAt": {
+                          "$ref": "#/$defs/__schema5"
+                        },
+                        "direct": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "network": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "receiptIds": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/__schema1"
+                          }
+                        }
+                      },
+                      "required": [
+                        "campaignId",
+                        "title",
+                        "merchant",
+                        "nodeId",
+                        "parentNodeId",
+                        "joinedAt",
+                        "direct",
+                        "network",
+                        "receiptIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "rewards": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "token": {
+                            "$ref": "#/$defs/__schema6"
+                          },
+                          "claimable": {
+                            "$ref": "#/$defs/__schema2"
+                          },
+                          "claimed": {
+                            "$ref": "#/$defs/__schema2"
+                          },
+                          "receiptIds": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/__schema1"
+                            }
+                          }
+                        },
+                        "required": [
+                          "token",
+                          "claimable",
+                          "claimed",
+                          "receiptIds"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "history",
+                  "positions",
+                  "rewards"
+                ],
+                "additionalProperties": false
               },
               {
                 "type": "null"
@@ -20412,31 +20630,130 @@
             ]
           },
           "__schema1": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "string",
+                "pattern": "^demo-[\\w-]+$"
+              }
+            ]
+          },
+          "__schema2": {
+            "type": "string"
+          },
+          "__schema3": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema4"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "displayName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "pseudonymous",
+                  "private"
+                ]
+              }
+            },
+            "required": [
+              "address",
+              "handle",
+              "displayName",
+              "visibility"
+            ],
+            "additionalProperties": false
+          },
+          "__schema4": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{40}$"
           },
-          "__schema2": {
+          "__schema5": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "__schema6": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              },
+              "name": {
+                "type": "string"
+              },
+              "testnet": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "address",
+              "symbol",
+              "decimals"
+            ],
+            "additionalProperties": false
+          },
+          "__schema7": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema4"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "__schema8": {
             "type": [
               "string",
               "null"
             ]
           },
-          "__schema3": {
+          "__schema9": {
             "type": [
               "string",
               "null"
             ]
           },
-          "__schema4": {
+          "__schema10": {
             "type": "string"
           },
-          "__schema5": {
+          "__schema11": {
             "type": "object",
             "properties": {
               "from": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema6"
+                    "$ref": "#/$defs/__schema5"
                   },
                   {
                     "type": "null"
@@ -20446,7 +20763,7 @@
               "to": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema6"
+                    "$ref": "#/$defs/__schema5"
                   },
                   {
                     "type": "null"
@@ -20460,38 +20777,30 @@
             ],
             "additionalProperties": false
           },
-          "__schema6": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
-          },
-          "__schema7": {
-            "type": "string"
-          },
-          "__schema8": {
+          "__schema12": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               {
                 "type": "null"
               }
             ]
           },
-          "__schema9": {
+          "__schema13": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               {
                 "type": "null"
               }
             ]
           },
-          "__schema10": {
+          "__schema14": {
             "type": "string"
           },
-          "__schema11": {
+          "__schema15": {
             "type": "object",
             "properties": {
               "items": {
@@ -20500,10 +20809,10 @@
                   "type": "object",
                   "properties": {
                     "saleId": {
-                      "$ref": "#/$defs/__schema12"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "campaignId": {
-                      "$ref": "#/$defs/__schema12"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "chainId": {
                       "type": "integer",
@@ -20511,12 +20820,12 @@
                       "maximum": 9007199254740991
                     },
                     "contractAddress": {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema4"
                     },
                     "buyer": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema1"
+                          "$ref": "#/$defs/__schema4"
                         },
                         {
                           "type": "null"
@@ -20524,13 +20833,13 @@
                       ]
                     },
                     "nodeId": {
-                      "$ref": "#/$defs/__schema12"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "orderKey": {
-                      "$ref": "#/$defs/__schema13"
+                      "$ref": "#/$defs/__schema16"
                     },
                     "policyHash": {
-                      "$ref": "#/$defs/__schema13"
+                      "$ref": "#/$defs/__schema16"
                     },
                     "policyVersion": {
                       "type": "integer",
@@ -20553,13 +20862,13 @@
                       ]
                     },
                     "price": {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     "rewardReserved": {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     "token": {
-                      "$ref": "#/$defs/__schema14"
+                      "$ref": "#/$defs/__schema6"
                     },
                     "state": {
                       "type": "string",
@@ -20570,16 +20879,16 @@
                       ]
                     },
                     "purchasedAt": {
-                      "$ref": "#/$defs/__schema6"
+                      "$ref": "#/$defs/__schema5"
                     },
                     "unlockAt": {
-                      "$ref": "#/$defs/__schema6"
+                      "$ref": "#/$defs/__schema5"
                     },
                     "allocations": {
                       "maxItems": 8,
                       "type": "array",
                       "items": {
-                        "$ref": "#/$defs/__schema15"
+                        "$ref": "#/$defs/__schema17"
                       }
                     },
                     "proceedsState": {
@@ -20592,12 +20901,12 @@
                       ]
                     },
                     "purchaseTx": {
-                      "$ref": "#/$defs/__schema16"
+                      "$ref": "#/$defs/__schema18"
                     },
                     "finalizeTx": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema16"
+                          "$ref": "#/$defs/__schema18"
                         },
                         {
                           "type": "null"
@@ -20607,7 +20916,7 @@
                     "refundTx": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema16"
+                          "$ref": "#/$defs/__schema18"
                         },
                         {
                           "type": "null"
@@ -20615,7 +20924,7 @@
                       ]
                     },
                     "indexedBlock": {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     "timeline": {
                       "type": "array",
@@ -20626,10 +20935,10 @@
                             "type": "string"
                           },
                           "at": {
-                            "$ref": "#/$defs/__schema6"
+                            "$ref": "#/$defs/__schema5"
                           },
                           "tx": {
-                            "$ref": "#/$defs/__schema16"
+                            "$ref": "#/$defs/__schema18"
                           }
                         },
                         "required": [
@@ -20646,13 +20955,13 @@
                           "type": "object",
                           "properties": {
                             "disputeId": {
-                              "$ref": "#/$defs/__schema17"
+                              "$ref": "#/$defs/__schema19"
                             },
                             "status": {
                               "type": "string"
                             },
                             "createdAt": {
-                              "$ref": "#/$defs/__schema6"
+                              "$ref": "#/$defs/__schema5"
                             }
                           },
                           "required": [
@@ -20710,93 +21019,15 @@
             ],
             "additionalProperties": false
           },
-          "__schema12": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/__schema7"
-              },
-              {
-                "type": "string",
-                "pattern": "^demo-[\\w-]+$"
-              }
-            ]
-          },
-          "__schema13": {
+          "__schema16": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{64}$"
           },
-          "__schema14": {
-            "type": "object",
-            "properties": {
-              "address": {
-                "$ref": "#/$defs/__schema1"
-              },
-              "symbol": {
-                "type": "string"
-              },
-              "decimals": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 36
-              },
-              "name": {
-                "type": "string"
-              },
-              "testnet": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "address",
-              "symbol",
-              "decimals"
-            ],
-            "additionalProperties": false
-          },
-          "__schema15": {
+          "__schema17": {
             "type": "object",
             "properties": {
               "recipient": {
-                "type": "object",
-                "properties": {
-                  "address": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/$defs/__schema1"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "handle": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "displayName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "visibility": {
-                    "type": "string",
-                    "enum": [
-                      "public",
-                      "pseudonymous",
-                      "private"
-                    ]
-                  }
-                },
-                "required": [
-                  "address",
-                  "handle",
-                  "displayName",
-                  "visibility"
-                ],
-                "additionalProperties": false
+                "$ref": "#/$defs/__schema3"
               },
               "level": {
                 "type": "integer",
@@ -20809,7 +21040,7 @@
                 "maximum": 10000
               },
               "amount": {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               "state": {
                 "type": "string",
@@ -20824,7 +21055,7 @@
               "claimTx": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema16"
+                    "$ref": "#/$defs/__schema18"
                   },
                   {
                     "type": "null"
@@ -20842,14 +21073,14 @@
             ],
             "additionalProperties": false
           },
-          "__schema16": {
+          "__schema18": {
             "type": "object",
             "properties": {
               "hash": {
-                "$ref": "#/$defs/__schema13"
+                "$ref": "#/$defs/__schema16"
               },
               "blockNumber": {
-                "$ref": "#/$defs/__schema7"
+                "$ref": "#/$defs/__schema2"
               },
               "explorerUrl": {
                 "anyOf": [
@@ -20863,7 +21094,7 @@
                 ]
               },
               "at": {
-                "$ref": "#/$defs/__schema6"
+                "$ref": "#/$defs/__schema5"
               }
             },
             "required": [
@@ -20873,42 +21104,42 @@
             ],
             "additionalProperties": false
           },
-          "__schema17": {
+          "__schema19": {
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
             "pattern": "^[a-zA-Z0-9_-]+$"
           },
-          "__schema18": {
+          "__schema20": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema19"
-                },
-                "settledCommission": {
-                  "$ref": "#/$defs/__schema20"
-                },
-                "refunded": {
                   "$ref": "#/$defs/__schema21"
                 },
-                "levels": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema22"
                 },
-                "lastSettledAt": {
+                "refunded": {
                   "$ref": "#/$defs/__schema23"
                 },
-                "token": {
+                "levels": {
                   "$ref": "#/$defs/__schema24"
                 },
+                "lastSettledAt": {
+                  "$ref": "#/$defs/__schema25"
+                },
+                "token": {
+                  "$ref": "#/$defs/__schema26"
+                },
                 "merchantId": {
-                  "$ref": "#/$defs/__schema17"
+                  "$ref": "#/$defs/__schema19"
                 },
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema12"
+                    "$ref": "#/$defs/__schema1"
                   }
                 },
                 "settledConversions": {
@@ -20925,18 +21156,18 @@
               "additionalProperties": false
             }
           },
-          "__schema19": {
+          "__schema21": {
             "type": "string"
           },
-          "__schema20": {
-            "$ref": "#/$defs/__schema7"
+          "__schema22": {
+            "$ref": "#/$defs/__schema2"
           },
-          "__schema21": {
+          "__schema23": {
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991
           },
-          "__schema22": {
+          "__schema24": {
             "type": "array",
             "items": {
               "type": "object",
@@ -20959,49 +21190,49 @@
               "additionalProperties": false
             }
           },
-          "__schema23": {
+          "__schema25": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema6"
+                "$ref": "#/$defs/__schema5"
               },
               {
                 "type": "null"
               }
             ]
           },
-          "__schema24": {
-            "$ref": "#/$defs/__schema14"
+          "__schema26": {
+            "$ref": "#/$defs/__schema6"
           },
-          "__schema25": {
+          "__schema27": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema19"
-                },
-                "settledCommission": {
-                  "$ref": "#/$defs/__schema20"
-                },
-                "refunded": {
                   "$ref": "#/$defs/__schema21"
                 },
-                "levels": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema22"
                 },
-                "lastSettledAt": {
+                "refunded": {
                   "$ref": "#/$defs/__schema23"
                 },
-                "token": {
+                "levels": {
                   "$ref": "#/$defs/__schema24"
                 },
+                "lastSettledAt": {
+                  "$ref": "#/$defs/__schema25"
+                },
+                "token": {
+                  "$ref": "#/$defs/__schema26"
+                },
                 "campaignId": {
-                  "$ref": "#/$defs/__schema12"
+                  "$ref": "#/$defs/__schema1"
                 },
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema12"
+                    "$ref": "#/$defs/__schema1"
                   }
                 },
                 "settledConversions": {
@@ -21018,28 +21249,28 @@
               "additionalProperties": false
             }
           },
-          "__schema26": {
+          "__schema28": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema19"
-                },
-                "settledCommission": {
-                  "$ref": "#/$defs/__schema20"
-                },
-                "refunded": {
                   "$ref": "#/$defs/__schema21"
                 },
-                "levels": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema22"
                 },
-                "lastSettledAt": {
+                "refunded": {
                   "$ref": "#/$defs/__schema23"
                 },
-                "token": {
+                "levels": {
                   "$ref": "#/$defs/__schema24"
+                },
+                "lastSettledAt": {
+                  "$ref": "#/$defs/__schema25"
+                },
+                "token": {
+                  "$ref": "#/$defs/__schema26"
                 },
                 "category": {
                   "type": "string"
@@ -21047,7 +21278,7 @@
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema12"
+                    "$ref": "#/$defs/__schema1"
                   }
                 },
                 "settledConversions": {
@@ -21064,7 +21295,7 @@
               "additionalProperties": false
             }
           },
-          "__schema27": {
+          "__schema29": {
             "type": "string",
             "enum": [
               "all",
@@ -21072,18 +21303,18 @@
               "30d"
             ]
           },
-          "__schema28": {
+          "__schema30": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "token": {
-                  "$ref": "#/$defs/__schema14"
+                  "$ref": "#/$defs/__schema6"
                 },
                 "netAttributedValue": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     {
                       "type": "null"
@@ -21093,7 +21324,7 @@
                 "settledCommission": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     {
                       "type": "null"
@@ -21103,7 +21334,7 @@
                 "refundAdjustment": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema2"
                     },
                     {
                       "type": "null"
@@ -21120,7 +21351,7 @@
               "additionalProperties": false
             }
           },
-          "__schema29": {
+          "__schema31": {
             "type": "string",
             "enum": [
               "public",
@@ -21128,12 +21359,12 @@
               "private"
             ]
           },
-          "__schema30": {
+          "__schema32": {
             "type": "boolean"
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L352"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L353"
     },
     {
       "name": "reputation.mine",
@@ -21154,10 +21385,151 @@
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
         "properties": {
+          "passport": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "history": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "month": {
+                          "type": "string",
+                          "pattern": "^\\d{4}-\\d{2}$"
+                        },
+                        "direct": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "network": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "receiptIds": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/__schema0"
+                          }
+                        }
+                      },
+                      "required": [
+                        "month",
+                        "direct",
+                        "network",
+                        "receiptIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "positions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "campaignId": {
+                          "$ref": "#/$defs/__schema0"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "merchant": {
+                          "$ref": "#/$defs/__schema2"
+                        },
+                        "nodeId": {
+                          "$ref": "#/$defs/__schema0"
+                        },
+                        "parentNodeId": {
+                          "$ref": "#/$defs/__schema0"
+                        },
+                        "joinedAt": {
+                          "$ref": "#/$defs/__schema4"
+                        },
+                        "direct": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "network": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "receiptIds": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/__schema0"
+                          }
+                        }
+                      },
+                      "required": [
+                        "campaignId",
+                        "title",
+                        "merchant",
+                        "nodeId",
+                        "parentNodeId",
+                        "joinedAt",
+                        "direct",
+                        "network",
+                        "receiptIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "rewards": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "token": {
+                            "$ref": "#/$defs/__schema5"
+                          },
+                          "claimable": {
+                            "$ref": "#/$defs/__schema1"
+                          },
+                          "claimed": {
+                            "$ref": "#/$defs/__schema1"
+                          },
+                          "receiptIds": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/$defs/__schema0"
+                            }
+                          }
+                        },
+                        "required": [
+                          "token",
+                          "claimable",
+                          "claimed",
+                          "receiptIds"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "history",
+                  "positions",
+                  "rewards"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "subject": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema0"
+                "$ref": "#/$defs/__schema3"
               },
               {
                 "type": "null"
@@ -21185,7 +21557,7 @@
               "from": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema1"
+                    "$ref": "#/$defs/__schema4"
                   },
                   {
                     "type": "null"
@@ -21195,7 +21567,7 @@
               "to": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema1"
+                    "$ref": "#/$defs/__schema4"
                   },
                   {
                     "type": "null"
@@ -21225,15 +21597,15 @@
             "maximum": 9007199254740991
           },
           "netAttributedValue": {
-            "$ref": "#/$defs/__schema2"
+            "$ref": "#/$defs/__schema1"
           },
           "settledCommission": {
-            "$ref": "#/$defs/__schema2"
+            "$ref": "#/$defs/__schema1"
           },
           "median": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema1"
               },
               {
                 "type": "null"
@@ -21251,12 +21623,12 @@
             "maximum": 9007199254740991
           },
           "refundAdjustment": {
-            "$ref": "#/$defs/__schema2"
+            "$ref": "#/$defs/__schema1"
           },
           "lastIndexedBlock": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema1"
               },
               {
                 "type": "null"
@@ -21275,10 +21647,10 @@
                   "type": "object",
                   "properties": {
                     "saleId": {
-                      "$ref": "#/$defs/__schema3"
+                      "$ref": "#/$defs/__schema0"
                     },
                     "campaignId": {
-                      "$ref": "#/$defs/__schema3"
+                      "$ref": "#/$defs/__schema0"
                     },
                     "chainId": {
                       "type": "integer",
@@ -21286,12 +21658,12 @@
                       "maximum": 9007199254740991
                     },
                     "contractAddress": {
-                      "$ref": "#/$defs/__schema0"
+                      "$ref": "#/$defs/__schema3"
                     },
                     "buyer": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema0"
+                          "$ref": "#/$defs/__schema3"
                         },
                         {
                           "type": "null"
@@ -21299,13 +21671,13 @@
                       ]
                     },
                     "nodeId": {
-                      "$ref": "#/$defs/__schema3"
+                      "$ref": "#/$defs/__schema0"
                     },
                     "orderKey": {
-                      "$ref": "#/$defs/__schema4"
+                      "$ref": "#/$defs/__schema6"
                     },
                     "policyHash": {
-                      "$ref": "#/$defs/__schema4"
+                      "$ref": "#/$defs/__schema6"
                     },
                     "policyVersion": {
                       "type": "integer",
@@ -21328,10 +21700,10 @@
                       ]
                     },
                     "price": {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "rewardReserved": {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "token": {
                       "$ref": "#/$defs/__schema5"
@@ -21345,16 +21717,16 @@
                       ]
                     },
                     "purchasedAt": {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema4"
                     },
                     "unlockAt": {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema4"
                     },
                     "allocations": {
                       "maxItems": 8,
                       "type": "array",
                       "items": {
-                        "$ref": "#/$defs/__schema6"
+                        "$ref": "#/$defs/__schema7"
                       }
                     },
                     "proceedsState": {
@@ -21367,12 +21739,12 @@
                       ]
                     },
                     "purchaseTx": {
-                      "$ref": "#/$defs/__schema7"
+                      "$ref": "#/$defs/__schema8"
                     },
                     "finalizeTx": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema7"
+                          "$ref": "#/$defs/__schema8"
                         },
                         {
                           "type": "null"
@@ -21382,7 +21754,7 @@
                     "refundTx": {
                       "anyOf": [
                         {
-                          "$ref": "#/$defs/__schema7"
+                          "$ref": "#/$defs/__schema8"
                         },
                         {
                           "type": "null"
@@ -21390,7 +21762,7 @@
                       ]
                     },
                     "indexedBlock": {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     "timeline": {
                       "type": "array",
@@ -21401,10 +21773,10 @@
                             "type": "string"
                           },
                           "at": {
-                            "$ref": "#/$defs/__schema1"
+                            "$ref": "#/$defs/__schema4"
                           },
                           "tx": {
-                            "$ref": "#/$defs/__schema7"
+                            "$ref": "#/$defs/__schema8"
                           }
                         },
                         "required": [
@@ -21421,13 +21793,13 @@
                           "type": "object",
                           "properties": {
                             "disputeId": {
-                              "$ref": "#/$defs/__schema8"
+                              "$ref": "#/$defs/__schema9"
                             },
                             "status": {
                               "type": "string"
                             },
                             "createdAt": {
-                              "$ref": "#/$defs/__schema1"
+                              "$ref": "#/$defs/__schema4"
                             }
                           },
                           "required": [
@@ -21491,30 +21863,30 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema9"
-                },
-                "settledCommission": {
                   "$ref": "#/$defs/__schema10"
                 },
-                "refunded": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema11"
                 },
-                "levels": {
+                "refunded": {
                   "$ref": "#/$defs/__schema12"
                 },
-                "lastSettledAt": {
+                "levels": {
                   "$ref": "#/$defs/__schema13"
                 },
-                "token": {
+                "lastSettledAt": {
                   "$ref": "#/$defs/__schema14"
                 },
+                "token": {
+                  "$ref": "#/$defs/__schema15"
+                },
                 "merchantId": {
-                  "$ref": "#/$defs/__schema8"
+                  "$ref": "#/$defs/__schema9"
                 },
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema3"
+                    "$ref": "#/$defs/__schema0"
                   }
                 },
                 "settledConversions": {
@@ -21537,30 +21909,30 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema9"
-                },
-                "settledCommission": {
                   "$ref": "#/$defs/__schema10"
                 },
-                "refunded": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema11"
                 },
-                "levels": {
+                "refunded": {
                   "$ref": "#/$defs/__schema12"
                 },
-                "lastSettledAt": {
+                "levels": {
                   "$ref": "#/$defs/__schema13"
                 },
-                "token": {
+                "lastSettledAt": {
                   "$ref": "#/$defs/__schema14"
                 },
+                "token": {
+                  "$ref": "#/$defs/__schema15"
+                },
                 "campaignId": {
-                  "$ref": "#/$defs/__schema3"
+                  "$ref": "#/$defs/__schema0"
                 },
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema3"
+                    "$ref": "#/$defs/__schema0"
                   }
                 },
                 "settledConversions": {
@@ -21583,22 +21955,22 @@
               "type": "object",
               "properties": {
                 "name": {
-                  "$ref": "#/$defs/__schema9"
-                },
-                "settledCommission": {
                   "$ref": "#/$defs/__schema10"
                 },
-                "refunded": {
+                "settledCommission": {
                   "$ref": "#/$defs/__schema11"
                 },
-                "levels": {
+                "refunded": {
                   "$ref": "#/$defs/__schema12"
                 },
-                "lastSettledAt": {
+                "levels": {
                   "$ref": "#/$defs/__schema13"
                 },
-                "token": {
+                "lastSettledAt": {
                   "$ref": "#/$defs/__schema14"
+                },
+                "token": {
+                  "$ref": "#/$defs/__schema15"
                 },
                 "category": {
                   "type": "string"
@@ -21606,7 +21978,7 @@
                 "receiptIds": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/$defs/__schema3"
+                    "$ref": "#/$defs/__schema0"
                   }
                 },
                 "settledConversions": {
@@ -21642,7 +22014,7 @@
                 "netAttributedValue": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     {
                       "type": "null"
@@ -21652,7 +22024,7 @@
                 "settledCommission": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     {
                       "type": "null"
@@ -21662,7 +22034,7 @@
                 "refundAdjustment": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema2"
+                      "$ref": "#/$defs/__schema1"
                     },
                     {
                       "type": "null"
@@ -21723,21 +22095,9 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "pattern": "^0x[0-9a-fA-F]{40}$"
-          },
-          "__schema1": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
-          },
-          "__schema2": {
-            "type": "string"
-          },
-          "__schema3": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema1"
               },
               {
                 "type": "string",
@@ -21745,15 +22105,65 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string"
+          },
+          "__schema2": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema3"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "displayName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "visibility": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "pseudonymous",
+                  "private"
+                ]
+              }
+            },
+            "required": [
+              "address",
+              "handle",
+              "displayName",
+              "visibility"
+            ],
+            "additionalProperties": false
+          },
+          "__schema3": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
           "__schema4": {
             "type": "string",
-            "pattern": "^0x[0-9a-fA-F]{64}$"
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
           },
           "__schema5": {
             "type": "object",
             "properties": {
               "address": {
-                "$ref": "#/$defs/__schema0"
+                "$ref": "#/$defs/__schema3"
               },
               "symbol": {
                 "type": "string"
@@ -21778,49 +22188,14 @@
             "additionalProperties": false
           },
           "__schema6": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$"
+          },
+          "__schema7": {
             "type": "object",
             "properties": {
               "recipient": {
-                "type": "object",
-                "properties": {
-                  "address": {
-                    "anyOf": [
-                      {
-                        "$ref": "#/$defs/__schema0"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "handle": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "displayName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "visibility": {
-                    "type": "string",
-                    "enum": [
-                      "public",
-                      "pseudonymous",
-                      "private"
-                    ]
-                  }
-                },
-                "required": [
-                  "address",
-                  "handle",
-                  "displayName",
-                  "visibility"
-                ],
-                "additionalProperties": false
+                "$ref": "#/$defs/__schema2"
               },
               "level": {
                 "type": "integer",
@@ -21833,7 +22208,7 @@
                 "maximum": 10000
               },
               "amount": {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema1"
               },
               "state": {
                 "type": "string",
@@ -21848,7 +22223,7 @@
               "claimTx": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/__schema7"
+                    "$ref": "#/$defs/__schema8"
                   },
                   {
                     "type": "null"
@@ -21866,14 +22241,14 @@
             ],
             "additionalProperties": false
           },
-          "__schema7": {
+          "__schema8": {
             "type": "object",
             "properties": {
               "hash": {
-                "$ref": "#/$defs/__schema4"
+                "$ref": "#/$defs/__schema6"
               },
               "blockNumber": {
-                "$ref": "#/$defs/__schema2"
+                "$ref": "#/$defs/__schema1"
               },
               "explorerUrl": {
                 "anyOf": [
@@ -21887,7 +22262,7 @@
                 ]
               },
               "at": {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema4"
               }
             },
             "required": [
@@ -21897,24 +22272,24 @@
             ],
             "additionalProperties": false
           },
-          "__schema8": {
+          "__schema9": {
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
             "pattern": "^[a-zA-Z0-9_-]+$"
           },
-          "__schema9": {
+          "__schema10": {
             "type": "string"
           },
-          "__schema10": {
-            "$ref": "#/$defs/__schema2"
-          },
           "__schema11": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "__schema12": {
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991
           },
-          "__schema12": {
+          "__schema13": {
             "type": "array",
             "items": {
               "type": "object",
@@ -21937,22 +22312,22 @@
               "additionalProperties": false
             }
           },
-          "__schema13": {
+          "__schema14": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema4"
               },
               {
                 "type": "null"
               }
             ]
           },
-          "__schema14": {
+          "__schema15": {
             "$ref": "#/$defs/__schema5"
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L360"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L361"
     },
     {
       "name": "reputation.updateVisibility",
@@ -22059,7 +22434,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L361"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L362"
     },
     {
       "name": "reputation.exportCredential",
@@ -22198,7 +22573,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L362"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L363"
     },
     {
       "name": "reputation.credentials",
@@ -22340,7 +22715,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L363"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L364"
     },
     {
       "name": "reputation.revokeCredential",
@@ -22488,7 +22863,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L364"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L365"
     },
     {
       "name": "reputation.verifyCredential",
@@ -22670,7 +23045,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L365"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L366"
     },
     {
       "name": "distributors.search",
@@ -22891,7 +23266,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L366"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L367"
     },
     {
       "name": "distributors.get",
@@ -23045,7 +23420,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L370"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L371"
     },
     {
       "name": "distributors.recommendations",
@@ -23202,7 +23577,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L371"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L372"
     },
     {
       "name": "partners.list",
@@ -23548,7 +23923,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L375"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L376"
     },
     {
       "name": "partners.get",
@@ -23859,7 +24234,147 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L390"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L391"
+    },
+    {
+      "name": "invitations.get",
+      "release": "core",
+      "status": "Core live",
+      "route": {
+        "verb": "GET",
+        "path": "/me/invitations/:id",
+        "auth": "session"
+      },
+      "input": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "output": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "joinedNodeId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "distributor": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "merchantId": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "message": {
+            "type": "string"
+          },
+          "terms": {
+            "type": "string"
+          },
+          "parentNodeId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "policyHash": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "declined",
+              "withdrawn",
+              "expired"
+            ]
+          },
+          "expiresAt": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "withdrawnAt": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema2"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "$ref": "#/$defs/__schema2"
+          }
+        },
+        "required": [
+          "id",
+          "distributor",
+          "campaignId",
+          "merchantId",
+          "message",
+          "terms",
+          "parentNodeId",
+          "policyHash",
+          "status",
+          "expiresAt",
+          "withdrawnAt",
+          "createdAt"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "pattern": "^demo-[\\w-]+$"
+              }
+            ]
+          },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "__schema2": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          }
+        }
+      },
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L392"
     },
     {
       "name": "invitations.mine",
@@ -23896,18 +24411,28 @@
             "items": {
               "type": "object",
               "properties": {
+                "joinedNodeId": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/__schema0"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
                 "id": {
-                  "$ref": "#/$defs/__schema0"
+                  "$ref": "#/$defs/__schema1"
                 },
                 "distributor": {
                   "type": "string",
                   "pattern": "^0x[0-9a-fA-F]{40}$"
                 },
                 "campaignId": {
-                  "$ref": "#/$defs/__schema1"
+                  "$ref": "#/$defs/__schema0"
                 },
                 "merchantId": {
-                  "$ref": "#/$defs/__schema0"
+                  "$ref": "#/$defs/__schema1"
                 },
                 "message": {
                   "type": "string"
@@ -23918,7 +24443,7 @@
                 "parentNodeId": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema0"
                     },
                     {
                       "type": "null"
@@ -23987,12 +24512,6 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          },
-          "__schema1": {
             "anyOf": [
               {
                 "type": "string"
@@ -24003,6 +24522,12 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
           "__schema2": {
             "type": "string",
             "format": "date-time",
@@ -24010,7 +24535,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L391"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L393"
     },
     {
       "name": "invitations.sent",
@@ -24048,18 +24573,28 @@
             "items": {
               "type": "object",
               "properties": {
+                "joinedNodeId": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/__schema0"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
                 "id": {
-                  "$ref": "#/$defs/__schema0"
+                  "$ref": "#/$defs/__schema1"
                 },
                 "distributor": {
                   "type": "string",
                   "pattern": "^0x[0-9a-fA-F]{40}$"
                 },
                 "campaignId": {
-                  "$ref": "#/$defs/__schema1"
+                  "$ref": "#/$defs/__schema0"
                 },
                 "merchantId": {
-                  "$ref": "#/$defs/__schema0"
+                  "$ref": "#/$defs/__schema1"
                 },
                 "message": {
                   "type": "string"
@@ -24070,7 +24605,7 @@
                 "parentNodeId": {
                   "anyOf": [
                     {
-                      "$ref": "#/$defs/__schema1"
+                      "$ref": "#/$defs/__schema0"
                     },
                     {
                       "type": "null"
@@ -24139,12 +24674,6 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          },
-          "__schema1": {
             "anyOf": [
               {
                 "type": "string"
@@ -24155,6 +24684,12 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
           "__schema2": {
             "type": "string",
             "format": "date-time",
@@ -24162,7 +24697,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L395"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L397"
     },
     {
       "name": "invitations.send",
@@ -24221,18 +24756,28 @@
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
         "properties": {
+          "joinedNodeId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "id": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "distributor": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{40}$"
           },
           "campaignId": {
-            "$ref": "#/$defs/__schema1"
+            "$ref": "#/$defs/__schema0"
           },
           "merchantId": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "message": {
             "type": "string"
@@ -24243,7 +24788,7 @@
           "parentNodeId": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema0"
               },
               {
                 "type": "null"
@@ -24298,12 +24843,6 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          },
-          "__schema1": {
             "anyOf": [
               {
                 "type": "string"
@@ -24314,6 +24853,12 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
           "__schema2": {
             "type": "string",
             "format": "date-time",
@@ -24321,7 +24866,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L399"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L401"
     },
     {
       "name": "invitations.respond",
@@ -24363,18 +24908,28 @@
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
         "properties": {
+          "joinedNodeId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "id": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "distributor": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{40}$"
           },
           "campaignId": {
-            "$ref": "#/$defs/__schema1"
+            "$ref": "#/$defs/__schema0"
           },
           "merchantId": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "message": {
             "type": "string"
@@ -24385,7 +24940,7 @@
           "parentNodeId": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema0"
               },
               {
                 "type": "null"
@@ -24440,12 +24995,6 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          },
-          "__schema1": {
             "anyOf": [
               {
                 "type": "string"
@@ -24456,6 +25005,12 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
           "__schema2": {
             "type": "string",
             "format": "date-time",
@@ -24463,7 +25018,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L400"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L402"
     },
     {
       "name": "invitations.withdraw",
@@ -24493,18 +25048,28 @@
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
         "properties": {
+          "joinedNodeId": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/__schema0"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "id": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "distributor": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{40}$"
           },
           "campaignId": {
-            "$ref": "#/$defs/__schema1"
+            "$ref": "#/$defs/__schema0"
           },
           "merchantId": {
-            "$ref": "#/$defs/__schema0"
+            "$ref": "#/$defs/__schema1"
           },
           "message": {
             "type": "string"
@@ -24515,7 +25080,7 @@
           "parentNodeId": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema0"
               },
               {
                 "type": "null"
@@ -24570,12 +25135,6 @@
         "additionalProperties": false,
         "$defs": {
           "__schema0": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          },
-          "__schema1": {
             "anyOf": [
               {
                 "type": "string"
@@ -24586,6 +25145,12 @@
               }
             ]
           },
+          "__schema1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
           "__schema2": {
             "type": "string",
             "format": "date-time",
@@ -24593,7 +25158,443 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L404"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L406"
+    },
+    {
+      "name": "workspace.list",
+      "release": "core",
+      "status": "Core live",
+      "route": {
+        "verb": "GET",
+        "path": "/me/workspace",
+        "auth": "session"
+      },
+      "input": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "items": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/__schema0"
+            }
+          },
+          "maxNotes": {
+            "type": "number",
+            "const": 100
+          }
+        },
+        "required": [
+          "items",
+          "maxNotes"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{40}$"
+              },
+              "chainId": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "campaignId": {
+                "type": "string",
+                "maxLength": 78,
+                "pattern": "^[1-9][0-9]*$"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              }
+            },
+            "required": [
+              "address",
+              "chainId",
+              "campaignId",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L407"
+    },
+    {
+      "name": "workspace.get",
+      "release": "core",
+      "status": "Core live",
+      "route": {
+        "verb": "GET",
+        "path": "/me/workspace/:chainId/:campaignId",
+        "auth": "session"
+      },
+      "input": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "chainId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "campaignId": {
+            "type": "string",
+            "maxLength": 78,
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "chainId",
+          "campaignId"
+        ]
+      },
+      "output": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{40}$"
+                  },
+                  "chainId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "campaignId": {
+                    "type": "string",
+                    "maxLength": 78,
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "version": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "namespace": {
+                    "type": "string",
+                    "const": "spoke.campaign-notes.v1"
+                  },
+                  "credentialId": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 2048,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "savedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "nonce": {
+                    "minLength": 16,
+                    "maxLength": 16,
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "ciphertext": {
+                    "type": "string",
+                    "minLength": 22,
+                    "maxLength": 33000,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "$ref": "#/$defs/__schema0"
+                  }
+                },
+                "required": [
+                  "address",
+                  "chainId",
+                  "campaignId",
+                  "version",
+                  "namespace",
+                  "credentialId",
+                  "revision",
+                  "savedAt",
+                  "nonce",
+                  "ciphertext"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "note",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+$"
+          }
+        }
+      },
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L408"
+    },
+    {
+      "name": "workspace.save",
+      "release": "core",
+      "status": "Core live",
+      "route": {
+        "verb": "PUT",
+        "path": "/me/workspace/:chainId/:campaignId",
+        "auth": "session"
+      },
+      "input": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "chainId": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "campaignId": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "note": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string",
+                "pattern": "^0x[0-9a-f]{40}$"
+              },
+              "chainId": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "campaignId": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "version": {
+                "type": "number",
+                "const": 1
+              },
+              "namespace": {
+                "type": "string",
+                "const": "spoke.campaign-notes.v1"
+              },
+              "credentialId": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 2048,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "$ref": "#/$defs/__schema2"
+              },
+              "revision": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "savedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              "nonce": {
+                "minLength": 16,
+                "maxLength": 16,
+                "$ref": "#/$defs/__schema2"
+              },
+              "ciphertext": {
+                "type": "string",
+                "minLength": 22,
+                "maxLength": 33000,
+                "pattern": "^[A-Za-z0-9_-]+$",
+                "$ref": "#/$defs/__schema2"
+              }
+            },
+            "required": [
+              "address",
+              "chainId",
+              "campaignId",
+              "version",
+              "namespace",
+              "credentialId",
+              "revision",
+              "savedAt",
+              "nonce",
+              "ciphertext"
+            ],
+            "additionalProperties": false
+          },
+          "expectedRevision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "chainId",
+          "campaignId",
+          "note",
+          "expectedRevision"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "__schema1": {
+            "type": "string",
+            "maxLength": 78,
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "__schema2": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+$"
+          }
+        }
+      },
+      "output": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-f]{40}$"
+                  },
+                  "chainId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "campaignId": {
+                    "type": "string",
+                    "maxLength": 78,
+                    "pattern": "^[1-9][0-9]*$"
+                  },
+                  "version": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "namespace": {
+                    "type": "string",
+                    "const": "spoke.campaign-notes.v1"
+                  },
+                  "credentialId": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 2048,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "revision": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "savedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "nonce": {
+                    "minLength": 16,
+                    "maxLength": 16,
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "ciphertext": {
+                    "type": "string",
+                    "minLength": 22,
+                    "maxLength": 33000,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "$ref": "#/$defs/__schema0"
+                  }
+                },
+                "required": [
+                  "address",
+                  "chainId",
+                  "campaignId",
+                  "version",
+                  "namespace",
+                  "credentialId",
+                  "revision",
+                  "savedAt",
+                  "nonce",
+                  "ciphertext"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "note",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+$"
+          }
+        }
+      },
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L409"
     },
     {
       "name": "insights.forDistributor",
@@ -24717,6 +25718,109 @@
               ],
               "additionalProperties": false
             }
+          },
+          "research": {
+            "type": "object",
+            "properties": {
+              "window": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  "to": {
+                    "$ref": "#/$defs/__schema0"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "additionalProperties": false
+              },
+              "sampledTransactions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "truncated": {
+                "type": "boolean"
+              },
+              "transactions": {
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "firstFunding": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "chain": {
+                        "$ref": "#/$defs/__schema2"
+                      },
+                      "transactionHash": {
+                        "$ref": "#/$defs/__schema3"
+                      },
+                      "timestamp": {
+                        "$ref": "#/$defs/__schema0"
+                      },
+                      "address": {
+                        "$ref": "#/$defs/__schema4"
+                      },
+                      "label": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "chain",
+                      "transactionHash",
+                      "timestamp",
+                      "address",
+                      "label"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationships": {
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema5"
+                }
+              },
+              "relationshipChain": {
+                "type": "string",
+                "const": "monad"
+              },
+              "endpoints": {
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/__schema6"
+                }
+              }
+            },
+            "required": [
+              "window",
+              "sampledTransactions",
+              "truncated",
+              "transactions",
+              "firstFunding",
+              "relationships",
+              "relationshipChain",
+              "endpoints"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -24735,10 +25839,487 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "__schema1": {
+            "type": "object",
+            "properties": {
+              "chain": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "transactionHash": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "timestamp": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            "required": [
+              "chain",
+              "transactionHash",
+              "timestamp"
+            ],
+            "additionalProperties": false
+          },
+          "__schema2": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "__schema3": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150
+          },
+          "__schema4": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "__schema5": {
+            "type": "object",
+            "properties": {
+              "chain": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "transactionHash": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "timestamp": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "address": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "relation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "chain",
+              "transactionHash",
+              "timestamp",
+              "address",
+              "label",
+              "relation"
+            ],
+            "additionalProperties": false
+          },
+          "__schema6": {
+            "type": "object",
+            "properties": {
+              "endpoint": {
+                "type": "string",
+                "enum": [
+                  "transactions",
+                  "first-funder",
+                  "related-wallets"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "available",
+                  "empty",
+                  "unavailable"
+                ]
+              },
+              "fetchedAt": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "sourceUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "endpoint",
+              "state",
+              "fetchedAt",
+              "sourceUrl"
+            ],
+            "additionalProperties": false
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L405"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L410"
+    },
+    {
+      "name": "insights.research",
+      "release": "core",
+      "status": "Core live",
+      "route": {
+        "verb": "POST",
+        "path": "/merchant/distributors/:address/insights",
+        "auth": "session"
+      },
+      "input": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "output": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "refreshed",
+              "cached",
+              "already_attempted",
+              "budget_exhausted",
+              "not_configured",
+              "failed"
+            ]
+          },
+          "insights": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "available",
+                  "no_history",
+                  "none"
+                ]
+              },
+              "source": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "fetchedAt": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/__schema0"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "labels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "networks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "scopeNote": {
+                "type": "string"
+              },
+              "activitySummary": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "transactions": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "lastActiveAt": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/$defs/__schema0"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "transactions",
+                      "lastActiveAt"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reviewSignals": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "research": {
+                "type": "object",
+                "properties": {
+                  "window": {
+                    "type": "object",
+                    "properties": {
+                      "from": {
+                        "$ref": "#/$defs/__schema0"
+                      },
+                      "to": {
+                        "$ref": "#/$defs/__schema0"
+                      }
+                    },
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "sampledTransactions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "truncated": {
+                    "type": "boolean"
+                  },
+                  "transactions": {
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/__schema1"
+                    }
+                  },
+                  "firstFunding": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "chain": {
+                            "$ref": "#/$defs/__schema2"
+                          },
+                          "transactionHash": {
+                            "$ref": "#/$defs/__schema3"
+                          },
+                          "timestamp": {
+                            "$ref": "#/$defs/__schema0"
+                          },
+                          "address": {
+                            "$ref": "#/$defs/__schema4"
+                          },
+                          "label": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "chain",
+                          "transactionHash",
+                          "timestamp",
+                          "address",
+                          "label"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "relationships": {
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/__schema5"
+                    }
+                  },
+                  "relationshipChain": {
+                    "type": "string",
+                    "const": "monad"
+                  },
+                  "endpoints": {
+                    "maxItems": 3,
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/__schema6"
+                    }
+                  }
+                },
+                "required": [
+                  "window",
+                  "sampledTransactions",
+                  "truncated",
+                  "transactions",
+                  "firstFunding",
+                  "relationships",
+                  "relationshipChain",
+                  "endpoints"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "status",
+              "source",
+              "fetchedAt",
+              "labels",
+              "networks",
+              "scopeNote",
+              "activitySummary",
+              "reviewSignals"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "status",
+          "insights"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "__schema0": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "__schema1": {
+            "type": "object",
+            "properties": {
+              "chain": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "transactionHash": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "timestamp": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            "required": [
+              "chain",
+              "transactionHash",
+              "timestamp"
+            ],
+            "additionalProperties": false
+          },
+          "__schema2": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "__schema3": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150
+          },
+          "__schema4": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "__schema5": {
+            "type": "object",
+            "properties": {
+              "chain": {
+                "$ref": "#/$defs/__schema2"
+              },
+              "transactionHash": {
+                "$ref": "#/$defs/__schema3"
+              },
+              "timestamp": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "address": {
+                "$ref": "#/$defs/__schema4"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "relation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "chain",
+              "transactionHash",
+              "timestamp",
+              "address",
+              "label",
+              "relation"
+            ],
+            "additionalProperties": false
+          },
+          "__schema6": {
+            "type": "object",
+            "properties": {
+              "endpoint": {
+                "type": "string",
+                "enum": [
+                  "transactions",
+                  "first-funder",
+                  "related-wallets"
+                ]
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "available",
+                  "empty",
+                  "unavailable"
+                ]
+              },
+              "fetchedAt": {
+                "$ref": "#/$defs/__schema0"
+              },
+              "sourceUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "endpoint",
+              "state",
+              "fetchedAt",
+              "sourceUrl"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L411"
     },
     {
       "name": "analytics.merchant",
@@ -25026,7 +26607,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L406"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L425"
     },
     {
       "name": "analytics.campaign",
@@ -25314,7 +26895,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L414"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L433"
     },
     {
       "name": "reports.export",
@@ -25501,7 +27082,7 @@
           }
         ]
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L415"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L434"
     },
     {
       "name": "reports.preview",
@@ -25717,7 +27298,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L416"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L435"
     },
     {
       "name": "reports.list",
@@ -25882,7 +27463,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L417"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L436"
     },
     {
       "name": "studio.templates",
@@ -26111,7 +27692,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L418"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L437"
     },
     {
       "name": "studio.saveTemplate",
@@ -26444,7 +28025,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L419"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L438"
     },
     {
       "name": "studio.simulate",
@@ -26689,7 +28270,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L423"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L442"
     },
     {
       "name": "disputes.open",
@@ -26755,7 +28336,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L431"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L450"
     },
     {
       "name": "disputes.list",
@@ -27006,7 +28587,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L439"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L458"
     },
     {
       "name": "disputes.get",
@@ -27227,7 +28808,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L448"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L467"
     },
     {
       "name": "disputes.respond",
@@ -27466,7 +29047,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L449"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L468"
     },
     {
       "name": "disputes.exposure",
@@ -27523,7 +29104,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L456"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L475"
     },
     {
       "name": "billing.summary",
@@ -27631,7 +29212,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L466"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L485"
     },
     {
       "name": "billing.invoices",
@@ -27745,7 +29326,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L467"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L486"
     },
     {
       "name": "integrations.list",
@@ -27829,7 +29410,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L468"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L487"
     },
     {
       "name": "integrations.connect",
@@ -27928,7 +29509,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L469"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L488"
     },
     {
       "name": "integrations.disconnect",
@@ -27965,7 +29546,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L477"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L496"
     },
     {
       "name": "integrations.status",
@@ -28095,7 +29676,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L478"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L497"
     },
     {
       "name": "integrations.reconciliation",
@@ -28260,7 +29841,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L482"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L501"
     },
     {
       "name": "integrations.resolveMismatch",
@@ -28358,7 +29939,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L486"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L505"
     },
     {
       "name": "signers.list",
@@ -28509,7 +30090,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L490"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L509"
     },
     {
       "name": "signers.add",
@@ -28643,7 +30224,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L506"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L525"
     },
     {
       "name": "signers.revoke",
@@ -28743,7 +30324,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L510"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L529"
     },
     {
       "name": "signers.attestations",
@@ -28879,7 +30460,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L511"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L530"
     },
     {
       "name": "apiKeys.list",
@@ -28959,7 +30540,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L517"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L536"
     },
     {
       "name": "apiKeys.create",
@@ -29067,7 +30648,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L518"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L537"
     },
     {
       "name": "apiKeys.revoke",
@@ -29107,7 +30688,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L522"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L541"
     },
     {
       "name": "apiKeys.usage",
@@ -29256,7 +30837,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L523"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L542"
     },
     {
       "name": "webhooks.list",
@@ -29314,7 +30895,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L536"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L555"
     },
     {
       "name": "webhooks.create",
@@ -29394,7 +30975,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L537"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L556"
     },
     {
       "name": "webhooks.test",
@@ -29499,7 +31080,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L538"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L557"
     },
     {
       "name": "webhooks.deliveries",
@@ -29631,7 +31212,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L539"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L558"
     },
     {
       "name": "webhooks.update",
@@ -29704,7 +31285,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L540"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L559"
     },
     {
       "name": "webhooks.rotateSecret",
@@ -29749,7 +31330,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L544"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L563"
     },
     {
       "name": "webhooks.remove",
@@ -29789,7 +31370,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L548"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L567"
     },
     {
       "name": "webhooks.replay",
@@ -29894,7 +31475,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L549"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L568"
     },
     {
       "name": "team.members",
@@ -29967,7 +31548,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L550"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L569"
     },
     {
       "name": "team.invite",
@@ -30053,7 +31634,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L551"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L570"
     },
     {
       "name": "team.updateRole",
@@ -30141,7 +31722,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L555"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L574"
     },
     {
       "name": "team.remove",
@@ -30181,7 +31762,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L559"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L578"
     },
     {
       "name": "team.audit",
@@ -30291,7 +31872,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L560"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L579"
     },
     {
       "name": "team.transferOwnership",
@@ -30335,7 +31916,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L561"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L580"
     },
     {
       "name": "subscriptions.list",
@@ -30530,7 +32111,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L562"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L581"
     },
     {
       "name": "subscriptions.get",
@@ -30707,7 +32288,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L563"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L582"
     },
     {
       "name": "subscriptions.save",
@@ -30910,7 +32491,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L564"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L583"
     },
     {
       "name": "partnerships.list",
@@ -31069,7 +32650,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L572"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L591"
     },
     {
       "name": "partnerships.propose",
@@ -31231,7 +32812,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L573"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L592"
     },
     {
       "name": "partnerships.respond",
@@ -31383,7 +32964,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L577"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L596"
     },
     {
       "name": "partnerships.terminate",
@@ -31532,7 +33113,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L581"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L600"
     },
     {
       "name": "communities.list",
@@ -31632,7 +33213,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L585"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L604"
     },
     {
       "name": "communities.get",
@@ -31714,7 +33295,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L586"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L605"
     },
     {
       "name": "communities.create",
@@ -31814,7 +33395,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L587"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L606"
     },
     {
       "name": "communities.members",
@@ -31895,7 +33476,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L591"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L610"
     },
     {
       "name": "communities.join",
@@ -31953,7 +33534,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L592"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L611"
     },
     {
       "name": "communities.leave",
@@ -31993,7 +33574,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L593"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L612"
     },
     {
       "name": "communities.update",
@@ -32104,7 +33685,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L594"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L613"
     },
     {
       "name": "networks.list",
@@ -32213,7 +33794,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L604"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L623"
     },
     {
       "name": "tokens.list",
@@ -32276,7 +33857,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L605"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L624"
     },
     {
       "name": "support.report",
@@ -32398,7 +33979,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L609"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L628"
     },
     {
       "name": "support.contact",
@@ -32451,7 +34032,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L610"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L629"
     },
     {
       "name": "support.mine",
@@ -32520,7 +34101,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L618"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L637"
     },
     {
       "name": "system.health",
@@ -32652,7 +34233,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L619"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L638"
     },
     {
       "name": "system.status",
@@ -32987,7 +34568,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L620"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L639"
     },
     {
       "name": "system.contracts",
@@ -33067,7 +34648,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L621"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L640"
     },
     {
       "name": "system.endpoints",
@@ -33165,7 +34746,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L622"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L641"
     },
     {
       "name": "system.events",
@@ -33335,7 +34916,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L623"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L642"
     },
     {
       "name": "playground.run",
@@ -33400,7 +34981,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L627"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L646"
     },
     {
       "name": "clients.list",
@@ -33475,7 +35056,7 @@
           "additionalProperties": false
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L637"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L656"
     },
     {
       "name": "ops.queue",
@@ -33566,7 +35147,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L638"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L657"
     },
     {
       "name": "ops.case",
@@ -33711,7 +35292,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L639"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L658"
     },
     {
       "name": "ops.act",
@@ -33908,7 +35489,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L640"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L659"
     },
     {
       "name": "ops.moderation",
@@ -34001,7 +35582,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L641"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L660"
     },
     {
       "name": "ops.audit",
@@ -34111,7 +35692,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L642"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L661"
     },
     {
       "name": "ops.reconciliation",
@@ -34261,7 +35842,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L643"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L662"
     },
     {
       "name": "ops.runReconciliation",
@@ -34294,7 +35875,7 @@
         ],
         "additionalProperties": false
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L644"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L663"
     },
     {
       "name": "ops.incident",
@@ -34433,7 +36014,7 @@
           }
         }
       },
-      "source": "https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L645"
+      "source": "https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L664"
     }
   ]
 }

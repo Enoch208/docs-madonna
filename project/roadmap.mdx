@@ -18,11 +18,11 @@ The core testnet loop is working. The next milestones focus on broader verificat
 
 **Evidence:** the [production journey and contract fixture](/project/proof).
 
-## Phase 2 — Harden the experience and operations
+## Phase 2 — Verify the strengthened experience and operations
 
 **Status: continuing.**
 
-Improve cross-device onboarding progress and intent recovery, exercise additional passkey and external-wallet/device combinations, and expand operational checks around provider outages, replay, restore, capacity, and monitoring.
+Passkey-first onboarding preserves campaign context, and encrypted workspace sync includes conflict protection and backup restoration. The next priority is physical Chrome/Safari and cross-device PRF verification, then observed merchant-to-distributor usability tests. Expand operational checks around provider outages, replay, restore, capacity and monitoring.
 
 **Exit criteria:** repeatable recovery exercises, documented alert ownership, meaningful load and gas measurements within the prototype limits, and reproducible user journeys across the supported wallet/device set.
 
@@ -32,7 +32,7 @@ The existing reorg recovery and transaction handling provide a foundation; broad
 
 **Status: implementation exists; activation and broader delivery remain.**
 
-For Aurora, finish provider setup and record a user-executed mainnet transfer through verified USDC delivery. Test route expiry and failure handling. Preserve the separation between mainnet funding and testnet settlement.
+Aurora provider setup is enabled. Continue route-specific verification using authorized user-executed transfers through independently verified USDC delivery. Test route expiry and failure handling. Preserve the separation between mainnet funding and testnet settlement.
 
 For developer access, SDK 0.1.2 is published on npm as `@enochid/spoke-sdk`, with a matching GitHub release archive, tested installation, ESM/CommonJS builds, declarations, examples and compatibility guidance. Initial SDK distribution is complete. Define any future write SDK around explicit user signing and idempotency. Improve insight coverage without letting external history determine payout eligibility.
 
@@ -40,9 +40,9 @@ For developer access, SDK 0.1.2 is published on npm as `@enochid/spoke-sdk`, wit
 
 ## Phase 4 — Extend distribution workflows
 
-**Status: designed or demonstrated in parts.**
+**Status: core partnership workflows shipped; extensions remain designed.**
 
-Validate demand and implementation scope for invitations, communities, partner workflows, merchant growth tools, teams, API keys, webhooks, and commerce connectors. Move each feature from Demo to live only when its backend, permissions, failure handling, and end-to-end journey are complete.
+Invitations, partner discovery/comparison, Partner Passport, live Network Activity and bounded Partner Intelligence are shipped. Validate adoption and usability before extending communities, merchant growth tools, teams, API keys, webhooks and commerce connectors. Move each feature from Demo to live only when its backend, permissions, failure handling, and end-to-end journey are complete.
 
 **Exit criteria:** tested live behavior and an updated method registry for each shipped feature. A finished screen alone does not satisfy this milestone.
 

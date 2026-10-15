@@ -1,0 +1,40 @@
+---
+title: "Partner Intelligence"
+description: "Use sourced wallet context alongside verified Spoke performance when choosing a distribution partner."
+---
+
+Partner Intelligence helps merchants inspect public wallet history before a partnership. Nansen supplies external mainnet context; Spoke supplies its own testnet settlement receipts. Neither source is an identity guarantee or a trust score.
+
+## Research a public wallet
+
+1. Sign in as a merchant and open [Distributors](https://usespoke.xyz/distributors).
+2. Open a distributor's wallet context or expand **Research a public wallet** and enter an address.
+3. Read any existing cached result. A page view does not purchase a provider query.
+4. Choose the explicit research refresh when needed. The service checks provider configuration, free-plan credits and request budgets first.
+5. Inspect the source, networks, timestamps and transaction evidence. Compare them with the distributor's native Passport, then invite a suitable registered, opted-in distributor through the normal campaign flow.
+
+An arbitrary external address can supply research context, but it is not automatically a registered distributor. Private and pseudonymous registered profiles cannot be researched through this feature. External context does not change directory ranking, contract terms or payouts.
+
+## What each finding means
+
+| Finding                      | Scope                                                                                                 | Important limit                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Recent transactions          | Latest 100 supported-mainnet transactions within the requested 30-day window; up to 20 evidence links | A truncated sample has no complete total. This is not all-time activity |
+| Networks and transfer labels | Networks/labels actually returned for the address in that sample                                      | A label is provider context, not a verified legal identity              |
+| First funding                | Earliest native-gas funding observation returned across supported networks                            | This is not the wallet's creation date or the person's age              |
+| Wallet relationships         | Supported relationships on Monad Mainnet, with source transactions                                    | A relationship does not establish common ownership, trust or wrongdoing |
+| Native performance           | Settled Spoke contract events and public receipts on Monad Testnet                                    | Scripted demonstrations are not customer revenue                        |
+
+Each endpoint has its own **available**, **empty** or **unavailable** state and fetch timestamp. An empty result and a failed request mean different things. Missing information is unknown, never a negative score.
+
+## Freshness and spending controls
+
+Results are cached for 24 hours. A refresh reserves up to three included provider credits for the three supported endpoints. The service requires a free-plan account with sufficient remaining credits, a configured conservative lifetime budget, a global daily limit of nine credits and at most two fresh requests per merchant per day. It does not purchase credits or use automatic payment.
+
+A wallet is attempted at most once per UTC day. Ambiguous outcomes keep their reservation and are not blindly retried. Partial results preserve which endpoint failed; a total failure does not erase a previous cached result. Explicit limits can return **budget exhausted** even while the provider has credit remaining.
+
+## Inspect actual provider evidence
+
+The [captured public example](https://github.com/Enoch208/spoke/blob/main/docs/proof/nansen-public-example-20261015.json) contains genuine provider results for an external wallet: a 100-transaction sample across seven networks, first-funding evidence and a Monad relationship. It is **not a Spoke distributor** and is not presented as customer activity. The four seeded demonstration distributors may still have no observed mainnet history.
+
+The provider's [transactions](https://docs.nansen.ai/api/profiler/address-transactions), [first-funder](https://docs.nansen.ai/api/profiler/address-first-funder) and [related-wallets](https://docs.nansen.ai/api/profiler/address-related-wallets) documentation describes the upstream sources. Read the [evidence matrix](/project/evidence) for tests and remaining verification work.

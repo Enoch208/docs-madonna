@@ -26,7 +26,7 @@ const groups = [
   {
     slug: "identity",
     title: "Identity and accounts",
-    names: ["auth", "account", "notifications"],
+    names: ["auth", "account", "notifications", "workspace"],
     description:
       "Wallet authentication, account profiles, recovery, sessions, wallets, passkeys, and notification preferences.",
   },
@@ -250,9 +250,9 @@ for (const group of groups) {
   writeFileSync(join(root, `reference/${group.slug}.mdx`), body);
 }
 const seen = new Set(entries.map((e) => e.name));
-if (seen.size !== 189)
+if (seen.size !== 194)
   throw new Error(
-    `Expected 189 methods; got ${seen.size}. Review release scope and update this guard.`,
+    `Expected 194 methods; got ${seen.size}. Review release scope and update this guard.`,
   );
 console.log(
   `Generated ${seen.size} methods in ${groups.length} reference pages at ${commit.slice(0, 7)}.`,

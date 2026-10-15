@@ -5,14 +5,14 @@ description: "Network catalogs, status, endpoint discovery, support, developer s
 
 Network catalogs, status, endpoint discovery, support, developer surfaces, and operator-scoped methods.
 
-This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **20 client methods** in this group.
+This reference is generated from application commit [`2e8a48d`](https://github.com/Enoch208/spoke/commit/2e8a48d31ca861a44821671a50cd23b66b50769b). It covers **20 client methods** in this group.
 
 <Note>
   Input schemas describe the typed client call before path/query/body mapping.
   Output schemas describe the envelope's `data`, not the full HTTP response.
   Custom refinements, transforms, and runtime permissions are enforced by the
   [shared Zod
-  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  contract](https://github.com/Enoch208/spoke/tree/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api).
   Read [transport rules](/developers/http-transport) before copying a client
   object into an HTTP body. Designed methods reject live calls; optional funding
   still requires provider configuration.
@@ -47,7 +47,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## networks.list
 
-**GET `/v1/networks`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L604).
+**GET `/v1/networks`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L623).
 
 **Client input fields**
 
@@ -163,7 +163,7 @@ No fields. Use an empty object for the client method input.
 
 ## tokens.list
 
-**GET `/v1/tokens`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L605).
+**GET `/v1/tokens`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L624).
 
 **Client input fields**
 
@@ -231,7 +231,7 @@ No fields. Use an empty object for the client method input.
 
 ## support.report
 
-**POST `/v1/support/reports`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L609).
+**POST `/v1/support/reports`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L628).
 
 **Client input fields**
 
@@ -351,7 +351,7 @@ No fields. Use an empty object for the client method input.
 
 ## support.contact
 
-**POST `/v1/support/contact`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L610).
+**POST `/v1/support/contact`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L629).
 
 **Client input fields**
 
@@ -417,7 +417,7 @@ No fields. Use an empty object for the client method input.
 
 ## support.mine
 
-**GET `/v1/me/support`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L618).
+**GET `/v1/me/support`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L637).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -498,7 +498,7 @@ No fields. Use an empty object for the client method input.
 
 ## system.health
 
-**GET `/v1/health`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L619).
+**GET `/v1/health`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L638).
 
 **Client input fields**
 
@@ -621,7 +621,7 @@ No fields. Use an empty object for the client method input.
 
 ## system.status
 
-**GET `/v1/system/status`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L620).
+**GET `/v1/system/status`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L639).
 
 **Client input fields**
 
@@ -943,7 +943,7 @@ No fields. Use an empty object for the client method input.
 
 ## system.contracts
 
-**GET `/v1/system/contracts`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L621).
+**GET `/v1/system/contracts`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L640).
 
 **Client input fields**
 
@@ -1036,7 +1036,7 @@ No fields. Use an empty object for the client method input.
 
 ## system.endpoints
 
-**GET `/v1/system/endpoints`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L622).
+**GET `/v1/system/endpoints`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L641).
 
 **Client input fields**
 
@@ -1130,7 +1130,7 @@ No fields. Use an empty object for the client method input.
 
 ## system.events
 
-**GET `/v1/system/events`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L623).
+**GET `/v1/system/events`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L642).
 
 **Client input fields**
 
@@ -1292,7 +1292,7 @@ No fields. Use an empty object for the client method input.
 
 ## playground.run
 
-**POST `/v1/playground`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L627).
+**POST `/v1/playground`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L646).
 
 **Client input fields**
 
@@ -1366,7 +1366,7 @@ No fields. Use an empty object for the client method input.
 
 ## clients.list
 
-**GET `/v1/clients`** · **Designed — unavailable** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L637).
+**GET `/v1/clients`** · **Designed — unavailable** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L656).
 
 **Client input fields**
 
@@ -1451,7 +1451,7 @@ No fields. Use an empty object for the client method input.
 
 ## ops.queue
 
-**GET `/v1/ops/queue`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L638).
+**GET `/v1/ops/queue`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L657).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1550,7 +1550,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## ops.case
 
-**GET `/v1/ops/cases/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L639).
+**GET `/v1/ops/cases/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L658).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1694,7 +1694,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## ops.act
 
-**POST `/v1/ops/cases/:id/actions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L640).
+**POST `/v1/ops/cases/:id/actions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L659).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1886,7 +1886,7 @@ HTTP body mapping: send the `action` property itself after removing path fields,
 
 ## ops.moderation
 
-**GET `/v1/ops/moderation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L641).
+**GET `/v1/ops/moderation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L660).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1988,7 +1988,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## ops.audit
 
-**GET `/v1/ops/audit`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L642).
+**GET `/v1/ops/audit`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L661).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2112,7 +2112,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## ops.reconciliation
 
-**GET `/v1/ops/reconciliation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L643).
+**GET `/v1/ops/reconciliation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L662).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2274,7 +2274,7 @@ No fields. Use an empty object for the client method input.
 
 ## ops.runReconciliation
 
-**POST `/v1/ops/reconciliation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L644).
+**POST `/v1/ops/reconciliation`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L663).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2322,7 +2322,7 @@ No fields. Use an empty object for the client method input.
 
 ## ops.incident
 
-**POST `/v1/ops/incidents`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L645).
+**POST `/v1/ops/incidents`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L664).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 

@@ -5,14 +5,14 @@ description: "Merchant profiles, product records and assets, campaign drafts and
 
 Merchant profiles, product records and assets, campaign drafts and publication, and policy simulation.
 
-This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **30 client methods** in this group.
+This reference is generated from application commit [`2e8a48d`](https://github.com/Enoch208/spoke/commit/2e8a48d31ca861a44821671a50cd23b66b50769b). It covers **30 client methods** in this group.
 
 <Note>
   Input schemas describe the typed client call before path/query/body mapping.
   Output schemas describe the envelope's `data`, not the full HTTP response.
   Custom refinements, transforms, and runtime permissions are enforced by the
   [shared Zod
-  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  contract](https://github.com/Enoch208/spoke/tree/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api).
   Read [transport rules](/developers/http-transport) before copying a client
   object into an HTTP body. Designed methods reject live calls; optional funding
   still requires provider configuration.
@@ -57,7 +57,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.list
 
-**GET `/v1/campaigns`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L208).
+**GET `/v1/campaigns`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L209).
 
 **Client input fields**
 
@@ -523,7 +523,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.get
 
-**GET `/v1/campaigns/:campaignId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L212).
+**GET `/v1/campaigns/:campaignId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L213).
 
 **Client input fields**
 
@@ -1234,7 +1234,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.policy
 
-**GET `/v1/campaigns/:campaignId/policy`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L213).
+**GET `/v1/campaigns/:campaignId/policy`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L214).
 
 **Client input fields**
 
@@ -1457,7 +1457,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.stats
 
-**GET `/v1/campaigns/:campaignId/stats`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L214).
+**GET `/v1/campaigns/:campaignId/stats`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L215).
 
 **Client input fields**
 
@@ -1589,7 +1589,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.activity
 
-**GET `/v1/campaigns/:campaignId/activity`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L215).
+**GET `/v1/campaigns/:campaignId/activity`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L216).
 
 **Client input fields**
 
@@ -1655,6 +1655,12 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
       "items": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nodeId": {
+            "$ref": "#/$defs/__schema0"
+          },
           "kind": {
             "type": "string",
             "enum": [
@@ -1702,7 +1708,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
           "amount": {
             "anyOf": [
               {
-                "$ref": "#/$defs/__schema0"
+                "$ref": "#/$defs/__schema1"
               },
               {
                 "type": "null"
@@ -1717,7 +1723,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
                 "pattern": "^0x[0-9a-fA-F]{64}$"
               },
               "blockNumber": {
-                "$ref": "#/$defs/__schema0"
+                "$ref": "#/$defs/__schema1"
               },
               "explorerUrl": {
                 "anyOf": [
@@ -1731,25 +1737,17 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
                 ]
               },
               "at": {
-                "$ref": "#/$defs/__schema1"
+                "$ref": "#/$defs/__schema2"
               }
             },
             "required": ["hash", "blockNumber", "explorerUrl"],
             "additionalProperties": false
           },
           "at": {
-            "$ref": "#/$defs/__schema1"
+            "$ref": "#/$defs/__schema2"
           },
           "saleId": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/__schema0"
-              },
-              {
-                "type": "string",
-                "pattern": "^demo-[\\w-]+$"
-              }
-            ]
+            "$ref": "#/$defs/__schema0"
           }
         },
         "required": ["kind", "actor", "amount", "tx", "at"],
@@ -1758,15 +1756,92 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
     },
     "nextCursor": {
       "type": ["string", "null"]
+    },
+    "growth": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "totalLinks": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "newLinks": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "purchases": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "finalized": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "refunded": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "day",
+          "totalLinks",
+          "newLinks",
+          "purchases",
+          "finalized",
+          "refunded"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "indexedBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "indexedAt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema2"
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
   "required": ["items", "nextCursor"],
   "additionalProperties": false,
   "$defs": {
     "__schema0": {
-      "type": "string"
+      "anyOf": [
+        {
+          "$ref": "#/$defs/__schema1"
+        },
+        {
+          "type": "string",
+          "pattern": "^demo-[\\w-]+$"
+        }
+      ]
     },
     "__schema1": {
+      "type": "string"
+    },
+    "__schema2": {
       "type": "string",
       "format": "date-time",
       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
@@ -1781,7 +1856,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## campaigns.mine
 
-**GET `/v1/merchant/campaigns`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L216).
+**GET `/v1/merchant/campaigns`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L217).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2173,7 +2248,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## campaigns.saveDraft
 
-**PUT `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L222).
+**PUT `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L223).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2681,7 +2756,7 @@ HTTP body mapping: send the `draft` property itself after removing path fields, 
 
 ## campaigns.getDraft
 
-**GET `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L223).
+**GET `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L224).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2932,7 +3007,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## campaigns.deleteDraft
 
-**DELETE `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L224).
+**DELETE `/v1/merchant/campaign-drafts/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L225).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2987,7 +3062,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## campaigns.prepareCreate
 
-**POST `/v1/merchant/campaign-drafts/:id/prepare`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L225).
+**POST `/v1/merchant/campaign-drafts/:id/prepare`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L226).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3279,7 +3354,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## campaigns.updateSettings
 
-**PATCH `/v1/merchant/campaigns/:campaignId/settings`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L226).
+**PATCH `/v1/merchant/campaigns/:campaignId/settings`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L227).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3348,7 +3423,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## campaigns.distributors
 
-**GET `/v1/merchant/campaigns/:campaignId/distributors`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L230).
+**GET `/v1/merchant/campaigns/:campaignId/distributors`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L231).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3541,7 +3616,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## products.list
 
-**GET `/v1/merchant/products`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L234).
+**GET `/v1/merchant/products`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L235).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3868,7 +3943,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## products.get
 
-**GET `/v1/products/:id`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L238).
+**GET `/v1/products/:id`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L239).
 
 **Client input fields**
 
@@ -4173,7 +4248,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## products.save
 
-**PUT `/v1/merchant/products/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L239).
+**PUT `/v1/merchant/products/:id`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L240).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -4580,7 +4655,7 @@ HTTP body mapping: send the `product` property itself after removing path fields
 
 ## products.uploadAsset
 
-**POST `/v1/merchant/products/:id/assets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L240).
+**POST `/v1/merchant/products/:id/assets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L241).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -4673,7 +4748,7 @@ Transport: multipart form data. File/blob inputs require the original runtime sc
 
 ## products.categories
 
-**GET `/v1/categories`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L241).
+**GET `/v1/categories`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L242).
 
 **Client input fields**
 
@@ -4722,7 +4797,7 @@ No fields. Use an empty object for the client method input.
 
 ## merchants.get
 
-**GET `/v1/merchants/:slug`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L242).
+**GET `/v1/merchants/:slug`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L243).
 
 **Client input fields**
 
@@ -4894,7 +4969,7 @@ No fields. Use an empty object for the client method input.
 
 ## merchants.record
 
-**GET `/v1/merchants/:slug/record`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L243).
+**GET `/v1/merchants/:slug/record`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L244).
 
 **Client input fields**
 
@@ -5011,7 +5086,7 @@ No fields. Use an empty object for the client method input.
 
 ## merchants.me
 
-**GET `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L244).
+**GET `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L245).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -5317,7 +5392,7 @@ No fields. Use an empty object for the client method input.
 
 ## merchants.setup
 
-**POST `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L245).
+**POST `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L246).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -5708,7 +5783,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## merchants.update
 
-**PATCH `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L246).
+**PATCH `/v1/merchant`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L247).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6093,7 +6168,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## merchants.slugAvailable
 
-**GET `/v1/merchant-slugs/:slug`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L247).
+**GET `/v1/merchant-slugs/:slug`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L248).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6158,7 +6233,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## merchants.uploadLogo
 
-**POST `/v1/merchant/logo`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L255).
+**POST `/v1/merchant/logo`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L256).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6240,7 +6315,7 @@ Transport: multipart form data. File/blob inputs require the original runtime sc
 
 ## merchants.requestVerification
 
-**POST `/v1/merchant/verification`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L259).
+**POST `/v1/merchant/verification`** · **Designed — unavailable** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L260).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6314,7 +6389,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## merchants.close
 
-**POST `/v1/merchant/close`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L266).
+**POST `/v1/merchant/close`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L267).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6372,7 +6447,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## merchants.offers
 
-**GET `/v1/merchants/:slug/offers`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L267).
+**GET `/v1/merchants/:slug/offers`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L268).
 
 **Client input fields**
 
@@ -6772,7 +6847,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## studio.templates
 
-**GET `/v1/merchant/policy-templates`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L418).
+**GET `/v1/merchant/policy-templates`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L437).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -6996,7 +7071,7 @@ No fields. Use an empty object for the client method input.
 
 ## studio.saveTemplate
 
-**POST `/v1/merchant/policy-templates`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L419).
+**POST `/v1/merchant/policy-templates`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L438).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -7321,7 +7396,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## studio.simulate
 
-**POST `/v1/policies/simulate`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L423).
+**POST `/v1/policies/simulate`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L442).
 
 **Client input fields**
 

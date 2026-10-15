@@ -4,15 +4,15 @@ description: "Understand the separate mainnet funding integration, its activatio
 ---
 
 <Note>
-  **Implemented, currently disabled.** The deployed application contains Aurora
-  funding screens and API routes, but the integration reports `configured:
-  false` until its provider configuration is completed. No end-to-end mainnet
-  transfer is claimed as verified.
+  **Configured separately from commerce.** The hosted funding integration is
+  enabled. Check the live configuration before starting a request. A user must
+  review and execute any real source-chain transfer. This guide does not treat
+  provider status or automated tests as proof of a new completed transfer.
 </Note>
 
-The intended flow lets a user move a supported source-chain asset into **canonical USDC on Monad Mainnet**, delivered to the authenticated external wallet. Aurora Intents provides routing and deposit instructions.
+The funding flow lets a user move a supported source-chain asset into **canonical USDC on Monad Mainnet**, delivered to the authenticated external wallet. Aurora Intents provides routing and deposit instructions.
 
-## How the flow is designed
+## How funding works
 
 ```mermaid
 sequenceDiagram
@@ -43,6 +43,6 @@ Spoke's API does not sign or broadcast the source transfer. The user executes it
 
 ## Activation checklist
 
-Before calling this flow live, complete the provider configuration, confirm supported routes and canonical token settings, and record a user-executed transfer from source deposit through verified destination receipt. Test expiry, underpayment, delayed delivery, refund, and retry behavior as supported by the provider.
+For a new deployment, complete provider configuration and confirm supported routes and canonical token settings. Verify a user-executed transfer from source deposit through canonical destination receipt before claiming that deployment has completed a transfer. Test expiry, underpayment, delayed delivery, refund, and retry behavior as supported by the provider.
 
 The current public configuration is available at [GET /funding/aurora](https://api.usespoke.xyz/v1/funding/aurora). The API also defines authenticated preview, create-deposit, and own-deposit-status routes. See [API reference](/developers/api).

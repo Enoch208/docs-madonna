@@ -7,9 +7,16 @@ Spoke supports an account experience around wallet-backed actions. Public discov
 
 ## Sign in
 
-Use **Create account** or **Log in**. The frontend supports passkey onboarding and external wallet connections. An external wallet signs an account challenge; passkey flows use the integrated account wallet experience. Review the requested action before approving it.
+Use **Create account** or **Log in**. The frontend offers **Continue with passkey** first, **Continue with email** through Reown, and external wallet connections. Email uses a one-time code and an embedded wallet; it is not a Mera passkey. Each sign-in method has its own wallet identity. An external wallet signs an account challenge; passkey flows use the integrated account wallet experience. Review the requested action before approving it.
 
 A session authenticates API access. It does not give the API permission to transfer your tokens. Contract actions still require the wallet flow.
+
+<Frame caption="Passkey-first login preserves your campaign or referral destination, with separate email onboarding through Reown.">
+  <img
+    src="/images/screenshots/login-desktop.png"
+    alt="Spoke login with passkey, email and wallet choices and a return-context notice"
+  />
+</Frame>
 
 ## Earn and Sell workspaces
 
@@ -27,7 +34,9 @@ The interface marks sample-only destinations with **Demo**.
 
 Settings includes profile and privacy preferences, connected wallet records, passkeys, notifications, recovery checks, and session management. Use recovery guidance before depending on a new sign-in method. Revoking a session ends that session's API access; it does not reverse completed transactions.
 
-Some multi-device onboarding and intent-persistence improvements remain on the [roadmap](/project/roadmap). A supported settings screen is not a guarantee that every future onboarding step is already synchronized across devices.
+Sign-in preserves the requested campaign/referral path, including its query parameters. Passkeys require HTTPS, WebAuthn and WebCrypto, then PRF support checked during the ceremony. A cancelled ceremony can be retried; use the original passkey for an existing account. A synced passkey may be available through its provider on another device, while a device-bound passkey stays on that device. Physical Safari/Chrome cross-device testing remains on the [roadmap](/project/roadmap).
+
+The [private workspace](/guides/private-workspace) uses a separate passkey-derived key. Wallet recovery does not restore that key.
 
 ## Privacy boundaries
 

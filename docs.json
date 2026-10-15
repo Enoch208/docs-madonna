@@ -47,6 +47,14 @@
             ]
           },
           {
+            "group": "Partnerships and privacy",
+            "pages": [
+              "guides/partner-passport",
+              "guides/partner-intelligence",
+              "guides/private-workspace"
+            ]
+          },
+          {
             "group": "Campaigns and purchases",
             "pages": [
               "guides/campaign-launch",
@@ -124,7 +132,12 @@
         "groups": [
           {
             "group": "Progress and evidence",
-            "pages": ["project/status", "project/proof", "project/roadmap"]
+            "pages": [
+              "project/status",
+              "project/proof",
+              "project/evidence",
+              "project/roadmap"
+            ]
           },
           {
             "group": "Reference",

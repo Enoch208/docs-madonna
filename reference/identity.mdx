@@ -5,14 +5,14 @@ description: "Wallet authentication, account profiles, recovery, sessions, walle
 
 Wallet authentication, account profiles, recovery, sessions, wallets, passkeys, and notification preferences.
 
-This reference is generated from application commit [`1c90c5e`](https://github.com/Enoch208/spoke/commit/1c90c5e408592d5b4e87944ea79b998890633249). It covers **29 client methods** in this group.
+This reference is generated from application commit [`2e8a48d`](https://github.com/Enoch208/spoke/commit/2e8a48d31ca861a44821671a50cd23b66b50769b). It covers **32 client methods** in this group.
 
 <Note>
   Input schemas describe the typed client call before path/query/body mapping.
   Output schemas describe the envelope's `data`, not the full HTTP response.
   Custom refinements, transforms, and runtime permissions are enforced by the
   [shared Zod
-  contract](https://github.com/Enoch208/spoke/tree/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api).
+  contract](https://github.com/Enoch208/spoke/tree/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api).
   Read [transport rules](/developers/http-transport) before copying a client
   object into an HTTP body. Designed methods reject live calls; optional funding
   still requires provider configuration.
@@ -22,41 +22,44 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## Methods at a glance
 
-| Client method                                                         | HTTP route                              | Access  | Availability |
-| --------------------------------------------------------------------- | --------------------------------------- | ------- | ------------ |
-| [`auth.challenge`](#auth-challenge)                                   | `POST /v1/auth/challenge`               | public  | Core live    |
-| [`auth.verify`](#auth-verify)                                         | `POST /v1/auth/verify`                  | public  | Core live    |
-| [`auth.signOut`](#auth-signout)                                       | `POST /v1/auth/sign-out`                | session | Core live    |
-| [`account.me`](#account-me)                                           | `GET /v1/me`                            | session | Core live    |
-| [`account.updateProfile`](#account-updateprofile)                     | `PATCH /v1/me`                          | session | Core live    |
-| [`account.handleAvailable`](#account-handleavailable)                 | `GET /v1/handles/:handle`               | public  | Core live    |
-| [`account.activity`](#account-activity)                               | `GET /v1/me/activity`                   | session | Core live    |
-| [`account.balances`](#account-balances)                               | `GET /v1/me/balances`                   | session | Core live    |
-| [`account.recordRecoveryCheck`](#account-recordrecoverycheck)         | `POST /v1/me/recovery-check`            | session | Core live    |
-| [`account.passkeys`](#account-passkeys)                               | `GET /v1/me/passkeys`                   | session | Core live    |
-| [`account.addPasskey`](#account-addpasskey)                           | `POST /v1/me/passkeys`                  | session | Core live    |
-| [`account.updatePasskey`](#account-updatepasskey)                     | `PATCH /v1/me/passkeys/:credentialId`   | session | Core live    |
-| [`account.removePasskey`](#account-removepasskey)                     | `DELETE /v1/me/passkeys/:credentialId`  | session | Core live    |
-| [`account.passkeyVault`](#account-passkeyvault)                       | `GET /v1/passkey-vaults/:credentialId`  | public  | Core live    |
-| [`account.wallets`](#account-wallets)                                 | `GET /v1/me/wallets`                    | session | Core live    |
-| [`account.linkWallet`](#account-linkwallet)                           | `POST /v1/me/wallets`                   | session | Core live    |
-| [`account.unlinkWallet`](#account-unlinkwallet)                       | `DELETE /v1/me/wallets/:address`        | session | Core live    |
-| [`account.labelWallet`](#account-labelwallet)                         | `PATCH /v1/me/wallets/:address`         | session | Core live    |
-| [`account.setPayoutAddress`](#account-setpayoutaddress)               | `PUT /v1/me/payout-address`             | session | Core live    |
-| [`account.sessions`](#account-sessions)                               | `GET /v1/me/sessions`                   | session | Core live    |
-| [`account.revokeSession`](#account-revokesession)                     | `DELETE /v1/me/sessions`                | session | Core live    |
-| [`account.preferences`](#account-preferences)                         | `GET /v1/me/preferences`                | session | Core live    |
-| [`account.updatePreferences`](#account-updatepreferences)             | `PATCH /v1/me/preferences`              | session | Core live    |
-| [`account.exportData`](#account-exportdata)                           | `POST /v1/me/export`                    | session | Core live    |
-| [`account.deleteAccount`](#account-deleteaccount)                     | `DELETE /v1/me`                         | session | Core live    |
-| [`notifications.list`](#notifications-list)                           | `GET /v1/me/notifications`              | session | Core live    |
-| [`notifications.markRead`](#notifications-markread)                   | `POST /v1/me/notifications/read`        | session | Core live    |
-| [`notifications.preferences`](#notifications-preferences)             | `GET /v1/me/notification-preferences`   | session | Core live    |
-| [`notifications.updatePreferences`](#notifications-updatepreferences) | `PATCH /v1/me/notification-preferences` | session | Core live    |
+| Client method                                                         | HTTP route                                  | Access  | Availability |
+| --------------------------------------------------------------------- | ------------------------------------------- | ------- | ------------ |
+| [`auth.challenge`](#auth-challenge)                                   | `POST /v1/auth/challenge`                   | public  | Core live    |
+| [`auth.verify`](#auth-verify)                                         | `POST /v1/auth/verify`                      | public  | Core live    |
+| [`auth.signOut`](#auth-signout)                                       | `POST /v1/auth/sign-out`                    | session | Core live    |
+| [`account.me`](#account-me)                                           | `GET /v1/me`                                | session | Core live    |
+| [`account.updateProfile`](#account-updateprofile)                     | `PATCH /v1/me`                              | session | Core live    |
+| [`account.handleAvailable`](#account-handleavailable)                 | `GET /v1/handles/:handle`                   | public  | Core live    |
+| [`account.activity`](#account-activity)                               | `GET /v1/me/activity`                       | session | Core live    |
+| [`account.balances`](#account-balances)                               | `GET /v1/me/balances`                       | session | Core live    |
+| [`account.recordRecoveryCheck`](#account-recordrecoverycheck)         | `POST /v1/me/recovery-check`                | session | Core live    |
+| [`account.passkeys`](#account-passkeys)                               | `GET /v1/me/passkeys`                       | session | Core live    |
+| [`account.addPasskey`](#account-addpasskey)                           | `POST /v1/me/passkeys`                      | session | Core live    |
+| [`account.updatePasskey`](#account-updatepasskey)                     | `PATCH /v1/me/passkeys/:credentialId`       | session | Core live    |
+| [`account.removePasskey`](#account-removepasskey)                     | `DELETE /v1/me/passkeys/:credentialId`      | session | Core live    |
+| [`account.passkeyVault`](#account-passkeyvault)                       | `GET /v1/passkey-vaults/:credentialId`      | public  | Core live    |
+| [`account.wallets`](#account-wallets)                                 | `GET /v1/me/wallets`                        | session | Core live    |
+| [`account.linkWallet`](#account-linkwallet)                           | `POST /v1/me/wallets`                       | session | Core live    |
+| [`account.unlinkWallet`](#account-unlinkwallet)                       | `DELETE /v1/me/wallets/:address`            | session | Core live    |
+| [`account.labelWallet`](#account-labelwallet)                         | `PATCH /v1/me/wallets/:address`             | session | Core live    |
+| [`account.setPayoutAddress`](#account-setpayoutaddress)               | `PUT /v1/me/payout-address`                 | session | Core live    |
+| [`account.sessions`](#account-sessions)                               | `GET /v1/me/sessions`                       | session | Core live    |
+| [`account.revokeSession`](#account-revokesession)                     | `DELETE /v1/me/sessions`                    | session | Core live    |
+| [`account.preferences`](#account-preferences)                         | `GET /v1/me/preferences`                    | session | Core live    |
+| [`account.updatePreferences`](#account-updatepreferences)             | `PATCH /v1/me/preferences`                  | session | Core live    |
+| [`account.exportData`](#account-exportdata)                           | `POST /v1/me/export`                        | session | Core live    |
+| [`account.deleteAccount`](#account-deleteaccount)                     | `DELETE /v1/me`                             | session | Core live    |
+| [`notifications.list`](#notifications-list)                           | `GET /v1/me/notifications`                  | session | Core live    |
+| [`notifications.markRead`](#notifications-markread)                   | `POST /v1/me/notifications/read`            | session | Core live    |
+| [`notifications.preferences`](#notifications-preferences)             | `GET /v1/me/notification-preferences`       | session | Core live    |
+| [`notifications.updatePreferences`](#notifications-updatepreferences) | `PATCH /v1/me/notification-preferences`     | session | Core live    |
+| [`workspace.list`](#workspace-list)                                   | `GET /v1/me/workspace`                      | session | Core live    |
+| [`workspace.get`](#workspace-get)                                     | `GET /v1/me/workspace/:chainId/:campaignId` | session | Core live    |
+| [`workspace.save`](#workspace-save)                                   | `PUT /v1/me/workspace/:chainId/:campaignId` | session | Core live    |
 
 ## auth.challenge
 
-**POST `/v1/auth/challenge`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L120).
+**POST `/v1/auth/challenge`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L121).
 
 **Client input fields**
 
@@ -139,7 +142,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## auth.verify
 
-**POST `/v1/auth/verify`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L121).
+**POST `/v1/auth/verify`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L122).
 
 **Client input fields**
 
@@ -268,7 +271,7 @@ This reference is generated from application commit [`1c90c5e`](https://github.c
 
 ## auth.signOut
 
-**POST `/v1/auth/sign-out`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L129).
+**POST `/v1/auth/sign-out`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L130).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -314,7 +317,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.me
 
-**GET `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L130).
+**GET `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L131).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -792,7 +795,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.updateProfile
 
-**PATCH `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L131).
+**PATCH `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L132).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1315,7 +1318,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.handleAvailable
 
-**GET `/v1/handles/:handle`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L132).
+**GET `/v1/handles/:handle`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L133).
 
 **Client input fields**
 
@@ -1387,7 +1390,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.activity
 
-**GET `/v1/me/activity`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L133).
+**GET `/v1/me/activity`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L134).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1555,7 +1558,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.balances
 
-**GET `/v1/me/balances`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L137).
+**GET `/v1/me/balances`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L138).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1634,7 +1637,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.recordRecoveryCheck
 
-**POST `/v1/me/recovery-check`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L138).
+**POST `/v1/me/recovery-check`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L139).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1681,7 +1684,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.passkeys
 
-**GET `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L139).
+**GET `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L140).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1770,7 +1773,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.addPasskey
 
-**POST `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L140).
+**POST `/v1/me/passkeys`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L141).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -1933,7 +1936,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.updatePasskey
 
-**PATCH `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L150).
+**PATCH `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L151).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2033,7 +2036,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.removePasskey
 
-**DELETE `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L154).
+**DELETE `/v1/me/passkeys/:credentialId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L155).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2093,7 +2096,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.passkeyVault
 
-**GET `/v1/passkey-vaults/:credentialId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L155).
+**GET `/v1/passkey-vaults/:credentialId`** · **Core live** · Access: **public**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L156).
 
 **Client input fields**
 
@@ -2179,7 +2182,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.wallets
 
-**GET `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L156).
+**GET `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L157).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2270,7 +2273,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.linkWallet
 
-**POST `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L157).
+**POST `/v1/me/wallets`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L158).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2401,7 +2404,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.unlinkWallet
 
-**DELETE `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L168).
+**DELETE `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L169).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2460,7 +2463,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.labelWallet
 
-**PATCH `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L169).
+**PATCH `/v1/me/wallets/:address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L170).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2560,7 +2563,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.setPayoutAddress
 
-**PUT `/v1/me/payout-address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L170).
+**PUT `/v1/me/payout-address`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L171).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2661,7 +2664,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.sessions
 
-**GET `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L171).
+**GET `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L172).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2746,7 +2749,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.revokeSession
 
-**DELETE `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L172).
+**DELETE `/v1/me/sessions`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L173).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2813,7 +2816,7 @@ Output shape: **object**. See the complete schema below.
 
 ## account.preferences
 
-**GET `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L179).
+**GET `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L180).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2883,7 +2886,7 @@ No fields. Use an empty object for the client method input.
 
 ## account.updatePreferences
 
-**PATCH `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L180).
+**PATCH `/v1/me/preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L181).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -2983,7 +2986,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.exportData
 
-**POST `/v1/me/export`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L181).
+**POST `/v1/me/export`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L182).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3051,7 +3054,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## account.deleteAccount
 
-**DELETE `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L182).
+**DELETE `/v1/me`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L183).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3110,7 +3113,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## notifications.list
 
-**GET `/v1/me/notifications`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L192).
+**GET `/v1/me/notifications`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L193).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3243,7 +3246,7 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
 
 ## notifications.markRead
 
-**POST `/v1/me/notifications/read`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L196).
+**POST `/v1/me/notifications/read`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L197).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3320,7 +3323,7 @@ Output shape: **object**. See the complete schema below.
 
 ## notifications.preferences
 
-**GET `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L203).
+**GET `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L204).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3393,7 +3396,7 @@ No fields. Use an empty object for the client method input.
 
 ## notifications.updatePreferences
 
-**PATCH `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/1c90c5e408592d5b4e87944ea79b998890633249/packages/protocol/src/api/methods.ts#L204).
+**PATCH `/v1/me/notification-preferences`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L205).
 
 An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
 
@@ -3489,6 +3492,479 @@ An authenticated session is necessary; ownership, merchant/operator scope, and a
     "toastsEnabled"
   ],
   "additionalProperties": false
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## workspace.list
+
+**GET `/v1/me/workspace`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L407).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+No fields. Use an empty object for the client method input.
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "items": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/__schema0"
+      }
+    },
+    "maxNotes": {
+      "type": "number",
+      "const": 100
+    }
+  },
+  "required": ["items", "maxNotes"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "chainId": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "campaignId": {
+          "type": "string",
+          "maxLength": 78,
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        }
+      },
+      "required": ["address", "chainId", "campaignId", "updatedAt"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## workspace.get
+
+**GET `/v1/me/workspace/:chainId/:campaignId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L408).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field        | Type    | Required | Constraints                                         |
+| ------------ | ------- | -------- | --------------------------------------------------- |
+| `chainId`    | integer | Yes      | Maximum: 9007199254740991; Greater than: 0          |
+| `campaignId` | string  | Yes      | Max length: 78; Pattern validated; see input schema |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "chainId": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "campaignId": {
+      "type": "string",
+      "maxLength": 78,
+      "pattern": "^[1-9][0-9]*$"
+    }
+  },
+  "required": ["chainId", "campaignId"]
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "note": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "pattern": "^0x[0-9a-f]{40}$"
+            },
+            "chainId": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "campaignId": {
+              "type": "string",
+              "maxLength": 78,
+              "pattern": "^[1-9][0-9]*$"
+            },
+            "version": {
+              "type": "number",
+              "const": 1
+            },
+            "namespace": {
+              "type": "string",
+              "const": "spoke.campaign-notes.v1"
+            },
+            "credentialId": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 2048,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "$ref": "#/$defs/__schema0"
+            },
+            "revision": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "savedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            },
+            "nonce": {
+              "minLength": 16,
+              "maxLength": 16,
+              "$ref": "#/$defs/__schema0"
+            },
+            "ciphertext": {
+              "type": "string",
+              "minLength": 22,
+              "maxLength": 33000,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "$ref": "#/$defs/__schema0"
+            }
+          },
+          "required": [
+            "address",
+            "chainId",
+            "campaignId",
+            "version",
+            "namespace",
+            "credentialId",
+            "revision",
+            "savedAt",
+            "nonce",
+            "ciphertext"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updatedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["note", "updatedAt"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+</AccordionGroup>
+
+## workspace.save
+
+**PUT `/v1/me/workspace/:chainId/:campaignId`** · **Core live** · Access: **session**. [Source definition](https://github.com/Enoch208/spoke/blob/2e8a48d31ca861a44821671a50cd23b66b50769b/packages/protocol/src/api/methods.ts#L409).
+
+An authenticated session is necessary; ownership, merchant/operator scope, and any fresh-confirmation requirements are checked separately by the service.
+
+**Client input fields**
+
+| Field              | Type           | Required | Constraints                                         |
+| ------------------ | -------------- | -------- | --------------------------------------------------- |
+| `chainId`          | integer        | Yes      | Maximum: 9007199254740991; Greater than: 0          |
+| `campaignId`       | string         | Yes      | Max length: 78; Pattern validated; see input schema |
+| `note`             | object         | Yes      | See nested schema and runtime validation            |
+| `expectedRevision` | string or null | Yes      | See nested schema and runtime validation            |
+
+<AccordionGroup>
+
+<Accordion title="Structural input JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "chainId": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "campaignId": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "note": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]{40}$"
+        },
+        "chainId": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "campaignId": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "namespace": {
+          "type": "string",
+          "const": "spoke.campaign-notes.v1"
+        },
+        "credentialId": {
+          "type": "string",
+          "minLength": 16,
+          "maxLength": 2048,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "$ref": "#/$defs/__schema2"
+        },
+        "revision": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "savedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        "nonce": {
+          "minLength": 16,
+          "maxLength": 16,
+          "$ref": "#/$defs/__schema2"
+        },
+        "ciphertext": {
+          "type": "string",
+          "minLength": 22,
+          "maxLength": 33000,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "$ref": "#/$defs/__schema2"
+        }
+      },
+      "required": [
+        "address",
+        "chainId",
+        "campaignId",
+        "version",
+        "namespace",
+        "credentialId",
+        "revision",
+        "savedAt",
+        "nonce",
+        "ciphertext"
+      ],
+      "additionalProperties": false
+    },
+    "expectedRevision": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["chainId", "campaignId", "note", "expectedRevision"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "__schema1": {
+      "type": "string",
+      "maxLength": 78,
+      "pattern": "^[1-9][0-9]*$"
+    },
+    "__schema2": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  }
+}
+```
+
+</Accordion>
+
+<Accordion title="Structural output JSON schema">
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "note": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "pattern": "^0x[0-9a-f]{40}$"
+            },
+            "chainId": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "campaignId": {
+              "type": "string",
+              "maxLength": 78,
+              "pattern": "^[1-9][0-9]*$"
+            },
+            "version": {
+              "type": "number",
+              "const": 1
+            },
+            "namespace": {
+              "type": "string",
+              "const": "spoke.campaign-notes.v1"
+            },
+            "credentialId": {
+              "type": "string",
+              "minLength": 16,
+              "maxLength": 2048,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "$ref": "#/$defs/__schema0"
+            },
+            "revision": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "savedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+            },
+            "nonce": {
+              "minLength": 16,
+              "maxLength": 16,
+              "$ref": "#/$defs/__schema0"
+            },
+            "ciphertext": {
+              "type": "string",
+              "minLength": 22,
+              "maxLength": 33000,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "$ref": "#/$defs/__schema0"
+            }
+          },
+          "required": [
+            "address",
+            "chainId",
+            "campaignId",
+            "version",
+            "namespace",
+            "credentialId",
+            "revision",
+            "savedAt",
+            "nonce",
+            "ciphertext"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updatedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["note", "updatedAt"],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  }
 }
 ```
 

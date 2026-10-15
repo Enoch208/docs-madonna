@@ -41,10 +41,16 @@ Local development can use direct RPC log ingestion against Anvil. Production use
 
 See the [indexer source and runbook](https://github.com/Enoch208/spoke/tree/main/indexer) for configuration and replay procedures.
 
+## Live product views
+
+Partner Passport history is grouped by the UTC month of `SaleFinalized`; pending purchases and refunded sales never enter settled contribution totals. Each history point retains supporting receipt IDs. Campaign positions come from canonical `NodeCreated` records. Rewards use indexed liabilities and remain owner-only in Passport responses.
+
+Network Activity deduplicates by canonical event identity, orders by block/log position, and paginates before resolving privacy-filtered actors. Its 30-day growth view includes an opening node balance for earlier history. Purchase, settlement and refund are different events and different counters. Activity refreshes every 15 seconds; graph snapshots and the owner's Passport refresh every 20 seconds while viewed. Expanded graph branches are reconciled with each new snapshot and removed if replay invalidates them.
+
+The network shows indexed block/time and links events to public receipts and referral paths. These are derived views; the contract still owns financial entitlements. Tests cover canonical order, duplicate handling, restart, divergent history, stale graph branches, overlapping referral credit, refunds and balance reconciliation.
+
 ## Nansen insight context
 
-The application includes a Nansen-backed insight integration with cached supported-mainnet history for demonstration wallets. The current seeded wallet results report no observed history. That is an absence of observed provider data, not a claim about a person's identity or quality.
+[Partner Intelligence](/guides/partner-intelligence) adds explicit merchant research for public wallet addresses. It combines supported mainnet transaction history, first native-gas funding and Monad wallet relationships, with endpoint-level timestamps and transaction evidence. New Spoke wallets may have no history; external example wallets are not participating distributors.
 
-External history is not Monad Testnet revenue, a reputation guarantee, a trust score, or a payout input. Refreshes are explicitly budgeted; ordinary page views do not trigger uncontrolled provider queries.
-
-Keep three concepts separate: **onchain settlement evidence**, **the application's derived record**, and **external historical context**.
+External research is separate from native settlement evidence and cannot alter rewards or ranking. A page view reads the cache. An explicit refresh requires free-plan credits and durable budget checks; failures preserve uncertainty instead of inventing a risk score.

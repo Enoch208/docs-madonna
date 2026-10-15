@@ -1,0 +1,53 @@
+---
+title: "Partner Passport and live network"
+description: "Build a portable record of settled contributions, inspect its receipts, and understand how a campaign spreads."
+---
+
+Your Partner Passport brings verified contributions and campaign participation into one profile. A merchant can inspect the underlying receipts before inviting you into a campaign. All commerce amounts currently use non-redeemable SDUSD on Monad Testnet.
+
+## Open your Passport
+
+Sign in and open **Earn → Reputation**. The page shows your settled record, contribution history, network positions and owner-only claimable/previously claimed rewards. Use **View profile** for a shareable page when your privacy settings allow it. A public profile can use a handle or public wallet address; pseudonymous profiles require their handle.
+
+[Inspect a scripted example Passport](https://usespoke.xyz/u/0x7e05742C7c6F8A7Bedf1F77627299DfEdAA18260). These are demonstration transactions, not customer revenue.
+
+<Frame caption="A scripted testnet Passport links each month of settled contributions to its public receipts.">
+  <img
+    src="/images/screenshots/passport-history.png"
+    alt="Spoke Partner Passport with settled contribution history and receipt links"
+  />
+</Frame>
+
+## Understand the evidence
+
+- **Direct contributions:** settled purchases attributed to your own link.
+- **Network contributions:** settled purchases attributed through descendants where you participated in the credited path.
+- **History:** the latest 12 active settlement months in UTC. Select a month to open its supporting receipts.
+- **Campaign positions:** the campaign, your link, its parent and your settled contributions. Joining alone does not establish sales performance.
+- **Rewards:** claimable and previously claimed allocations visible only to the owner. Use **Review rewards and claim** for the transaction flow.
+
+One purchase can credit multiple people. Do not add distributor totals together and call the result unique campaign sales. Pending and refunded purchases do not count as settled contributions. The app does not show a conversion rate without a measured denominator.
+
+A new Passport has no performance history. Join a suitable campaign, share the referral link and let the first finalized sale establish the record. Missing history is not poor performance.
+
+## Control what you share
+
+Use reputation visibility settings to control public fields and invitation eligibility. Public history and campaign associations require full evidence-sharing consent. Private and pseudonymous records do not expose the new public association history. Owner reward balances never appear in public Passport responses. Presentation privacy cannot erase public blockchain transactions.
+
+## Read the live network
+
+Open a campaign and choose its network, or use **View position** on a Passport. Expand a branch, inspect its ancestry and select a purchase or receipt to see the accepted terms and reward allocations.
+
+**Network Activity** shows a 30-day growth chart, confirmed participation/purchase/settlement/refund events, and indexed block/time. Choose a day to inspect its activity. Earlier nodes form the chart's opening balance; purchase and settlement counts remain separate. Private participants appear without revealing their identity.
+
+Activity refreshes every 15 seconds. Graph snapshots and your Passport refresh every 20 seconds while viewed. Reorganizations can remove events and branches after canonical replay. A fresh checkpoint does not guarantee that a particular transaction has already been indexed; inspect its receipt.
+
+## From research to partnership
+
+A merchant opens **Distributors**, compares shared native records, optionally reviews [Partner Intelligence](/guides/partner-intelligence), then sends an invitation for an active campaign. The distributor reviews the terms, accepts and separately approves link creation. The merchant sees **Joined** after confirmation and indexing. A later settled sale creates receipt-backed contributions and claimable allocations.
+
+<Note>
+  Mainnet Aurora funding does not fund these campaigns or rewards. The network
+  and Passport describe testnet commerce. Prototype capacity limits and the
+  absence of an independent contract audit still apply.
+</Note>

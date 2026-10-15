@@ -1,0 +1,46 @@
+---
+title: "Private partnership workspace"
+description: "Keep campaign notes encrypted with a separate passkey-derived key, sync ciphertext and preserve conflicting copies."
+---
+
+Your Spoke passkey does two independent jobs: it authorizes account actions and derives a separate key for private campaign notes. Use the notebook for outreach plans, partnership terms or follow-up notes you do not want to share with the merchant.
+
+Only encrypted note envelopes sync to Spoke. The server can see the account, campaign, credential identifier, revision and timestamps, but the notes API never receives the plaintext or encryption key. This is encrypted content, not anonymous metadata.
+
+## Create or open a notebook
+
+1. Sign in with your original Spoke passkey. Email and external-wallet sign-ins use different account methods.
+2. Open **Earn → Private workspace** or a campaign's private notebook.
+3. Confirm the same passkey to unlock. PRF support must be available from the browser and passkey provider.
+4. Write your note and choose **Encrypt & sync**. The browser encrypts first, saves a local copy, then sends the encrypted envelope to the API.
+5. The notebook locks after saving. Reopening requires the original passkey. It also locks on navigation, sign-out or after five minutes.
+
+There can be up to 100 synced notebooks per account. If synchronization fails, the local encrypted copy is retained and the UI tells you it has not synced. A local copy alone does not survive clearing that browser's storage.
+
+## Preserve existing notes
+
+Earlier notebooks use the same namespace and encryption format. Open them from their original browser with the original passkey, then explicitly sync. Spoke does not silently replace old local notes with a server copy.
+
+When local and server revisions differ, choose which copy to open. Export an encrypted backup before replacing a conflicting copy. Opening a local copy does not overwrite the server until you choose to sync. The API rejects stale revisions instead of silently discarding someone else's edits.
+
+## Encrypted backups and recovery
+
+Use **Download encrypted backup** to save the envelope. Restoring a backup validates its account, chain, campaign and encryption format, then requires the same passkey to decrypt it before replacing the local copy. A restored local copy is not automatically uploaded.
+
+An encrypted backup is useful only while you still have the original passkey with PRF support. A wallet recovery phrase, a newly created passkey or a second independent passkey cannot derive the original note key.
+
+<Warning>
+  Cross-device restoration is conditional, not guaranteed. The same passkey must
+  be available through your provider on the second device, with compatible PRF
+  support. Physical cross-device restoration has not yet been verified for this
+  release. Do not delete your only working passkey or local copy based on an
+  assumption that your provider syncs it.
+</Warning>
+
+## Cryptographic and API boundaries
+
+The notes namespace is `spoke.campaign-notes.v1`. Mera evaluates its SHA-256 digest as a separate WebAuthn PRF salt. HKDF-SHA-256 derives a non-extractable AES-256-GCM key bound to address, chain, campaign and credential. Every save uses a fresh nonce and authenticated scope. Existing account-key derivation is unchanged.
+
+`workspace.list`, `workspace.get` and `workspace.save` require a passkey session. The server validates the strict envelope, registered credential, ownership, current chain and existing campaign; applies CSRF and write limits; and atomically compares revisions. It cannot decrypt or merge the text.
+
+Automated tests use actual WebCrypto encryption with a controlled PRF to verify round trips, scope binding, tamper rejection, serialized backup restoration and conflicts. These tests do not substitute for a physical passkey/device demonstration. See the [verification procedure](/project/evidence).

@@ -1,50 +1,42 @@
 ---
 title: "What is built"
-description: "A dated, evidence-based view of live testnet capabilities, optional integrations, and planned surfaces."
+description: "A dated, evidence-based view of shipped product behavior, conditional integrations and remaining verification."
 ---
 
-**Reviewed 13 October 2026 · application release `1c90c5e`.** This page describes the documented deployment, not a promise that every designed screen is a live service.
+**Reviewed 15 October 2026.** The web app and API are deployed at [usespoke.xyz](https://usespoke.xyz). Commerce uses non-redeemable SDUSD on Monad Testnet. Demo mode is a separate labelled fixture experience; mainnet Aurora funding stays separate from commerce.
 
-## Live on Monad Testnet
+## Shipped product capabilities
 
-| Area               | Implemented behavior                                                                                             |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| Discovery          | Public campaigns, merchant profiles, products, policies, and distributor views                                   |
-| Merchant workflow  | Merchant setup, product versions, campaign preparation, funding, publication, and vault views                    |
-| Distribution       | Immutable parent links, branching graph, ancestry, and sale attribution paths                                    |
-| Checkout           | Preview, client-generated order keys, wallet purchase, intent tracking, and indexed receipts                     |
-| Delivery           | Buyer-only access with sale and refund rechecks                                                                  |
-| Settlement         | Reward reservation, refunds, finalization, beneficiary claims, and unused-budget rules                           |
-| Earnings           | Six distinct buckets, claimable balances, claims history, and campaign/conversion views                          |
-| Account experience | Wallet sessions, passkey onboarding, profile/privacy settings, recovery and notification surfaces                |
-| Infrastructure     | Canonical indexing, independent RPC verification, transactional projection, reorg recovery, and status reporting |
-| Developer access   | Typed API schemas, endpoint registry, public read SDK, and contract/source verification                          |
-| Interface          | Grouped collapsible navigation, compact sidebar rail, mobile navigation, and corrected dialog overflow           |
+| Area              | Implemented behavior                                                                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Merchant commerce | Merchant setup, immutable product versions, campaign publication/funding, checkout, buyer-only delivery, refunds and claims                                       |
+| Partner workflow  | Privacy-aware discovery and comparison, invitations with current terms, acceptance and independently approved link creation; Joined follows confirmation/indexing |
+| Partner Passport  | Settlement-month contribution history, receipt evidence, campaign positions, public sharing and owner-only claimable/claimed rewards                              |
+| Live network      | Expandable branches, ancestry, allocation paths, 30-day growth, paginated confirmed activity, receipt links and checkpoint freshness                              |
+| External research | Merchant-triggered Nansen transaction, first-funder and Monad relationship research with evidence, freshness, privacy and durable credit limits                   |
+| Mera account UX   | Passkey-first entry, support/cancellation guidance, original campaign/referral return context and bounded testnet gas assistance                                  |
+| Email onboarding  | Reown one-time-code email login and embedded wallets, kept distinct from Mera accounts                                                                            |
+| Private workspace | Separate PRF encryption namespace, ciphertext-only sync, revision conflicts, original local-note preservation and encrypted backups                               |
+| Infrastructure    | Envio ingestion, canonical verification/replay, atomic projection, reorg recovery, endpoint schemas and freshness reporting                                       |
 
-## Implemented with a narrower or conditional scope
+The shared contract contains **194 client methods**: **140 core**, **4 optional mainnet funding**, and **50 designed unavailable** methods. Unsupported methods return `FEATURE_NOT_AVAILABLE`. Authentication, ownership, runtime configuration and quotas still apply to core methods.
 
-**Aurora funding:** code and UI are deployed, but configuration is disabled and a real mainnet transfer has not been verified. It is separate from testnet settlement.
+## Evidence and limits
 
-**Nansen insights:** cached supported-mainnet history is integrated. Seeded demonstration wallets currently have no observed history. It does not prove customer revenue or determine payouts.
+The updated application passed **717 tests across 76 files** with PostgreSQL and both required Anvil chains, plus typecheck, lint, formatting and a production build. The unchanged settlement contract baseline passed **33 Foundry tests**. [CI](https://github.com/Enoch208/spoke/actions/workflows/ci.yml) records validation per pushed revision.
 
-**Public SDK:** [`@enochid/spoke-sdk` version 0.1.2](https://www.npmjs.com/package/@enochid/spoke-sdk) is published on npm with 32 public read methods, ESM/CommonJS builds, and TypeScript declarations. A matching [GitHub release archive](https://github.com/Enoch208/docs-madonna/releases/tag/sdk-v0.1.2) provides a checksum and release notes. Authenticated writes remain outside this read SDK.
+The [recorded testnet journey](/project/proof) has inspectable purchases, refunds, settlements and claims. Passport and network pages display those canonical events. They are scripted demonstrations, not customer revenue or adoption.
 
-**Account onboarding:** settings and recovery surfaces exist; further cross-device progress persistence and onboarding polish remain.
+Nansen research includes a genuine external public-wallet sample with 100 recent transactions across seven networks, first funding and Monad relationship evidence. That address is not a Spoke partner. New seeded Spoke wallets may have no observed mainnet history.
 
-## Demo or designed, not live commitments
+Passkey UI and cryptographic/API behavior are tested, but physical cross-device PRF restoration and a new device-specific passkey transaction remain human verification tasks. The workspace does not claim universal recovery. Mainnet commerce, independent audit and production-scale capacity validation remain future gates.
 
-Additional invitation/community flows, partner discovery and recommendations, team/API-key management, commerce connectors, webhooks, buyer incentives, advanced growth analytics, and other extension surfaces have designs or Demo presentations. Check the method-level registry before building against them.
+## Developer distribution
 
-At this release, the shared contract contains **189 client methods**: **135 core live**, **4 optional mainnet funding**, and **50 unavailable-by-design** methods. Unsupported methods intentionally return `FEATURE_NOT_AVAILABLE`.
+The public SDK exposes 32 credential-free read methods. The [0.1.3 GitHub archive](https://github.com/Enoch208/spoke/releases/tag/sdk-v0.1.3) updates Passport and activity schemas and passes isolated packed installation, ESM/CommonJS, consumer typechecks and live API reads. npm version 0.1.2 remains available; 0.1.3 registry publication requires a renewed maintainer session. The generated API reference describes all 194 methods and identifies its source commit.
 
-## Documentation and SDK releases
+## Remaining designed surfaces
 
-The hosted documentation is live at [docs.usespoke.xyz](https://docs.usespoke.xyz). Its expanded reference covers all 189 client methods; that is broader than the 32 public methods exposed by the SDK. The SDK is versioned separately from the deployed application, so publishing it does not change the settlement deployment described above.
+Communities, teams, API-key management, webhooks, external commerce connectors and other extension methods remain designed or Demo-only where the registry says unavailable. Invitations and partner discovery are already live and are not part of that preview list.
 
-## Evidence and verification
-
-The recorded production journey contains **15 confirmed testnet transactions** covering campaign setup, links, purchase, delivery access, refund and access revocation, finalization, and claims. The broader scripted settlement fixture records **58 confirmed transactions**, including gas top-ups.
-
-The application's [release CI](https://github.com/Enoch208/spoke/actions/runs/38371406203) completed successfully. The release's frontend validation included **494 tests across 42 files**, type checks, lint, formatting, and a production build. Tests and source verification do not substitute for an independent audit.
-
-Read [proof and deployments](/project/proof) for inspectable artifacts and the [roadmap](/project/roadmap) for remaining work.
+Read the [evidence matrix](/project/evidence) and [roadmap](/project/roadmap) for exact proof and remaining work.
